@@ -21,7 +21,7 @@ def index(request):
 
 def db(request):
 
-    component = Component(name="1", version_nuumber="1.1", date="04.08.2019", url="www.google.com")
+    component = Component(name="1", version_number="1.1", date="04.08.2019", url="www.google.com")
     component.save()
 
     components = component.objects.all()

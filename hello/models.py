@@ -9,3 +9,6 @@ class Component(models.Model):
     version_number = models.CharField(max_length=10)
     date = models.CharField(max_length=12)
     url = models.CharField(max_length=255)
+
+    class Meta:
+        db_table = "temp_user"

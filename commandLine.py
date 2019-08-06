@@ -1,6 +1,8 @@
 import sys
 import requests
 from requests.exceptions import HTTPError
+from hello.models import Component
+
 def send_Function(file):
     for url in ['http://localhost:8080']:
         try:
@@ -29,3 +31,6 @@ if not len(sys.argv) > 1 or sys.argv[1].lower() not in ["push", "pull"]:
     help()
 elif sys.argv[1].lower()=="push":
     send_Function(sys.argv[2])
+
+# component = Component(name="1", version_nuumber="1.1", date="04.08.2019", url="www.google.com")
+# component.save()
