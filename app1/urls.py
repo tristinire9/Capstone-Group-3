@@ -1,4 +1,4 @@
-"""URL Configuration
+"""DjangoTEST URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.2/topics/http/urls/
@@ -13,26 +13,13 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.urls import path
 
-from django.urls import path, include
-
-from django.contrib import admin
-
-admin.autodiscover()
-
-import hello.views
-
-# To add a new path, first import the app:
-# import blog
-#
-# Then add the new path:
-# path('blog/', blog.urls, name="blog")
-#
-# Learn more here: https://docs.djangoproject.com/en/2.1/topics/http/urls/
+from . import views
 
 urlpatterns = [
-    path("", hello.views.index, name="index"),
-    path("db/", hello.views.db, name="db"),
-    path("admin/", admin.site.urls),
-    path('app1/', include('app1.urls')),
+    path('', views.index, name='index'),
+    # http://127.0.0.1:8000/polls/1
+    path('1', views.page1, name='page1'),
+    path('2', views.page2, name='page2'),
 ]
