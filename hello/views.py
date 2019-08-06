@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 
-from .models import Greeting
+from .models import Component
 
 # Create your views here.
 def index(request):
@@ -9,11 +9,21 @@ def index(request):
     return render(request, "index.html")
 
 
+# def db(request):
+#
+#     greeting = Greeting()
+#     greeting.save()
+#
+#     greetings = Greeting.objects.all()
+#
+#     return render(request, "db.html", {"greetings": greetings})
+
+
 def db(request):
 
-    greeting = Greeting()
-    greeting.save()
+    component = Component(name="1", version_nuumber="1.1", date="04.08.2019", url="www.google.com")
+    component.save()
 
-    greetings = Greeting.objects.all()
+    components = component.objects.all()
 
-    return render(request, "db.html", {"greetings": greetings})
+    return render(request, "db.html", {"components": components})

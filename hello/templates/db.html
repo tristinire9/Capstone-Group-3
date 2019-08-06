@@ -5,13 +5,13 @@
   <div class="container">
 
 
-<h2>Page View Report</h2>
+<h2>All components</h2>
 
 
 <ul>
 
-{% for greeting in greetings %}
-    <li>{{ greeting.when }}</li>
+{% for component in components %}
+    <li>{{ component.name, component.version_number, component.date, component.url }}</li>
 {% endfor %}
 
 </ul>
