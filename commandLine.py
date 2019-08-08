@@ -1,10 +1,12 @@
 import sys
 import requests
 from requests.exceptions import HTTPError
-def send_Function(file):
+def send_Function(file,fileName,versionNumber):
     for url in ['http://localhost:8080']:
         try:
-            response = requests.post(url,data={'file':open(file,'rb')})
+            response = requests.post(url,data={'file':open(file,'rb'),
+                                               'version':versionNumber,
+                                               'fileName': fileName})
 
             # If the response was successful, no Exception will be raised
             response.raise_for_status()
@@ -21,11 +23,11 @@ def send_Function(file):
 # print ("Number of arguments: ", len(sys.argv))
 # print ("The arguments are: " , str(sys.argv))
 def help():
-    print("""\nPUSH \"filename.xxx\" - Sends file (relative path) to Store.
+    print("""\nPUSH \"filename.xxx\" \"NAME\" \"1.1.1.1\" - Sends file (relative path) to Store.
 PULL \"filename.xxx\" - Sends pull request to Store.
 """)
 
-if not len(sys.argv) > 1 or sys.argv[1].lower() not in ["push", "pull"]:
+if not len(sys.argv) > 3 or sys.argv[1].lower() not in ["push", "pull"]:
     help()
 elif sys.argv[1].lower()=="push":
-    send_Function(sys.argv[2])
+    send_Function(sys.argv[2],sys.argv[3],sys.argv[4])
