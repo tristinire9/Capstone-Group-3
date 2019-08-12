@@ -4,7 +4,7 @@ from django.shortcuts import render
 
 # Create your views here.
 def index(request):
-    return HttpResponse(request)
+    return HttpResponse("tset")
 
 
 def page1(request):
