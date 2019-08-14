@@ -8,7 +8,7 @@ app = Flask(__name__)
 def hello_world():
     method = request.method
     parameters = request.params
-    return request.data
+    return parameters
 
 
 if __name__ == '__main__':
