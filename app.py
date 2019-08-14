@@ -5,19 +5,17 @@ from flask_request_params import bind_request_params
 app = Flask(__name__)
 
 
-@app.route('/', methods = ["GET","POST"])
-def hello_world():
+@app.route('/file', methods = ["GET","POST"])
+def file():
     method = request.method
     parameters = request.params
     files = request.files
     return str(parameters)
 
 
-
-@app.route('/0', methods = ["GET","POST"])
-def f0():
+@app.route('/')
+def hello_world():
     return render_template('hello.html')
-
 
 @app.route('/1')
 def f1():
