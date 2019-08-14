@@ -9,7 +9,7 @@ def hello_world():
     method = request.method
     parameters = request.params
     files = request.files
-    return parameters
+    return str(parameters)
 
 
 if __name__ == '__main__':
