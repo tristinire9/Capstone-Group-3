@@ -1,15 +1,19 @@
-from flask import Flask, request, url_for, redirect,jsonify
-from flask_request_params import bind_request_params
+from flask import Flask, request
+from werkzeug.utils import secure_filename
+
 
 app = Flask(__name__)
 
 
 @app.route('/', methods = ["GET","POST"])
 def hello_world():
-    method = request.method
-    parameters = request.params
-    files = request.files
-    return str(parameters)
+    return "hello world"
+
+@app.route('/upload',methods = ["POST"])
+def uploadFunc():
+    if 'file' not in request.files:
+        file = request.files['file']
+        return file
 
 
 if __name__ == '__main__':
