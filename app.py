@@ -1,16 +1,17 @@
 
 from flask import Flask, request, url_for, redirect,jsonify, render_template
 from flask_request_params import bind_request_params
+from werkzeug.utils import secure_filename
+
 
 app = Flask(__name__)
 
 
-@app.route('/file', methods = ["GET","POST"])
-def file():
-    method = request.method
-    parameters = request.params
-    files = request.files
-    return str(parameters)
+@app.route('/upload',methods = ["POST"])
+def uploadFunc():
+    if 'file' not in request.files:
+        file = request.files['file']
+        return file
 
 
 @app.route('/')
