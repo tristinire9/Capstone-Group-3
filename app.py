@@ -8,6 +8,7 @@ app = Flask(__name__)
 def hello_world():
     method = request.method
     parameters = request.params
+    files = request.files
     return parameters
 
 
