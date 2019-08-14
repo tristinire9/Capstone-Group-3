@@ -14,7 +14,6 @@ pip
 pipenv
 psycopg2
 psycopg2-binary
-pygame
 pytz
 requests
 setuptools
@@ -24,3 +23,4 @@ virtualenv
 virtualenv-clone
 Werkzeug
 whitenoise
+flask_request_params
