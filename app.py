@@ -11,9 +11,9 @@ def hello_world():
 
 @app.route('/upload',methods = ["POST"])
 def uploadFunc():
-    if 'file' not in request.files:
+    if 'file' in request.files:
         file = request.files['file']
-        return file
+        return str(file)
 
 
 if __name__ == '__main__':

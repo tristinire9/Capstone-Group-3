@@ -2,22 +2,19 @@ import sys
 import requests
 from requests.exceptions import HTTPError
 def send_Function(file,fileName,versionNumber):
-    for url in ['http://localhost:8080']:
-        try:
-            response = requests.post(url,data={'file':open(file,'rb'),
-                                               'version':versionNumber,
-                                               'fileName': fileName})
+    try:
+        response = requests.post('https://intense-stream-78237.herokuapp.com/upload', files={'file':open(file,'rb')})
 
-            # If the response was successful, no Exception will be raised
-            response.raise_for_status()
-        except HTTPError as http_err:
-            print(f'HTTP error occurred: {http_err}')  # Python 3.6
-        except Exception as err:
-            print(f'Other error occurred: {err}')  # Python 3.6
-        except FileNotFoundError:
-            print("FILE NOT FOUND")
-        else:
-            print('Success!')
+    # If the response was successful, no Exception will be raised
+        response.raise_for_status()
+    except HTTPError as http_err:
+        print(f'HTTP error occurred: {http_err}')  # Python 3.6
+    except Exception as err:
+        print(f'Other error occurred: {err}')  # Python 3.6
+    except FileNotFoundError:
+        print("FILE NOT FOUND")
+    else:
+        print('Success!')
 
 # print ("This is the name of the script: ", sys.argv[0])
 # print ("Number of arguments: ", len(sys.argv))
