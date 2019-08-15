@@ -24,3 +24,4 @@ virtualenv-clone
 Werkzeug
 whitenoise
 flask_request_params
+boto3

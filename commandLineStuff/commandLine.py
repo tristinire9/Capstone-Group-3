@@ -3,7 +3,7 @@ import requests
 from requests.exceptions import HTTPError
 def send_Function(file,fileName,versionNumber):
     try:
-        response = requests.post('https://intense-stream-78237.herokuapp.com/upload', files={'file':open(file,'rb')})
+        response = requests.post('https://intense-stream-78237.herokuapp.com/upload', files={'file':file})
 
     # If the response was successful, no Exception will be raised
         response.raise_for_status()
@@ -15,6 +15,7 @@ def send_Function(file,fileName,versionNumber):
         print("FILE NOT FOUND")
     else:
         print('Success!')
+        print(response)
 
 # print ("This is the name of the script: ", sys.argv[0])
 # print ("Number of arguments: ", len(sys.argv))
