@@ -1,9 +1,10 @@
 import sys
 import requests
 from requests.exceptions import HTTPError
+#'https://intense-stream-78237.herokuapp.com/upload'
 def send_Function(file,fileName,versionNumber):
     try:
-        response = requests.post('https://intense-stream-78237.herokuapp.com/upload', files={'file':file})
+        response = requests.post('http://127.0.0.1:5000/upload', files={'file':open(file,'rb')})
 
     # If the response was successful, no Exception will be raised
         response.raise_for_status()
