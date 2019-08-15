@@ -18,7 +18,7 @@ app = Flask(__name__)
 def uploadFunc():
     if 'file' in request.files:
         file = request.files['file']
-        print(open(file))
+        print(file.read())
         try:
             s3.upload_fileobj(file,S3_BUCKET,file.filename,ExtraArgs={"ContentType": file.content_type})
         except:
