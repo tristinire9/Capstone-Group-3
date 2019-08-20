@@ -18,7 +18,6 @@ def index():
         buckets = get_buckets_list()
         return render_template("index.html", buckets=buckets)
 
-
 @app.route('/files')
 def files():
     my_bucket = get_bucket()
