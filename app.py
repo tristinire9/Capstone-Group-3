@@ -1,55 +1,69 @@
-from flask import Flask, request, render_template
-import boto3, botocore
-import os
-
-S3_BUCKET = os.environ.get("S3_BUCKET_NAME")
-S3_KEY = os.environ.get("S3_ACCESS_KEY")
-S3_SECRET = os.environ.get("S3_SECRET_ACCESS_KEY")
-S3_LOCATION = 'http://{}.s3.amazonaws.com/'.format(S3_BUCKET)
-s3 = boto3.client(
-    "s3",
-    aws_access_key_id=S3_KEY,
-    aws_secret_access_key=S3_SECRET)
+from flask import Flask, render_template, request, redirect, url_for, flash, Response, session
+from flask_bootstrap import Bootstrap
+from filters import datetimeformat, file_type
+from resources import get_bucket, get_buckets_list
 
 app = Flask(__name__)
+app.add_template_filter(datetimeformat)
+app.add_template_filter(file_type)
+bootstrap = Bootstrap(app)
+
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    if request.method == 'POST':
+        bucket = request.form['bucket']
+        session['bucket'] = bucket
+        return redirect(url_for('files'))
+    else:
+        buckets = get_buckets_list()
+        return render_template("index.html", buckets=buckets)
 
 
-@app.route('/upload', methods=["POST"])
-def uploadFunc():
-    if 'file' in request.files:
-        file = request.files['file']
-        print(file.read())
-        try:
-            s3.upload_fileobj(file, S3_BUCKET, file.filename, ExtraArgs={"ContentType": file.content_type})
-        except:
-            return "faileed"
-        return str(file)
+@app.route('/files')
+def files():
+    my_bucket = get_bucket()
+    summaries = my_bucket.objects.all()
+
+    return render_template('files.html', my_bucket=my_bucket, files=summaries)
 
 
-@app.route('/')
-def hello_world():
-    return render_template('hello.html')
+@app.route('/upload', methods=['POST'])
+def upload():
+    file = request.files['file']
+
+    my_bucket = get_bucket()
+    my_bucket.Object(file.filename).put(Body=file)
+
+    flash('File uploaded successfully')
+    return redirect(url_for('files'))
 
 
-@app.route('/1')
-def f1():
-    return render_template('page1.html')
+@app.route('/delete', methods=['POST'])
+def delete():
+    key = request.form['key']
+
+    my_bucket = get_bucket()
+    my_bucket.Object(key).delete()
+
+    flash('File deleted successfully')
+    return redirect(url_for('files'))
 
 
-@app.route('/2')
-def f2():
-    return render_template('page2.html')
+@app.route('/download', methods=['POST'])
+def download():
+    key = request.form['key']
 
+    my_bucket = get_bucket()
+    file_obj = my_bucket.Object(key).get()
 
-@app.route('/3')
-def f3():
-    return render_template('page3.html')
-
-
-@app.route('/4')
-def f4():
-    return render_template('page4.html')
+    return Response(
+        file_obj['Body'].read(),
+        mimetype='text/plain',
+        headers={"Content-Disposition": "attachment;filename={}".format(key)}
+    )
 
 
 if __name__ == '__main__':
+    app.secret_key = '\xd3#d\xb0\xfck=\x14\xb9qi\xde\x04\xea\xb9\x89\x02+\xd8\x1e8g\x83t' #this is new, had errors about needing a secret key
+    app.config['SESSION_TYPE'] = 'filesystem' #this is new
     app.run()
