@@ -3,7 +3,8 @@ import mimetypes
 import arrow
 
 additional_file_types = {
-    '.md': 'text/markdown'
+    '.md': 'text/markdown',
+    '.py': 'text/python'
 }
 
 def basename(path):
