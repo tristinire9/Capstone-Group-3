@@ -25,8 +25,8 @@ def files():
     return render_template('files.html', my_bucket=my_bucket, files=summaries)
 
 
-@app.route('/upload', methods=['POST'])
-def upload():
+@app.route('/component', methods=['POST'])
+def component():
     file = request.files['file']
 
     my_bucket = get_bucket()
