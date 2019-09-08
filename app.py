@@ -1,12 +1,25 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, Response, session
+#from flask import Flask, render_template, request, redirect, url_for, flash, Response, session
+#from flask_bootstrap import Bootstrap
+#from filters import datetimeformat, file_type
+#from resources import get_bucket, get_buckets_list
+
+#app = Flask(__name__)
+#app.add_template_filter(datetimeformat)
+#pp.add_template_filter(file_type)
+#bootstrap = Bootstrap(app)
+
+from flask import Flask, render_template, request, redirect, url_for, flash, \
+    Response, session
 from flask_bootstrap import Bootstrap
 from filters import datetimeformat, file_type
 from resources import get_bucket, get_buckets_list
 
 app = Flask(__name__)
-app.add_template_filter(datetimeformat)
-app.add_template_filter(file_type)
-bootstrap = Bootstrap(app)
+Bootstrap(app)
+app.secret_key = 'secret'
+app.jinja_env.filters['datetimeformat'] = datetimeformat
+app.jinja_env.filters['file_type'] = file_type
+
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -35,6 +48,15 @@ def component():
     #flash('File uploaded successfully')
     return redirect(url_for('files'))
 
+@app.route('/upload', methods=['POST'])
+def upload():
+    file = request.files['file']
+
+    my_bucket = get_bucket()
+    my_bucket.Object(file.filename).put(Body=file)
+
+    flash('File uploaded successfully')
+    return redirect(url_for('files'))
 
 @app.route('/delete', methods=['POST'])
 def delete():
@@ -62,6 +84,6 @@ def download():
 
 
 if __name__ == '__main__':
-    app.secret_key = '\xd3#d\xb0\xfck=\x14\xb9qi\xde\x04\xea\xb9\x89\x02+\xd8\x1e8g\x83t' #this is new, had errors about needing a secret key
-    app.config['SESSION_TYPE'] = 'filesystem' #this is new
+#    app.secret_key = '\xd3#d\xb0\xfck=\x14\xb9qi\xde\x04\xea\xb9\x89\x02+\xd8\x1e8g\x83t' #this is new, had errors about needing a secret key
+#    app.config['SESSION_TYPE'] = 'filesystem' #this is new
     app.run()
