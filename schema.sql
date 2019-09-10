@@ -1,0 +1,10 @@
+DROP TABLE IF EXISTS components;
+
+CREATE TABLE components (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+  name TEXT NOT NULL,
+  version_num TEXT NOT NULL,
+  date TEXT NOT NULL,
+  url TEXT NOT NULL
+);

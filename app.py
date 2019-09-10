@@ -8,6 +8,7 @@
 #pp.add_template_filter(file_type)
 #bootstrap = Bootstrap(app)
 
+import os
 from flask import Flask, render_template, request, redirect, url_for, flash, \
     Response, session
 from flask_bootstrap import Bootstrap
@@ -15,11 +16,18 @@ from filters import datetimeformat, file_type
 from resources import get_bucket, get_buckets_list
 
 app = Flask(__name__)
+app.config.from_mapping(
+        SECRET_KEY='dev',
+        DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
+    )
 Bootstrap(app)
 app.secret_key = 'secret'
 app.jinja_env.filters['datetimeformat'] = datetimeformat
 app.jinja_env.filters['file_type'] = file_type
 
+@app.route('/hello')
+def hello():
+    return 'Hello, World!'
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
