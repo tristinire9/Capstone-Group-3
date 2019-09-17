@@ -12,21 +12,27 @@ bp = Blueprint('mold', __name__)
 
 @bp.route('/hello')
 def hello_world():
-    db = init_db()
+    # db = init_db()
+    db = get_db()
 
-    sqlite_insert_query = """INSERT INTO `components`
-                                  ('name', 'version_num', 'date', 'url')
-                                   VALUES
-                                  ('James','1.2.3','2019-03-17','www.baidu.com')"""
+    # sqlite_insert_query = """INSERT INTO `components`
+    #                               ('name', 'version_num', 'date', 'url')
+    #                                VALUES
+    #                               ('James','1.2.3','2019-03-17','www.baidu.com')"""
+    #
+    # db.execute(sqlite_insert_query)
+    # db.commit()
 
-    db.execute(sqlite_insert_query)
-    db.commit()
+    # name = "James"
+    all_rows = db.execute(
+        'SELECT * FROM components'
+    ).fetchall()
 
-    name = "James"
-    one_row = db.execute(
-        'SELECT name FROM components WHERE name = ?', (name,)
-    ).fetchone()
+    rows = ""
+    for row in all_rows:
+        row = str(row[0]) + "," + str(row[1]) + "," + str(row[2]) + "," + str(row[3]) + "," + str(row[4]) + "; "
+        rows = rows + row
 
-    return one_row[0]
+    return rows
 
 

@@ -1,6 +1,8 @@
 import sys
 import requests
 from requests.exceptions import HTTPError
+import db
+from datetime import datetime
 #'https://intense-stream-78237.herokuapp.com/upload'
 def send_Function(file,fileName,versionNumber):
     try:
@@ -16,6 +18,14 @@ def send_Function(file,fileName,versionNumber):
         print("FILE NOT FOUND")
     else:
         print('Success!')
+        connection = db.create_connection("../instance/flaskr.sqlite")
+
+        now = datetime.now()  # current date and time
+
+        date_time = now.strftime("%d/%m/%Y, %H:%M:%S")
+
+        URL = "https://capprojteam3.s3-ap-southeast-2.amazonaws.com/" + fileName
+        id = db.create_component(connection, (fileName, versionNumber, date_time, URL))
         
         print(response)
 
