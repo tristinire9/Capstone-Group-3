@@ -31,7 +31,7 @@ def send_Function(file,fileName,versionNumber):
 
 def download_Function(fileName, versionNumber):
     try:
-        response = requests.post('https://intense-stream-78237.herokuapp.com/download',form={'key':fileName})
+        response = requests.post('https://intense-stream-78237.herokuapp.com/download',data={'key':fileName})
     except HTTPError as http_err:
         print(f'HTTP error occurred: {http_err}')  # Python 3.6
     except Exception as err:
