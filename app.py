@@ -87,7 +87,8 @@ def delete():
 @app.route('/download', methods=['POST'])
 def download():
     key = request.form['key']
-
+    if not key:
+        key = request.data['key']
     my_bucket = get_bucket()
     file_obj = my_bucket.Object(key).get()
 
