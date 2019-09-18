@@ -22,10 +22,10 @@ def send_Function(file,fileName,versionNumber):
 
         now = datetime.now()  # current date and time
 
-        date_time = now.strftime("%d/%m/%Y, %H:%M:%S")
+        date_time = now.strftime("%d/%m/%Y")
 
         URL = "https://capprojteam3.s3-ap-southeast-2.amazonaws.com/" + fileName
-        id = db.create_component(connection, (fileName, versionNumber, date_time, URL))
+        db.create_component(connection, (fileName, versionNumber, date_time, URL))
         
         print(response)
 

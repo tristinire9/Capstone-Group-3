@@ -33,3 +33,44 @@ def create_component(conn, component):
 # connection = create_connection("../instance/flaskr.sqlite")
 # id = create_component(connection, ('Thomas','1.4.3','2019-09-16','www.google.com'))
 # print(id)
+
+
+# check whether there is any duplicate, if there is return True, else False
+def check_duplicate(fileName, versionNumber):
+    conn = sqlite3.connect("../instance/flaskr.sqlite", isolation_level=None)
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM components WHERE name = ? AND version_num = ?", (fileName, versionNumber))
+    data = cursor.fetchall()
+    if len(data) == 0:
+        return False
+    else:
+        return True
+
+
+# return a list containing all components' names
+def all_components_names():
+    conn = sqlite3.connect("../instance/flaskr.sqlite", isolation_level=None)
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM components")
+    all_components = cursor.fetchall()
+
+    component_names_list = []
+
+    for component in all_components:
+        component_names_list.append(component[1])
+    return component_names_list
+
+
+# return a list containing all the version numbers of a specific component
+def lookup(componentName):
+    conn = sqlite3.connect("../instance/flaskr.sqlite", isolation_level=None)
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM components WHERE name = ? ", (componentName,))
+    components = cursor.fetchall()
+
+    versionNumbers = []
+    for component in components:
+        versionNumbers.append(component[2])
+
+    return versionNumbers
+
