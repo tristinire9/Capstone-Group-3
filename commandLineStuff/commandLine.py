@@ -19,7 +19,6 @@ def send_Function(file,fileName,versionNumber):
     except FileNotFoundError:
         print("FILE NOT FOUND")
     else:
-
         if response.status_code==200:
             sys.exit(0)
         else:
