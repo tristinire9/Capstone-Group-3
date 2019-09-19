@@ -1,14 +1,14 @@
 import sys
 import requests
 from requests.exceptions import HTTPError
-import db
 import re
 from datetime import datetime
 #'https://intense-stream-78237.herokuapp.com/upload'
-url="https://intense-stream-78237.herokuapp.com/"
+url="http://127.0.0.1:5000/"
+
 def send_Function(file,fileName,versionNumber):
     try:
-        response = requests.post(url+'component', files={'file':open(file,'rb')})
+        response = requests.post(url+'component', files={'file':open(file,'rb')}, params={'ver':versionNumber, 'Fname':fileName})
 
     # If the response was successful, no Exception will be raised
         response.raise_for_status()
@@ -19,19 +19,12 @@ def send_Function(file,fileName,versionNumber):
     except FileNotFoundError:
         print("FILE NOT FOUND")
     else:
-        connection = db.create_connection("../instance/flaskr.sqlite")
 
-        now = datetime.now()  # current date and time
-
-        date_time = now.strftime("%d/%m/%Y, %H:%M:%S")
-
-        URL = "https://capprojteam3.s3-ap-southeast-2.amazonaws.com/" + fileName
-        id = db.create_component(connection, (fileName, versionNumber, date_time, URL))
-        
         if response.status_code==200:
-            return sys.exit(0)
+            sys.exit(0)
         else:
-            return sys.exit(1)
+            sys.exit(1)
+
 
 def get_filename_from_cd(cd):
     """
@@ -55,14 +48,19 @@ def download_Function(fileName, versionNumber):
         filename = get_filename_from_cd(response.headers.get('content-disposition'))
         open(filename, 'wb').write(response.content)
         if response.status_code==200:
-            return sys.exit(0)
+            sys.exit(0)
         else:
-            return sys.exit(1)
+            sys.exit(1)
 
 
 def help():
+    print("""\n\n***Welcome to ITL's Software Component Command Line tool!*** \nThis tool is used to store, retrieve, and look up components in the Store\n (Server)\n
+To use this tool correctly, follow the examples below:\n""")
     print("""\nPUSH \"filename.xxx\" \"NAME\" \"1.1.1.1\" - Sends file (relative path) to Store.
-PULL \"filename.xxx\" \"1.1.1.1\"- Sends pull request to Store.
+PULL \"filename.xxx\" \"1.1.1.1\"- Sends retrieve request to Store.\n
+\n
+You must specify a command (Push/Pull), the File (relative path), name the Component, and the version number.\n
+You cannot have duplicates in the store, \ne.g: matching component name and version number.
 """)
 
 if not len(sys.argv) > 3 or sys.argv[1].lower() not in ["push", "pull"]:
