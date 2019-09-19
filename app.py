@@ -62,7 +62,7 @@ def component():
     now = datetime.now()  # current date and time
     date_time = now.strftime("%d/%m/%Y, %H:%M:%S")
 
-    connection = normal_db_functions.create_connection("../instance/flaskr.sqlite")
+    connection = normal_db_functions.create_connection("instance/flaskr.sqlite")
     normal_db_functions.create_component(connection, (fileName, ver, date_time, URL))
 
     my_bucket = get_bucket()
