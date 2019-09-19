@@ -6,7 +6,7 @@ from flask import (
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from normal_db_functions import get_db, init_db
+from db import get_db, init_db
 
 bp = Blueprint('mold', __name__)
 
