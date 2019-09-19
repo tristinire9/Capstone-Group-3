@@ -7,7 +7,9 @@
 #app.add_template_filter(datetimeformat)
 #pp.add_template_filter(file_type)
 #bootstrap = Bootstrap(app)
+import datetime
 from auth import bp
+import db
 
 import normal_db_functions
 import sqlite3
@@ -19,7 +21,7 @@ from filters import datetimeformat, file_type
 from resources import get_bucket, get_buckets_list
 
 app = Flask(__name__)
-normal_db_functions.init_app(app)
+db.init_app(app)
 app.register_blueprint(bp, url_prefix="/hi")
 app.config.from_mapping(
         SECRET_KEY='dev',
@@ -54,6 +56,15 @@ def files():
 @app.route('/component', methods=['POST'])
 def component():
     file = request.files['file']
+    print(file)
+    ver = request.args.get('ver')
+    fileName = request.args.get('Fname')
+    print(ver)
+    URL = "https://capprojteam3.s3-ap-southeast-2.amazonaws.com/" + fileName
+    now = datetime.now()  # current date and time
+    date_time = now.strftime("%d/%m/%Y, %H:%M:%S")
+    connection = normal_db_functions.create_connection("../instance/flaskr.sqlite")
+    normal_db_functions.create_component(connection, (fileName, ver, date_time, URL))
 
     my_bucket = get_bucket()
     my_bucket.Object(file.filename).put(Body=file)
@@ -62,6 +73,7 @@ def component():
 
     #flash('File uploaded successfully')
     return redirect(url_for('files'))
+
 
 @app.route('/upload', methods=['POST'])
 def upload():
