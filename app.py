@@ -9,7 +9,7 @@
 #bootstrap = Bootstrap(app)
 from auth import bp
 
-import db
+import normal_db_functions
 import sqlite3
 import os
 from flask import Flask, render_template, request, redirect, url_for, flash, \
@@ -19,7 +19,7 @@ from filters import datetimeformat, file_type
 from resources import get_bucket, get_buckets_list
 
 app = Flask(__name__)
-db.init_app(app)
+normal_db_functions.init_app(app)
 app.register_blueprint(bp, url_prefix="/hi")
 app.config.from_mapping(
         SECRET_KEY='dev',

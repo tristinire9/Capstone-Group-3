@@ -35,9 +35,9 @@ def create_component(conn, component):
 # print(id)
 
 
-# check whether there is any duplicate, if there is return True, else False
-def check_duplicate(fileName, versionNumber):
-    conn = sqlite3.connect("../instance/flaskr.sqlite", isolation_level=None)
+# check whether there is any duplicate, if there is, return True, otherwise False
+def check_duplicate(db_file, fileName, versionNumber):
+    conn = sqlite3.connect(db_file, isolation_level=None)
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM components WHERE name = ? AND version_num = ?", (fileName, versionNumber))
     data = cursor.fetchall()
@@ -48,8 +48,8 @@ def check_duplicate(fileName, versionNumber):
 
 
 # return a list containing all components' names
-def all_components_names():
-    conn = sqlite3.connect("../instance/flaskr.sqlite", isolation_level=None)
+def all_components_names(db_file):
+    conn = sqlite3.connect(db_file, isolation_level=None)
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM components")
     all_components = cursor.fetchall()
@@ -62,8 +62,8 @@ def all_components_names():
 
 
 # return a list containing all the version numbers of a specific component
-def lookup(componentName):
-    conn = sqlite3.connect("../instance/flaskr.sqlite", isolation_level=None)
+def lookup(db_file, componentName):
+    conn = sqlite3.connect(db_file, isolation_level=None)
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM components WHERE name = ? ", (componentName,))
     components = cursor.fetchall()
@@ -74,3 +74,7 @@ def lookup(componentName):
 
     return versionNumbers
 
+
+
+# create_component(create_connection("../instance/myDB"), ("Thomas", "1.2.3.4", "19/9/2019", "www.google.com"))
+# print(lookup("../instance/myDB", "Thomas"))
