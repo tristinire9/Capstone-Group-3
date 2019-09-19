@@ -17,6 +17,8 @@ import os
 from flask import Flask, render_template, request, redirect, url_for, flash, \
     Response, session
 from flask_bootstrap import Bootstrap
+from datetime import datetime
+
 from filters import datetimeformat, file_type
 from resources import get_bucket, get_buckets_list
 
@@ -31,10 +33,6 @@ Bootstrap(app)
 app.secret_key = 'secret'
 app.jinja_env.filters['datetimeformat'] = datetimeformat
 app.jinja_env.filters['file_type'] = file_type
-
-# @app.route('/hello')
-# def hello():
-#     return 'Hello, World!'
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -63,6 +61,7 @@ def component():
     URL = "https://capprojteam3.s3-ap-southeast-2.amazonaws.com/" + fileName
     now = datetime.now()  # current date and time
     date_time = now.strftime("%d/%m/%Y, %H:%M:%S")
+
     connection = normal_db_functions.create_connection("../instance/flaskr.sqlite")
     normal_db_functions.create_component(connection, (fileName, ver, date_time, URL))
 
