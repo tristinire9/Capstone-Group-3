@@ -5,17 +5,34 @@ import re
 import zipfile
 import os
 
+#Ensures all files inside a directory get added to zip
 def zipdir(path, ziph):
     # ziph is zipfile handle
-    for root, dirs, files in os.walk(path):
-        for file in files:
-            ziph.write(os.path.join(root, file))
+    if os.path.isfile(path):
+        if path.split(".")[1]=="zip":
+            ziph.write(path)
+    else:
+        for root, dirs, files in os.walk(path):
+            for file in files:
+                ziph.write(os.path.join(root, file))
+
+#Zips single files/directories, otherwise renames the file if it's already zipped
+def ensureZipped(file,fileName):
+    if os.path.isfile(file):
+        if file.split(".")[1]=="zip":
+            os.rename(file,fileName+".zip")
+    else:
+        zipf = zipfile.ZipFile(fileName+'.zip', 'w', zipfile.ZIP_DEFLATED)
+        zipdir(file, zipf)
+        zipf.close()
+
 #'https://intense-stream-78237.herokuapp.com/upload'
 url="http://127.0.0.1:5000/"
 
 def send_Function(file,fileName,versionNumber):
     try:
-        response = requests.post(url+'component', files={'file':open(file,'rb')}, params={'ver':versionNumber, 'Fname':fileName})
+        ensureZipped(file,fileName)
+        response = requests.post(url+'component', files={'file':open(fileName+".zip",'rb')}, params={'ver':versionNumber, 'Fname':fileName})
     # If the response was successful, no Exception will be raised
         response.raise_for_status()
     except HTTPError as http_err:
