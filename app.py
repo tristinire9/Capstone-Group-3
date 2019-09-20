@@ -14,7 +14,7 @@ import db
 import normal_db_functions
 import sqlite3
 import os
-from flask import Flask, render_template, request, redirect, url_for, flash, \
+from flask import Flask, render_template, request, redirect, url_for, jsonify,flash, \
     Response, session
 from flask_bootstrap import Bootstrap
 from datetime import datetime
@@ -54,19 +54,19 @@ def files():
 @app.route('/component', methods=['POST'])
 def component():
     file = request.files['file']
-    print(file)
     ver = request.args.get('ver')
     fileName = request.args.get('Fname')
-    print(ver)
-    URL = "https://capprojteam3.s3-ap-southeast-2.amazonaws.com/" + fileName
+    URL = "https://capprojteam3.s3-ap-southeast-2.amazonaws.com/" + fileName+"."+ver
     now = datetime.now()  # current date and time
     date_time = now.strftime("%d/%m/%Y, %H:%M:%S")
 
     connection = normal_db_functions.create_connection("instance/flaskr.sqlite")
+    if normal_db_functions.check_duplicate("instance/flaskr.sqlite",fileName,ver):
+        return jsonify("DUPLICATE"),400
     normal_db_functions.create_component(connection, (fileName, ver, date_time, URL))
 
     my_bucket = get_bucket()
-    my_bucket.Object(file.filename).put(Body=file)
+    my_bucket.Object(fileName+"."+ver).put(Body=file)
 
 
 

@@ -2,18 +2,27 @@ import sys
 import requests
 from requests.exceptions import HTTPError
 import re
-from datetime import datetime
+import zipfile
+import os
+
+def zipdir(path, ziph):
+    # ziph is zipfile handle
+    for root, dirs, files in os.walk(path):
+        for file in files:
+            ziph.write(os.path.join(root, file))
 #'https://intense-stream-78237.herokuapp.com/upload'
 url="http://127.0.0.1:5000/"
 
 def send_Function(file,fileName,versionNumber):
     try:
         response = requests.post(url+'component', files={'file':open(file,'rb')}, params={'ver':versionNumber, 'Fname':fileName})
-
     # If the response was successful, no Exception will be raised
         response.raise_for_status()
     except HTTPError as http_err:
         print(f'HTTP error occurred: {http_err}')  # Python 3.6
+        if response.status_code==400:
+            print("The Server denied the request most likely because that Component name and version already exists in the database.")
+
     except Exception as err:
         print(f'Other error occurred: {err}')  # Python 3.6
     except FileNotFoundError:
