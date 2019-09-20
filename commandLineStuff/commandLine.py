@@ -5,16 +5,20 @@ import re
 import zipfile
 import os
 
-#Ensures all files inside a directory get added to zip
-def zipdir(path, ziph):
-    # ziph is zipfile handle
-    if os.path.isfile(path):
-        if path.split(".")[1]=="zip":
-            ziph.write(path)
-    else:
-        for root, dirs, files in os.walk(path):
-            for file in files:
-                ziph.write(os.path.join(root, file))
+def retrieve_file_paths(dirName):
+
+  # setup file paths variable
+  filePaths = []
+
+  # Read all directory, subdirectories and file lists
+  for root, directories, files in os.walk(dirName):
+    for filename in files:
+        # Create the full filepath by using os module.
+        filePath = os.path.join(root, filename)
+        filePaths.append(filePath)
+
+  # return all paths
+  return filePaths
 
 #Zips single files/directories, otherwise renames the file if it's already zipped
 def ensureZipped(file,fileName):
@@ -22,12 +26,14 @@ def ensureZipped(file,fileName):
         if file.split(".")[1]=="zip":
             os.rename(file,fileName+".zip")
     else:
+        filePaths = retrieve_file_paths(file)
         zipf = zipfile.ZipFile(fileName+'.zip', 'w', zipfile.ZIP_DEFLATED)
-        zipdir(file, zipf)
+        for file in filePaths:
+            zipf.write(file)
         zipf.close()
 
-#'https://intense-stream-78237.herokuapp.com/upload'
-url="https://intense-stream-78237.herokuapp.com/upload/"
+#'https://intense-stream-78237.herokuapp.com/'
+url="http://127.0.0.1:5000/"
 
 def send_Function(file,fileName,versionNumber):
     try:
@@ -64,7 +70,7 @@ def get_filename_from_cd(cd):
 
 def download_Function(fileName, versionNumber):
     try:
-        response = requests.post(url+'download',data={'key':fileName})
+        response = requests.get(url+'retrieve',params={'ver':versionNumber, 'Fname':fileName})
     except HTTPError as http_err:
         print(f'HTTP error occurred: {http_err}')  # Python 3.6
     except Exception as err:

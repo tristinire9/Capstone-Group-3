@@ -91,8 +91,6 @@ def delete():
 @app.route('/download', methods=['POST'])
 def download():
     key = request.form['key']
-    if not key:
-        key = request.data['key']
     my_bucket = get_bucket()
     file_obj = my_bucket.Object(key).get()
 
@@ -101,6 +99,26 @@ def download():
         mimetype='text/plain',
         headers={"Content-Disposition": "attachment;filename={}".format(key)}
     )
+@app.route('/retrieve', methods=['GET'])
+def retrieve():
+    ver = request.args.get('ver')
+    fileName = request.args.get('Fname')
+
+    connection = normal_db_functions.create_connection("instance/flaskr.sqlite")
+    if normal_db_functions.check_duplicate("instance/flaskr.sqlite",fileName,ver):
+        url = normal_db_functions.get_URL("instance/flaskr.sqlite",fileName,ver)
+        key = url[0][0].split("/")[-1]
+
+        my_bucket = get_bucket()
+        file_obj = my_bucket.Object(key).get()
+
+        return Response(
+            file_obj['Body'].read(),
+            mimetype='text/plain',
+            headers={"Content-Disposition": "attachment;filename={}".format(key)}
+        )
+    else:
+        return jsonify("DOESN'T EXIST"),404
 
 if __name__ == '__main__':
 #    app.secret_key = '\xd3#d\xb0\xfck=\x14\xb9qi\xde\x04\xea\xb9\x89\x02+\xd8\x1e8g\x83t' #this is new, had errors about needing a secret key

@@ -6,5 +6,5 @@ CREATE TABLE components (
   name TEXT NOT NULL,
   version_num TEXT NOT NULL,
   date TEXT NOT NULL,
-  url TEXT NOT NULL
+  url TEXT NOT NULL,
 );

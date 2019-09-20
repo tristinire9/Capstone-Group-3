@@ -46,6 +46,15 @@ def check_duplicate(db_file, fileName, versionNumber):
     else:
         return True
 
+def get_URL(db_file, fileName, versionNumber):
+    conn = sqlite3.connect(db_file, isolation_level=None)
+    cursor = conn.cursor()
+    cursor.execute("SELECT url FROM components WHERE name = ? AND version_num = ?", (fileName, versionNumber))
+    data = cursor.fetchall()
+    if len(data) == 0:
+        return None
+    else:
+        return data
 
 # return a list containing all components' names
 def all_components_names(db_file):
