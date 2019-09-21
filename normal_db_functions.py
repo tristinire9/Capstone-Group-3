@@ -19,8 +19,8 @@ def create_connection(db_file):
 def create_component(conn, component):
     """
     Create a new component into the components table
-    :param conn:
-    :param component:
+    :param conn: a database connection
+    :param component: a component as a tuple
     :return: component id
     """
     sql = ''' INSERT INTO components ('name', 'version_num', 'date', 'url')
@@ -37,6 +37,13 @@ def create_component(conn, component):
 
 # check whether there is any duplicate, if there is, return True, otherwise False
 def check_duplicate(db_file, fileName, versionNumber):
+    """ check whether there is any duplicate with both fileName and versionNumber
+        in db_file
+    :param db_file: database file
+    :param fileName: name of a component
+    :param versionNumber: version number of a component
+    :return: True or False
+    """
     conn = sqlite3.connect(db_file, isolation_level=None)
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM components WHERE name = ? AND version_num = ?", (fileName, versionNumber))
@@ -49,6 +56,10 @@ def check_duplicate(db_file, fileName, versionNumber):
 
 # return a list containing all components' names
 def all_components_names(db_file):
+    """ return a list containing all components' names in db_file
+    :param db_file: database file
+    :return: a list
+    """
     conn = sqlite3.connect(db_file, isolation_level=None)
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM components")
@@ -63,6 +74,11 @@ def all_components_names(db_file):
 
 # return a list containing all the version numbers of a specific component
 def lookup(db_file, componentName):
+    """ return a list containing all the version numbers of a specific component in db_file
+    :param db_file: database file
+    :param componentName: name of a component
+    :return: a list
+    """
     conn = sqlite3.connect(db_file, isolation_level=None)
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM components WHERE name = ? ", (componentName,))
@@ -73,7 +89,6 @@ def lookup(db_file, componentName):
         versionNumbers.append(component[2])
 
     return versionNumbers
-
 
 
 # create_component(create_connection("../instance/myDB"), ("Thomas", "1.2.3.4", "19/9/2019", "www.google.com"))
