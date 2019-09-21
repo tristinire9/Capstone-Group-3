@@ -1,12 +1,4 @@
-#from flask import Flask, render_template, request, redirect, url_for, flash, Response, session
-#from flask_bootstrap import Bootstrap
-#from filters import datetimeformat, file_type
-#from resources import get_bucket, get_buckets_list
 
-#app = Flask(__name__)
-#app.add_template_filter(datetimeformat)
-#pp.add_template_filter(file_type)
-#bootstrap = Bootstrap(app)
 import datetime
 from auth import bp
 import db
@@ -54,9 +46,10 @@ def files():
 @app.route('/component', methods=['POST'])
 def component():
     file = request.files['file']
+    filetype = file.filename.split(".")[1]
     ver = request.args.get('ver')
     fileName = request.args.get('Fname')
-    URL = "https://capprojteam3.s3-ap-southeast-2.amazonaws.com/" + fileName+"."+ver
+    URL = "https://capprojteam3.s3-ap-southeast-2.amazonaws.com/" + fileName+"".join(ver.split('.'))+'.'+filetype
     now = datetime.now()  # current date and time
     date_time = now.strftime("%d/%m/%Y, %H:%M:%S")
 
@@ -66,7 +59,7 @@ def component():
     normal_db_functions.create_component(connection, (fileName, ver, date_time, URL))
 
     my_bucket = get_bucket()
-    my_bucket.Object(fileName+"."+ver).put(Body=file)
+    my_bucket.Object(fileName+"".join(ver.split('.'))+'.'+filetype).put(Body=file)
 
 
 
@@ -98,8 +91,6 @@ def delete():
 @app.route('/download', methods=['POST'])
 def download():
     key = request.form['key']
-    if not key:
-        key = request.data['key']
     my_bucket = get_bucket()
     file_obj = my_bucket.Object(key).get()
 
@@ -108,6 +99,26 @@ def download():
         mimetype='text/plain',
         headers={"Content-Disposition": "attachment;filename={}".format(key)}
     )
+@app.route('/retrieve', methods=['GET'])
+def retrieve():
+    ver = request.args.get('ver')
+    fileName = request.args.get('Fname')
+
+    connection = normal_db_functions.create_connection("instance/flaskr.sqlite")
+    if normal_db_functions.check_duplicate("instance/flaskr.sqlite",fileName,ver):
+        url = normal_db_functions.get_URL("instance/flaskr.sqlite",fileName,ver)
+        key = url[0][0].split("/")[-1]
+
+        my_bucket = get_bucket()
+        file_obj = my_bucket.Object(key).get()
+
+        return Response(
+            file_obj['Body'].read(),
+            mimetype='text/plain',
+            headers={"Content-Disposition": "attachment;filename={}".format(key)}
+        )
+    else:
+        return jsonify("DOESN'T EXIST"),404
 
 if __name__ == '__main__':
 #    app.secret_key = '\xd3#d\xb0\xfck=\x14\xb9qi\xde\x04\xea\xb9\x89\x02+\xd8\x1e8g\x83t' #this is new, had errors about needing a secret key

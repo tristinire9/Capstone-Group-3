@@ -5,17 +5,40 @@ import re
 import zipfile
 import os
 
-def zipdir(path, ziph):
-    # ziph is zipfile handle
-    for root, dirs, files in os.walk(path):
-        for file in files:
-            ziph.write(os.path.join(root, file))
-#'https://intense-stream-78237.herokuapp.com/upload'
+def retrieve_file_paths(dirName):
+
+  # setup file paths variable
+  filePaths = []
+
+  # Read all directory, subdirectories and file lists
+  for root, directories, files in os.walk(dirName):
+    for filename in files:
+        # Create the full filepath by using os module.
+        filePath = os.path.join(root, filename)
+        filePaths.append(filePath)
+
+  # return all paths
+  return filePaths
+
+#Zips single files/directories, otherwise renames the file if it's already zipped
+def ensureZipped(file,fileName):
+    if os.path.isfile(file):
+        if file.split(".")[1]=="zip":
+            os.rename(file,fileName+".zip")
+    else:
+        filePaths = retrieve_file_paths(file)
+        zipf = zipfile.ZipFile(fileName+'.zip', 'w', zipfile.ZIP_DEFLATED)
+        for file in filePaths:
+            zipf.write(file)
+        zipf.close()
+
+#'https://intense-stream-78237.herokuapp.com/'
 url="http://127.0.0.1:5000/"
 
 def send_Function(file,fileName,versionNumber):
     try:
-        response = requests.post(url+'component', files={'file':open(file,'rb')}, params={'ver':versionNumber, 'Fname':fileName})
+        ensureZipped(file,fileName)
+        response = requests.post(url+'component', files={'file':open(fileName+".zip",'rb')}, params={'ver':versionNumber, 'Fname':fileName})
     # If the response was successful, no Exception will be raised
         response.raise_for_status()
     except HTTPError as http_err:
@@ -47,7 +70,7 @@ def get_filename_from_cd(cd):
 
 def download_Function(fileName, versionNumber):
     try:
-        response = requests.post(url+'download',data={'key':fileName})
+        response = requests.get(url+'retrieve',params={'ver':versionNumber, 'Fname':fileName})
     except HTTPError as http_err:
         print(f'HTTP error occurred: {http_err}')  # Python 3.6
     except Exception as err:
