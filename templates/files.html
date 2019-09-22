@@ -1,10 +1,10 @@
 {% extends "layout.html" %}
-{% block title %}S3 Object List{% endblock %}
+{% block title %}ITL Component Store{% endblock %}
 
 {% block content %}
   <div class="container">
     <div class="col-12-xs">
-      <h3>Bucket Info</h3>
+      <h3>Store Components</h3>
       <p>Created: {{ my_bucket.creation_date | datetimeformat }}</p>
 
       {% with messages = get_flashed_messages() %}
@@ -26,30 +26,19 @@
 
       <table class="table table-striped">
         <tr>
-          <th>Filename</th>
-          <th>Last Modified</th>
-          <th>Type</th>
+          <th>Component</th>
           <th></th>
         </tr>
-        {% for f in files %}
+        {% for name in dB.all_components_names("instance/flaskr.sqlite") %}
         <tr>
-          <td>{{ f.key }}</td>
-          <td>{{ f.last_modified | datetimeformat }}</td>
-          <td>{{ f.key | file_type }}</td>
+          <td>{{ name }}</td>
           <td class="td-buttons">
-            <form class="delete-form" action="{{ url_for('delete') }}" method="POST">
-              <input type="hidden" name="key" value="{{ f.key }}">
-              <button type="submit" class="btn btn-danger btn-sm">
-                <i class="fa fa-trash-alt"></i>
+            <form class="delete-form" action="{{ url_for('version') }}" method="POST">
+              <input type="hidden" name="component" value="{{ name }}">
+              <button type="submit" class="btn btn-outline-primary">
+                Versions
               </button>
             </form>
-            <form class="download-form" action="{{ url_for('download') }}" method="POST">
-              <input type="hidden" name="key" value="{{ f.key }}">
-              <button type="submit" class="btn btn-default btn-sm">
-                <i class="fa fa-download"></i>
-              </button>
-            </form>
-          </td>
         </tr>
         {% endfor %}
       </table>

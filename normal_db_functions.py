@@ -71,13 +71,12 @@ def all_components_names(db_file):
     """
     conn = sqlite3.connect(db_file, isolation_level=None)
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM components")
+    cursor.execute("SELECT DISTINCT name FROM components")
     all_components = cursor.fetchall()
 
     component_names_list = []
-
     for component in all_components:
-        component_names_list.append(component[1])
+        component_names_list.append(component[0]) #adds into index at which it's ID(PK) is represented
     return component_names_list
 
 
