@@ -100,5 +100,11 @@ def lookup(db_file, componentName):
     return versionNumbers
 
 
+def delete_component(db_file, name, version_num):
+    conn = sqlite3.connect(db_file, isolation_level=None)
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM components WHERE name = ? AND version_num = ?", (name, version_num))
+    return 0
+
 # create_component(create_connection("../instance/myDB"), ("Thomas", "1.2.3.4", "19/9/2019", "www.google.com"))
 # print(lookup("../instance/myDB", "Thomas"))

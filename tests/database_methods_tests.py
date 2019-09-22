@@ -6,6 +6,17 @@ class SimpleTest(unittest.TestCase):
     global db_file
     db_file = "../instance/myDB.sqlite"
 
+    @classmethod
+    def setUpClass(cls):
+        conn = sqlite3.connect(db_file)
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO components (name, version_num, date, url) VALUES('Ahmad', '2.4.7.8', '1997-10-12', 'www.google.com')")
+
+    # @classmethod
+    # def tearDownClass(cls):
+    #     cls._connection.destroy()
+
     def test_create_component(self):
         conn = normal_db_functions.create_connection(db_file)
         cur = conn.cursor()
@@ -30,6 +41,31 @@ class SimpleTest(unittest.TestCase):
     def test_check_duplicate_2(self):
         duplicate = normal_db_functions.check_duplicate(db_file, "Bob", "1.2.3.4")
         self.assertEqual(duplicate, False)
+
+    def test_look_up(self):
+        result = normal_db_functions.lookup(db_file, "test")
+        self.assertEqual(result, ["1.2.3.4", "1.2.3.4"])
+
+
+    def test_get_URL(self):
+        result = normal_db_functions.get_URL(db_file, "test", "1.2.3.4")
+        result_list = []
+        for data in result:
+            result_list.append(data[0])
+        self.assertEqual(result_list, ["https://capprojteam3.s3-ap-southeast-2.amazonaws.com/test", "https://capprojteam3.s3-ap-southeast-2.amazonaws.com/test"])
+
+
+    def test_delete_component(self):
+        normal_db_functions.delete_component(db_file, "Ahmad", "2.4.7.8")
+
+        conn =  sqlite3.connect(db_file)
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM components WHERE name = 'Ahmad' AND version_num = '2.4.7.8'")
+        data = cur.fetchall()
+        if len(data) == 0:
+            self.assertTrue(True)
+        else:
+            self.assertTrue(False)
 
 
 if __name__ == '__main__':
