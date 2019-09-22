@@ -40,7 +40,7 @@ def index():
 def files():
     my_bucket = get_bucket()
     summaries = my_bucket.objects.all()
-    return render_template('files.html', my_bucket=my_bucket, files=summaries)
+    return render_template('files.html', my_bucket=my_bucket, files=summaries, dB = normal_db_functions)
 
 
 @app.route('/component', methods=['POST'])
@@ -90,7 +90,7 @@ def delete():
 
 @app.route('/download', methods=['POST'])
 def download():
-    key = request.form['key']
+    key = request.form['key'].split('/')[-1][:-4]
     my_bucket = get_bucket()
     file_obj = my_bucket.Object(key).get()
 
@@ -99,6 +99,13 @@ def download():
         mimetype='text/plain',
         headers={"Content-Disposition": "attachment;filename={}".format(key)}
     )
+
+@app.route('/version', methods=['POST'])
+def version():
+    component = request.form['component']
+    my_bucket = get_bucket()
+    return render_template('versions.html', my_bucket=my_bucket, componentName=component, dB = normal_db_functions)
+
 @app.route('/retrieve', methods=['GET'])
 def retrieve():
     ver = request.args.get('ver')
