@@ -105,5 +105,20 @@ def delete_component(db_file, name, version_num):
     cursor.execute("DELETE FROM components WHERE name = ? AND version_num = ?", (name, version_num))
     return 0
 
+
+def create_recipe(db_file, name, version_num, status):
+    conn = sqlite3.connect(db_file, isolation_level=None)
+    cursor = conn.cursor()
+    cursor.execute(''' INSERT INTO recipes ('name', 'version_num', 'status')
+              VALUES(?,?,?) ''', (name, version_num, status))
+    return 0
+
+
+def create_relationship(db_file, componentID, recipeID):
+    conn = sqlite3.connect(db_file, isolation_level=None)
+    cursor = conn.cursor()
+    cursor.execute(''' INSERT INTO relationships ('componentID', 'recipeID')
+                  VALUES(?,?) ''', (componentID, recipeID))
+    return 0
 # create_component(create_connection("../instance/myDB"), ("Thomas", "1.2.3.4", "19/9/2019", "www.google.com"))
 # print(lookup("../instance/myDB", "Thomas"))

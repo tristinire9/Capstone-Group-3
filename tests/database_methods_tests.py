@@ -11,11 +11,14 @@ class SimpleTest(unittest.TestCase):
         conn = sqlite3.connect(db_file)
         cur = conn.cursor()
         cur.execute(
-            "INSERT INTO components (name, version_num, date, url) VALUES('Ahmad', '2.4.7.8', '1997-10-12', 'www.google.com')")
+            "INSERT INTO components (name, version_num, date, url) VALUES ('Ahmad', '2.4.7.8', '1997-10-12', 'www.google.com')")
 
-    # @classmethod
-    # def tearDownClass(cls):
-    #     cls._connection.destroy()
+    @classmethod
+    def tearDownClass(cls):
+        conn = sqlite3.connect(db_file)
+        cur = conn.cursor()
+        cur.execute("DELETE FROM recipes")
+        cur.execute("DELETE FROM relationships")
 
     def test_create_component(self):
         conn = normal_db_functions.create_connection(db_file)
@@ -66,6 +69,31 @@ class SimpleTest(unittest.TestCase):
             self.assertTrue(True)
         else:
             self.assertTrue(False)
+
+    def test_create_recipe(self):
+        normal_db_functions.create_recipe(db_file, "MyRecipe", "7.8.9.4", "In development")
+
+        conn = sqlite3.connect(db_file)
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM recipes WHERE name = 'MyRecipe' AND version_num = '7.8.9.4' AND status = 'In development'")
+        data = cur.fetchall()
+        if len(data) == 0:
+            self.assertTrue(False)
+        else:
+            self.assertTrue(True)
+
+    def test_create_relationship(self):
+        normal_db_functions.create_relationship(db_file, "1", "1")
+
+        conn = sqlite3.connect(db_file)
+        cur = conn.cursor()
+        cur.execute(
+            "SELECT * FROM relationships")
+        data = cur.fetchall()
+        if len(data) == 0:
+            self.assertTrue(False)
+        else:
+            self.assertTrue(True)
 
 
 if __name__ == '__main__':
