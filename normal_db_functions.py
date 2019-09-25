@@ -113,6 +113,17 @@ def create_recipe(db_file, name, version_num, status):
               VALUES(?,?,?) ''', (name, version_num, status))
     return 0
 
+def all_Recipes(db_file):
+    """Returns a list of all recipe names"""
+    conn = sqlite3.connect(db_file, isolation_level=None)
+    cursor = conn.cursor()
+    cursor.execute("SELECT DISTINCT name FROM recipes")
+    all_components = cursor.fetchall()
+
+    component_names_list = []
+    for component in all_components:
+        component_names_list.append(component[0]) #adds into index at which it's ID(PK) is represented
+    return component_names_list
 
 def create_relationship(db_file, componentID, recipeID):
     conn = sqlite3.connect(db_file, isolation_level=None)

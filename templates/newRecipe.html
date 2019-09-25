@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% block title %}ITL Component Store{% endblock %}
+
+{% block content %}
+<div class="container" xmlns="http://www.w3.org/1999/html">
+    <div class="col-12-xs">
+      <h3>Recipe Details</h3>
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <p class="bg-info" style="padding: 15px;">
+          {% for message in messages %}
+            {{ message }}<br>
+          {% endfor %}
+          </p>
+        {% endif %}
+      {% endwith %}
+      <hr>
+
+      <form action = "{{ url_for('submitNewRecipe') }}" method="get">
+        Software Name:<br>
+        <input type="text" name="softwareName"><br>
+        Version Number: <br>
+        <input type ="text" name="version"><br>
+        Status: <br>
+        <input type ="radio" name="status" value="In Development" checked>In Development<br>
+        <input type ="radio" name="status" value="Released">Released<br><br>
+
+        <button type="submit" name="submit">Submit</button><br>
+      </form>
+
+    </div>
+  </div>
+{% endblock %}
