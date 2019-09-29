@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+{% block title %}ITL Component Store{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="col-12-xs">
+      <h3>Store Recipes</h3>
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <p class="bg-info" style="padding: 15px;">
+          {% for message in messages %}
+            {{ message }}<br>
+          {% endfor %}
+          </p>
+        {% endif %}
+      {% endwith %}
+      <hr>
+      <a type="submit" href="{{ url_for('new_Recipe') }}">Create New Recipe</a><br><br>
+      <table class="table table-striped">
+        <tr>
+          <th>Recipe</th>
+          <th></th>
+        </tr>
+        {% for name in dB.all_Recipes("instance/flaskr.sqlite") %}
+        <tr>
+          <td>{{ name }}</td>
+          <td class="td-buttons">
+            <form class="delete-form" action="{{ url_for('version') }}" method="POST">
+              <input type="hidden" name="component" value="{{ name }}">
+              <button type="submit" class="btn btn-outline-primary">
+                Versions
+              </button>
+            </form>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+{% endblock %}
