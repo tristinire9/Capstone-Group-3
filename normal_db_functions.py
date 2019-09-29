@@ -114,11 +114,33 @@ def create_recipe(db_file, name, version_num, status):
     return 0
 
 
-def create_relationship(db_file, componentID, recipeID):
+def create_relationship(db_file, componentID, recipeID, destination_path):
     conn = sqlite3.connect(db_file, isolation_level=None)
     cursor = conn.cursor()
-    cursor.execute(''' INSERT INTO relationships ('componentID', 'recipeID')
-                  VALUES(?,?) ''', (componentID, recipeID))
+    cursor.execute(''' INSERT INTO relationships ('componentID', 'recipeID', 'destination_path')
+                  VALUES(?,?,?) ''', (componentID, recipeID, destination_path))
+    return 0
+
+
+def change_recipe_name(db_file, oldName, version_num, newName):
+    conn = sqlite3.connect(db_file, isolation_level=None)
+    cursor = conn.cursor()
+    cursor.execute(''' UPDATE recipes SET name = ? WHERE name = ? AND version_num = ?''', (newName, oldName, version_num))
+
+    return 0
+
+def change_recipe_version_num(db_file, name, old_version_num, new_version_num):
+    conn = sqlite3.connect(db_file, isolation_level=None)
+    cursor = conn.cursor()
+    cursor.execute(''' UPDATE recipes SET version_num = ? WHERE name = ? AND version_num = ?''', (new_version_num, name, old_version_num))
+
+    return 0
+
+def change_recipe_status(db_file, name, version_num, new_status):
+    conn = sqlite3.connect(db_file, isolation_level=None)
+    cursor = conn.cursor()
+    cursor.execute(''' UPDATE recipes SET status = ? WHERE name = ? AND version_num = ?''', (new_status, name, version_num))
+
     return 0
 # create_component(create_connection("../instance/myDB"), ("Thomas", "1.2.3.4", "19/9/2019", "www.google.com"))
 # print(lookup("../instance/myDB", "Thomas"))
