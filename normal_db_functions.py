@@ -172,6 +172,41 @@ def create_a_relationship(db_file, recipe_name, recipe_num, component_name, comp
 
     return 0
 
+# return a list
+def get_a_component_by_ID(db_file, component_ID):
+    conn = sqlite3.connect(db_file, isolation_level=None)
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM components WHERE id = ?", (component_ID,))
+    component = cursor.fetchall()
+    return list(component[0])
+
+def all_components_in_a_recipe(db_file, recipe_name, recipe_num):
+    recipe_ID = get_a_recipe_ID(db_file, recipe_name, recipe_num)
+
+    conn = sqlite3.connect(db_file, isolation_level=None)
+    cursor = conn.cursor()
+    cursor.execute(''' SELECT * FROM relationships WHERE recipeID = ?''', (recipe_ID,))
+    relationships = cursor.fetchall()
+
+    component_IDs_list = []
+    destinations_list = []
+    for relationship in relationships:
+        component_IDs_list.append(relationship[1])
+        destinations_list.append(relationship[3])
+
+    components_list = []
+    for component_ID in component_IDs_list:
+        components_list.append(get_a_component_by_ID(db_file, component_ID))
+
+    result_list = []
+    for i in range(0, len(destinations_list)):
+        component = components_list[i]
+        destination = destinations_list[i]
+        result = component + [destination]
+        result_list.append(result)
+
+    return result_list
+
 
 
 # create_component(create_connection("../instance/myDB"), ("Thomas", "1.2.3.4", "19/9/2019", "www.google.com"))

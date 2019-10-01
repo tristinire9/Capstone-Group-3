@@ -1,16 +1,12 @@
-import sqlite3
+destinations_list = ['/', "/data"]
+components_list = [[22,"hh"], [56,"po"]]
 
-conn = sqlite3.connect("instance/flaskr.sqlite")
+result_list = []
+for i in range(0, len(destinations_list)):
+    component = components_list[i]
+    destination = destinations_list[i]
+    result = component + [destination]
+    print(result)
+    result_list.append(result)
 
-cur = conn.cursor()
-
-cur.execute("""CREATE TABLE relationships (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-
-  componentID INTEGER NOT NULL,
-  recipeID INTEGER NOT NULL,
-
-  FOREIGN KEY(componentID) REFERENCES components(id),
-  FOREIGN KEY(recipeID) REFERENCES recipes(id)
-);""")
-
+print(result_list)

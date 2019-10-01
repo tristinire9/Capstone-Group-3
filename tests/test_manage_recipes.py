@@ -16,7 +16,7 @@ class SimpleTest(unittest.TestCase):
         conn = sqlite3.connect(db_file)
         cur = conn.cursor()
         cur.execute("DELETE FROM recipes WHERE name != 'Hiii' AND name != '100'")
-        cur.execute("DELETE FROM relationships")
+        cur.execute("DELETE FROM relationships WHERE id !=11 AND id != 12")
         conn.commit()
 
     def test_change_recipe_name(self):
@@ -89,6 +89,14 @@ class SimpleTest(unittest.TestCase):
         componentID = int(relationship[0][1])
         recipeID = int(relationship[0][2])
         self.assertEqual([componentID, recipeID], [23, 52])
+
+    def test_get_a_component_by_ID(self):
+        component = normal_db_functions.get_a_component_by_ID(db_file, '22')
+        self.assertEqual(component, [22, 'nihao', '1.2.3.5', '2019.10.1', 'www.google.com'])
+
+    def test_all_components_in_a_recipe(self):
+        result_list = normal_db_functions.all_components_in_a_recipe(db_file, "Hiii", "1.2.3.4")
+        self.assertEqual(result_list, [[22, 'nihao', '1.2.3.5', '2019.10.1', 'www.google.com', '/tttt'], [24, '1heyhey', '1.4.8.9', '2019.10.3', 'www.hhhh.com', '/tttt']])
 
 
 if __name__ == '__main__':
