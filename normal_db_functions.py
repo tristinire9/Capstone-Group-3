@@ -153,5 +153,20 @@ def change_recipe_status(db_file, name, version_num, new_status):
     cursor.execute(''' UPDATE recipes SET status = ? WHERE name = ? AND version_num = ?''', (new_status, name, version_num))
 
     return 0
+
+def get_a_recipe_ID(db_file, name, version_num):
+    conn = sqlite3.connect(db_file, isolation_level=None)
+    cursor = conn.cursor()
+    cursor.execute("""SELECT * FROM recipes WHERE name=? AND version_num=?""", (name, version_num))
+    recipe = cursor.fetchall()
+    return recipe[0][0]
+
+def get_a_component_ID(db_file, name, version_num):
+    conn = sqlite3.connect(db_file, isolation_level=None)
+    cursor = conn.cursor()
+    cursor.execute("""SELECT * FROM components WHERE name=? AND version_num=?""", (name, version_num))
+    component = cursor.fetchall()
+    return component[0][0]
+
 # create_component(create_connection("../instance/myDB"), ("Thomas", "1.2.3.4", "19/9/2019", "www.google.com"))
 # print(lookup("../instance/myDB", "Thomas"))

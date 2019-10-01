@@ -15,8 +15,9 @@ class SimpleTest(unittest.TestCase):
     def tearDownClass(cls):
         conn = sqlite3.connect(db_file)
         cur = conn.cursor()
-        cur.execute("DELETE FROM recipes")
+        cur.execute("DELETE FROM recipes WHERE name != 'Hiii'")
         cur.execute("DELETE FROM relationships")
+        conn.commit()
 
     def test_change_recipe_name(self):
         normal_db_functions.create_recipe(db_file, "1", "1.2.3.4", "In Dev")
@@ -62,6 +63,19 @@ class SimpleTest(unittest.TestCase):
             self.assertTrue(False)
         else:
             self.assertTrue(True)
+
+    def test_get_a_recipe_ID(self):
+        # normal_db_functions.create_recipe(db_file, "Hiii", "1.2.3.4", "In dEV")
+        ID = normal_db_functions.get_a_recipe_ID(db_file, "Hiii", "1.2.3.4")
+        ID = int(ID)
+        self.assertEqual(ID, 28)
+
+    def test_get_a_component_ID(self):
+        # normal_db_functions.create_component(conn, ("nihao", "1.2.3.5", "2019.10.1", "www.google.com"))
+        ID = normal_db_functions.get_a_component_ID(db_file, "nihao", "1.2.3.5")
+        ID = int(ID)
+        self.assertEqual(ID, 22)
+
 
 if __name__ == '__main__':
     unittest.main()
