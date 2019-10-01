@@ -125,13 +125,6 @@ def all_Recipes(db_file):
         component_names_list.append(component[0]) #adds into index at which it's ID(PK) is represented
     return component_names_list
 
-def create_relationship(db_file, componentID, recipeID, destination_path):
-    conn = sqlite3.connect(db_file, isolation_level=None)
-    cursor = conn.cursor()
-    cursor.execute(''' INSERT INTO relationships ('componentID', 'recipeID', 'destination_path')
-                  VALUES(?,?,?) ''', (componentID, recipeID, destination_path))
-    return 0
-
 
 def change_recipe_name(db_file, oldName, version_num, newName):
     conn = sqlite3.connect(db_file, isolation_level=None)
@@ -167,6 +160,19 @@ def get_a_component_ID(db_file, name, version_num):
     cursor.execute("""SELECT * FROM components WHERE name=? AND version_num=?""", (name, version_num))
     component = cursor.fetchall()
     return component[0][0]
+
+def create_a_relationship(db_file, recipe_name, recipe_num, component_name, component_num, destination_path):
+    recipe_ID = get_a_recipe_ID(db_file, recipe_name, recipe_num)
+    component_ID = get_a_component_ID(db_file, component_name, component_num)
+
+    conn = sqlite3.connect(db_file, isolation_level=None)
+    cursor = conn.cursor()
+    cursor.execute(''' INSERT INTO relationships ('componentID', 'recipeID', 'destination_path')
+              VALUES(?,?,?) ''', (component_ID, recipe_ID, destination_path))
+
+    return 0
+
+
 
 # create_component(create_connection("../instance/myDB"), ("Thomas", "1.2.3.4", "19/9/2019", "www.google.com"))
 # print(lookup("../instance/myDB", "Thomas"))

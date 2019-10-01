@@ -15,7 +15,7 @@ class SimpleTest(unittest.TestCase):
     def tearDownClass(cls):
         conn = sqlite3.connect(db_file)
         cur = conn.cursor()
-        cur.execute("DELETE FROM recipes WHERE name != 'Hiii'")
+        cur.execute("DELETE FROM recipes WHERE name != 'Hiii' AND name != '100'")
         cur.execute("DELETE FROM relationships")
         conn.commit()
 
@@ -75,6 +75,20 @@ class SimpleTest(unittest.TestCase):
         ID = normal_db_functions.get_a_component_ID(db_file, "nihao", "1.2.3.5")
         ID = int(ID)
         self.assertEqual(ID, 22)
+
+    def test_create_a_relationship(self):
+        # normal_db_functions.create_recipe(db_file, "100", "4.3.2.1", "HHH")
+
+        conn = sqlite3.connect(db_file, isolation_level=None)
+        # normal_db_functions.create_component(conn, ("hey", "1.2.3.7", "2019.10.2", "www.baidu.com"))
+        normal_db_functions.create_a_relationship(db_file, "100", "4.3.2.1", "hey", "1.2.3.7", "/data")
+
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM relationships WHERE destination_path = '/data'")
+        relationship = cur.fetchall()
+        componentID = int(relationship[0][1])
+        recipeID = int(relationship[0][2])
+        self.assertEqual([componentID, recipeID], [23, 52])
 
 
 if __name__ == '__main__':
