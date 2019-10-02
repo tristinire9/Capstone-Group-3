@@ -24,15 +24,15 @@
         </tr>
         {% for recipe in recipes %}
         <tr>
-          <td>{{ recipe['name'] }}</td>
+          <td>{{ recipe[0] }}</td>
           <td class="td-buttons">
-            {% for i in dB.recipeVersions("instance/flaskr.sqlite",name) %}
+            {% for i in recipe[1] %}
                 <form class="download-form" action="{{ url_for('recipeDetails') }}" method="POST">
-                  <input type="hidden" name="recipePK" value="{{ dB.get_a_recipe_ID('instance/flaskr.sqlite',name,ver) }}">
-                  <input type="hidden" name="recipeName" value="{{name}}">
-                  <input type="hidden" name="ver" value="{{ver}}">
+                  <input type="hidden" name="recipePK" value="{{ loop.index }}">
+                  <input type="hidden" name="recipeName" value="{{ recipe[0] }}">
+                  <input type="hidden" name="ver" value="{{ i }}">
                   <button type="submit" class="btn btn-outline-primary">
-                    {{ ver }}
+                    {{ i }}
                   </button>
                 </form>
             {% endfor %}

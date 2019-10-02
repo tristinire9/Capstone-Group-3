@@ -130,8 +130,11 @@ def update_recipe(id, name, version_num, status):
 def all_Recipes():
     """Returns a list of all recipe names"""
     cursor = get_db().cursor()
-    cursor.execute("SELECT id, name FROM recipes")
-    all_recipes = cursor.fetchall()
+    cursor.execute("SELECT DISTINCT name FROM recipes")
+    recipe_Names = cursor.fetchall()
+    all_recipes = []
+    for i in recipe_Names:
+        all_recipes.append([i[0],recipeVersions("instance/flaskr.sqlite",i[0])])
     return all_recipes
 
 def create_relationship(componentID, recipeID):
@@ -224,12 +227,12 @@ def all_components_in_a_recipe(db_file, recipe_name, recipe_num):
 def recipeVersions(db_file, recipe_name):
     conn = sqlite3.connect(db_file, isolation_level=None)
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM recipes WHERE name = ? ", (recipe_name,))
+    cursor.execute("SELECT id,version_num FROM recipes WHERE name = ? ", (recipe_name,))
     components = cursor.fetchall()
 
     versionNumbers = []
     for component in components:
-        versionNumbers.append(component[2])
+        versionNumbers.insert(component[0],component[1])
 
     return versionNumbers
 
