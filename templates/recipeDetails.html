@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% block title %}Versions{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="col-12-xs">
+      <h2>Recipe: {{ recipeName }}</h2>
+      <h3>Version: {{ recipeVER }}</h3>
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <p class="bg-info" style="padding: 15px;">
+          {% for message in messages %}
+            {{ message }}<br>
+          {% endfor %}
+          </p>
+        {% endif %}
+      {% endwith %}
+      <hr>
+
+      <hr>
+      <form class="download-form" action="{{ url_for('files') }}" method="get">
+        <input type="hidden" name="addToRecipe" value="{{ recipePK }}">
+        <button type="submit" class="btn btn-outline-primary">
+          Add Components to this Recipe
+        </button>
+      </form><br><br>
+
+      <table class="table table-striped">
+        <tr>
+          <th>Component</th>
+          <th>Version</th>
+        </tr>
+        {% for comp in dB.all_components_in_a_recipe("instance/flaskr.sqlite",recipeName,recipeVER) %}
+        <tr>
+            {% if comp %}
+              <td>{{comp[1]}}</td><td>{{comp[2]}}</td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+{% endblock %}

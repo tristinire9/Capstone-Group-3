@@ -161,8 +161,8 @@ def get_a_component_ID(db_file, name, version_num):
     component = cursor.fetchall()
     return component[0][0]
 
-def create_a_relationship(db_file, recipe_name, recipe_num, component_name, component_num, destination_path):
-    recipe_ID = get_a_recipe_ID(db_file, recipe_name, recipe_num)
+def create_a_relationship(db_file, recipe_ID, component_name, component_num):
+    destination_path = ""
     component_ID = get_a_component_ID(db_file, component_name, component_num)
 
     conn = sqlite3.connect(db_file, isolation_level=None)
@@ -207,7 +207,17 @@ def all_components_in_a_recipe(db_file, recipe_name, recipe_num):
 
     return result_list
 
+def recipeVersions(db_file, recipe_name):
+    conn = sqlite3.connect(db_file, isolation_level=None)
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM recipes WHERE name = ? ", (recipe_name,))
+    components = cursor.fetchall()
 
+    versionNumbers = []
+    for component in components:
+        versionNumbers.append(component[2])
+
+    return versionNumbers
 
 # create_component(create_connection("../instance/myDB"), ("Thomas", "1.2.3.4", "19/9/2019", "www.google.com"))
 # print(lookup("../instance/myDB", "Thomas"))
