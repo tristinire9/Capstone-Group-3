@@ -26,7 +26,7 @@
         <tr>
           <td>{{ recipe['name'] }}</td>
           <td class="td-buttons">
-            {% for ver in dB.recipeVersions("instance/flaskr.sqlite",name) %}
+            {% for i in dB.recipeVersions("instance/flaskr.sqlite",name) %}
                 <form class="download-form" action="{{ url_for('recipeDetails') }}" method="POST">
                   <input type="hidden" name="recipePK" value="{{ dB.get_a_recipe_ID('instance/flaskr.sqlite',name,ver) }}">
                   <input type="hidden" name="recipeName" value="{{name}}">

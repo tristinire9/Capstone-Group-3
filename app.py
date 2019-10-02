@@ -144,7 +144,7 @@ def editRecipe():
 @app.route('/recipes')  # Look-up page for all recipes in Database
 def recipes():
     recipes = normal_db_functions.all_Recipes()
-    return render_template('recipes.html', recipes=recipes)
+    return render_template('recipes.html', recipes=recipes, dB = normal_db_functions)
 
 
 @app.route('/new_Recipe')  # Links from recipes look-up to create a new recipe.
