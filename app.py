@@ -39,10 +39,12 @@ def index():
 
 @app.route('/files')  # Displays all components
 def files():
+    addToRecipe=request.args.get('addToRecipe')
     my_bucket = get_bucket()
     summaries = my_bucket.objects.all()
     components = normal_db_functions.all_components_names()
-    return render_template('files.html', my_bucket=my_bucket, files=summaries, components=components)
+    return render_template('files.html', my_bucket=my_bucket, files=summaries, components = components,atR = addToRecipe)
+
 
 
 @app.route('/component', methods=['POST'])  # Upload from Command line client
@@ -87,6 +89,7 @@ def submitNewRecipe():
     flash('Recipe uploaded successfully')
     return redirect(url_for('files'))
 
+
 @app.route('/updateRecipe', methods=['POST'])  # API for adding new recipe to database
 def updateRecipe():
     id = request.form.get('id')
@@ -98,7 +101,7 @@ def updateRecipe():
     return redirect(url_for('recipes'))
 
 
-@app.route('/delete', methods=['POST'])  # Delete from bucket
+@app.route('/delete', methods=['POST']) #Delete from bucket
 def delete():
     key = request.form['key']
 
@@ -125,9 +128,10 @@ def download():
 @app.route('/version', methods=['POST'])  # See all versions of a particular component
 def version():
     component = request.form['component']
+    addToRecipe = request.form['atR']
     my_bucket = get_bucket()
     versions=normal_db_functions.lookup(component)
-    return render_template('versions.html', my_bucket=my_bucket, componentName=component, versions=versions)
+    return render_template('versions.html', my_bucket=my_bucket, componentName=component, versions=versions,atR=addToRecipe)
 
 
 @app.route('/editRecipe', methods=['POST'])  # See all versions of a particular component
@@ -149,6 +153,21 @@ def new_Recipe():
         return redirect(url_for('submitNewRecipe', softwareName=request.args.get['softwareName'],
                                 version=request.args.get['version'], status=request.args.get['status']))
     return render_template('newRecipe.html')
+
+@app.route('/recipeDetails',methods=['POST']) #Expands a recipe to view components and details
+def recipeDetails():
+    return render_template('recipeDetails.html',dB = normal_db_functions, recipeName = request.form['recipeName'], recipePK = request.form['recipePK'], recipeVER = request.form['ver'] )
+
+@app.route('/addComponentRecipe',methods=['POST']) #Adds a component to the currently selected Recipe
+def addComponentRecipe():
+
+    recipePK = request.form['recipe']
+    componentName = request.form["componentName"]
+    version = request.form["version"]
+    print(recipePK,componentName,version)
+    normal_db_functions.create_a_relationship("instance/flaskr.sqlite",recipePK,componentName,version)
+    flash('Component added to Recipe successfully! Select another Component to keep adding more.')
+    return redirect(url_for('files',addToRecipe = recipePK))
 
 
 @app.route('/retrieve', methods=['GET'])  # Command Line retrieve API

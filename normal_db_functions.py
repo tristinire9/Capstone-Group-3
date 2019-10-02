@@ -138,6 +138,100 @@ def create_relationship(componentID, recipeID):
     cursor = get_db().cursor()
     cursor.execute(''' INSERT INTO relationships ('componentID', 'recipeID')
                   VALUES(?,?) ''', (componentID, recipeID))
+
+
+def change_recipe_name(db_file, oldName, version_num, newName):
+    conn = sqlite3.connect(db_file, isolation_level=None)
+    cursor = conn.cursor()
+    cursor.execute(''' UPDATE recipes SET name = ? WHERE name = ? AND version_num = ?''', (newName, oldName, version_num))
+
     return 0
+
+def change_recipe_version_num(db_file, name, old_version_num, new_version_num):
+    conn = sqlite3.connect(db_file, isolation_level=None)
+    cursor = conn.cursor()
+    cursor.execute(''' UPDATE recipes SET version_num = ? WHERE name = ? AND version_num = ?''', (new_version_num, name, old_version_num))
+
+    return 0
+
+def change_recipe_status(db_file, name, version_num, new_status):
+    conn = sqlite3.connect(db_file, isolation_level=None)
+    cursor = conn.cursor()
+    cursor.execute(''' UPDATE recipes SET status = ? WHERE name = ? AND version_num = ?''', (new_status, name, version_num))
+
+    return 0
+
+def get_a_recipe_ID(db_file, name, version_num):
+    conn = sqlite3.connect(db_file, isolation_level=None)
+    cursor = conn.cursor()
+    cursor.execute("""SELECT * FROM recipes WHERE name=? AND version_num=?""", (name, version_num))
+    recipe = cursor.fetchall()
+    return recipe[0][0]
+
+def get_a_component_ID(db_file, name, version_num):
+    conn = sqlite3.connect(db_file, isolation_level=None)
+    cursor = conn.cursor()
+    cursor.execute("""SELECT * FROM components WHERE name=? AND version_num=?""", (name, version_num))
+    component = cursor.fetchall()
+    return component[0][0]
+
+def create_a_relationship(db_file, recipe_ID, component_name, component_num):
+    destination_path = ""
+    component_ID = get_a_component_ID(db_file, component_name, component_num)
+
+    conn = sqlite3.connect(db_file, isolation_level=None)
+    cursor = conn.cursor()
+    cursor.execute(''' INSERT INTO relationships ('componentID', 'recipeID', 'destination_path')
+              VALUES(?,?,?) ''', (component_ID, recipe_ID, destination_path))
+
+    return 0
+
+# return a list
+def get_a_component_by_ID(db_file, component_ID):
+    conn = sqlite3.connect(db_file, isolation_level=None)
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM components WHERE id = ?", (component_ID,))
+    component = cursor.fetchall()
+    return list(component[0])
+
+def all_components_in_a_recipe(db_file, recipe_name, recipe_num):
+    recipe_ID = get_a_recipe_ID(db_file, recipe_name, recipe_num)
+
+    conn = sqlite3.connect(db_file, isolation_level=None)
+    cursor = conn.cursor()
+    cursor.execute(''' SELECT * FROM relationships WHERE recipeID = ?''', (recipe_ID,))
+    relationships = cursor.fetchall()
+
+    component_IDs_list = []
+    destinations_list = []
+    for relationship in relationships:
+        component_IDs_list.append(relationship[1])
+        destinations_list.append(relationship[3])
+
+    components_list = []
+    for component_ID in component_IDs_list:
+        components_list.append(get_a_component_by_ID(db_file, component_ID))
+
+    result_list = []
+    for i in range(0, len(destinations_list)):
+        component = components_list[i]
+        destination = destinations_list[i]
+        result = component + [destination]
+        result_list.append(result)
+
+    return result_list
+
+def recipeVersions(db_file, recipe_name):
+    conn = sqlite3.connect(db_file, isolation_level=None)
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM recipes WHERE name = ? ", (recipe_name,))
+    components = cursor.fetchall()
+
+    versionNumbers = []
+    for component in components:
+        versionNumbers.append(component[2])
+
+    return versionNumbers
+
 # create_component(create_connection("../instance/myDB"), ("Thomas", "1.2.3.4", "19/9/2019", "www.google.com"))
 # print(lookup("../instance/myDB", "Thomas"))

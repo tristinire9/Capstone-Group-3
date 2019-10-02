@@ -19,27 +19,23 @@
       <table class="table table-striped">
         <tr>
           <th>Recipe</th>
-          <th></th>
-          <th></th>
+          <th>Version</th>
+
         </tr>
         {% for recipe in recipes %}
         <tr>
           <td>{{ recipe['name'] }}</td>
           <td class="td-buttons">
-            <form class="delete-form" action="{{ url_for('version') }}" method="POST">
-              <input type="hidden" name="component" value="{{ recipe['name'] }}">
-              <button type="submit" class="btn btn-outline-primary">
-                Versions
-              </button>
-            </form>
-          </td>
-          <td class="td-buttons">
-            <form class="delete-form" action="{{ url_for('editRecipe') }}" method="POST">
-              <input type="hidden" name="recipeID" value="{{ recipe['id'] }}">
-              <button type="submit" class="btn btn-outline-primary">
-                Edit
-              </button>
-            </form>
+            {% for ver in dB.recipeVersions("instance/flaskr.sqlite",name) %}
+                <form class="download-form" action="{{ url_for('recipeDetails') }}" method="POST">
+                  <input type="hidden" name="recipePK" value="{{ dB.get_a_recipe_ID('instance/flaskr.sqlite',name,ver) }}">
+                  <input type="hidden" name="recipeName" value="{{name}}">
+                  <input type="hidden" name="ver" value="{{ver}}">
+                  <button type="submit" class="btn btn-outline-primary">
+                    {{ ver }}
+                  </button>
+                </form>
+            {% endfor %}
           </td>
         </tr>
         {% endfor %}

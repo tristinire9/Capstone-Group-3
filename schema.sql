@@ -27,3 +27,5 @@ CREATE TABLE relationships (
   FOREIGN KEY(componentID) REFERENCES components(id),
   FOREIGN KEY(recipeID) REFERENCES recipes(id)
 );
+
+ALTER TABLE relationships ADD COLUMN destination_path text;

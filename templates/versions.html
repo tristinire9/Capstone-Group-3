@@ -5,8 +5,9 @@
   <div class="container">
     <div class="col-12-xs">
       <h3>Versions for: {{componentName}}</h3>
-      <p>Created: {{ my_bucket.creation_date | datetimeformat }}</p>
-
+      {% if atR != 'None' %}
+        <p>Any Components you select will be added to Recipe ID: {{ atR }}</p>
+      {% endif %}
       {% with messages = get_flashed_messages() %}
         {% if messages %}
           <p class="bg-info" style="padding: 15px;">
@@ -34,6 +35,18 @@
                   <i class="fa fa-download"></i>
                 </button>
             </form>
+          </td>
+          <td>
+            {% if atR != 'None'%}
+              <form class="download-form" action="{{ url_for('addComponentRecipe') }}" method="post">
+                  <input type="hidden" name="componentName" value="{{ componentName }}">
+                  <input type="hidden" name="version" value="{{ version }}">
+                  <input type="hidden" name="recipe" value="{{ atR }}">
+                  <button type="submit" class="btn btn-default btn-sm">
+                    Add to Selected Recipe
+                  </button>
+              </form>
+            {% endif %}
           </td>
         </tr>
         {% endfor %}

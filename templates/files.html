@@ -35,6 +35,7 @@
           <td class="td-buttons">
             <form class="delete-form" action="{{ url_for('version') }}" method="POST">
               <input type="hidden" name="component" value="{{ name }}">
+              <input type="hidden" name="atR" value="{{ atR }}"/>
               <button type="submit" class="btn btn-outline-primary">
                 Versions
               </button>
