@@ -144,7 +144,7 @@ def editRecipe():
 @app.route('/recipes')  # Look-up page for all recipes in Database
 def recipes():
     recipes = normal_db_functions.all_Recipes()
-    return render_template('recipes.html', recipes=recipes, dB = normal_db_functions)
+    return render_template('recipes.html', recipes=recipes)
 
 
 @app.route('/new_Recipe')  # Links from recipes look-up to create a new recipe.
@@ -156,7 +156,8 @@ def new_Recipe():
 
 @app.route('/recipeDetails',methods=['POST']) #Expands a recipe to view components and details
 def recipeDetails():
-    return render_template('recipeDetails.html',dB = normal_db_functions, recipeName = request.form['recipeName'], recipePK = request.form['recipePK'], recipeVER = request.form['ver'] )
+    all_Components = normal_db_functions.all_components_in_a_recipe("instance/flaskr.sqlite",request.form['recipeName'],request.form['ver'])
+    return render_template('recipeDetails.html',all_Components = all_Components, recipeName = request.form['recipeName'], recipePK = request.form['recipePK'], recipeVER = request.form['ver'] )
 
 @app.route('/addComponentRecipe',methods=['POST']) #Adds a component to the currently selected Recipe
 def addComponentRecipe():
@@ -164,7 +165,6 @@ def addComponentRecipe():
     recipePK = request.form['recipe']
     componentName = request.form["componentName"]
     version = request.form["version"]
-    print(recipePK,componentName,version)
     normal_db_functions.create_a_relationship("instance/flaskr.sqlite",recipePK,componentName,version)
     flash('Component added to Recipe successfully! Select another Component to keep adding more.')
     return redirect(url_for('files',addToRecipe = recipePK))

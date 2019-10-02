@@ -38,7 +38,7 @@
           <th>Component</th>
           <th>Version</th>
         </tr>
-        {% for comp in dB.all_components_in_a_recipe("instance/flaskr.sqlite",recipeName,recipeVER) %}
+        {% for comp in all_Components %}
         <tr>
             {% if comp %}
               <td>{{comp[1]}}</td><td>{{comp[2]}}</td>
