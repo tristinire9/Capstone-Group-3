@@ -1,4 +1,3 @@
-
 import datetime
 from auth import bp
 import db
@@ -6,7 +5,7 @@ import db
 import normal_db_functions
 import sqlite3
 import os
-from flask import Flask, render_template, request, redirect, url_for, jsonify,flash, \
+from flask import Flask, render_template, request, redirect, url_for, jsonify, flash, \
     Response, session
 from flask_bootstrap import Bootstrap
 from datetime import datetime
@@ -18,15 +17,16 @@ app = Flask(__name__)
 db.init_app(app)
 app.register_blueprint(bp, url_prefix="/hi")
 app.config.from_mapping(
-        SECRET_KEY='dev',
-        DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
-    )
+    SECRET_KEY='dev',
+    DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
+)
 Bootstrap(app)
 app.secret_key = 'secret'
 app.jinja_env.filters['datetimeformat'] = datetimeformat
 app.jinja_env.filters['file_type'] = file_type
 
-@app.route('/', methods=['GET', 'POST']) #Index page, shows list of buckets
+
+@app.route('/', methods=['GET', 'POST'])  # Index page, shows list of buckets
 def index():
     if request.method == 'POST':
         bucket = request.form['bucket']
@@ -36,38 +36,38 @@ def index():
         buckets = get_buckets_list()
         return render_template("index.html", buckets=buckets)
 
-@app.route('/files') #Displays all components
+
+@app.route('/files')  # Displays all components
 def files():
     my_bucket = get_bucket()
     summaries = my_bucket.objects.all()
-    return render_template('files.html', my_bucket=my_bucket, files=summaries, dB = normal_db_functions)
+    components = normal_db_functions.all_components_names()
+    return render_template('files.html', my_bucket=my_bucket, files=summaries, components=components)
 
 
-@app.route('/component', methods=['POST']) #Upload from Command line client
+@app.route('/component', methods=['POST'])  # Upload from Command line client
 def component():
     file = request.files['file']
     filetype = file.filename.split(".")[1]
     ver = request.args.get('ver')
     fileName = request.args.get('Fname')
-    URL = "https://capprojteam3.s3-ap-southeast-2.amazonaws.com/" + fileName+"".join(ver.split('.'))+'.'+filetype
+    URL = "https://capprojteam3.s3-ap-southeast-2.amazonaws.com/" + fileName + "".join(ver.split('.')) + '.' + filetype
     now = datetime.now()  # current date and time
     date_time = now.strftime("%d/%m/%Y, %H:%M:%S")
 
     connection = normal_db_functions.create_connection("instance/flaskr.sqlite")
-    if normal_db_functions.check_duplicate("instance/flaskr.sqlite",fileName,ver):
-        return jsonify("DUPLICATE"),400
+    if normal_db_functions.check_duplicate("instance/flaskr.sqlite", fileName, ver):
+        return jsonify("DUPLICATE"), 400
     normal_db_functions.create_component(connection, (fileName, ver, date_time, URL))
 
     my_bucket = get_bucket()
-    my_bucket.Object(fileName+"".join(ver.split('.'))+'.'+filetype).put(Body=file)
+    my_bucket.Object(fileName + "".join(ver.split('.')) + '.' + filetype).put(Body=file)
 
-
-
-    #flash('File uploaded successfully')
+    # flash('File uploaded successfully')
     return redirect(url_for('files'))
 
 
-@app.route('/upload', methods=['POST']) #Upload from Web UI
+@app.route('/upload', methods=['POST'])  # Upload from Web UI
 def upload():
     file = request.files['file']
 
@@ -77,16 +77,28 @@ def upload():
     flash('File uploaded successfully')
     return redirect(url_for('files'))
 
-@app.route('/submitNewRecipe',methods=['GET']) #API for adding new recipe to database
+
+@app.route('/submitNewRecipe', methods=['GET'])  # API for adding new recipe to database
 def submitNewRecipe():
     name = request.args.get('softwareName')
     ver = request.args.get('version')
     status = request.args.get('status')
-    normal_db_functions.create_recipe("instance/flaskr.sqlite",name,ver,status)
+    normal_db_functions.create_recipe(name, ver, status)
     flash('Recipe uploaded successfully')
     return redirect(url_for('files'))
 
-@app.route('/delete', methods=['POST']) #Delete from bucket
+@app.route('/updateRecipe', methods=['POST'])  # API for adding new recipe to database
+def updateRecipe():
+    id = request.form.get('id')
+    name = request.form.get('name')
+    ver = request.form.get('version')
+    status = request.form.get('status')
+    normal_db_functions.update_recipe(id, name, ver, status)
+    flash('Recipe update successfully')
+    return redirect(url_for('recipes'))
+
+
+@app.route('/delete', methods=['POST'])  # Delete from bucket
 def delete():
     key = request.form['key']
 
@@ -97,7 +109,7 @@ def delete():
     return redirect(url_for('files'))
 
 
-@app.route('/download', methods=['POST']) #download from Web UI
+@app.route('/download', methods=['POST'])  # download from Web UI
 def download():
     key = request.form['key'].split('/')[-1][:-4]
     my_bucket = get_bucket()
@@ -109,31 +121,44 @@ def download():
         headers={"Content-Disposition": "attachment;filename={}".format(key)}
     )
 
-@app.route('/version', methods=['POST'])  #See all versions of a particular component
+
+@app.route('/version', methods=['POST'])  # See all versions of a particular component
 def version():
     component = request.form['component']
     my_bucket = get_bucket()
-    return render_template('versions.html', my_bucket=my_bucket, componentName=component, dB = normal_db_functions)
+    versions=normal_db_functions.lookup(component)
+    return render_template('versions.html', my_bucket=my_bucket, componentName=component, versions=versions)
 
-@app.route('/recipes') #Look-up page for all recipes in Database
+
+@app.route('/editRecipe', methods=['POST'])  # See all versions of a particular component
+def editRecipe():
+    recipeID = request.form['recipeID']
+    recipe = normal_db_functions.lookupRecipe(recipeID)
+    return render_template('editRecipe.html', recipe=recipe)
+
+
+@app.route('/recipes')  # Look-up page for all recipes in Database
 def recipes():
-    return render_template('recipes.html',dB = normal_db_functions)
+    recipes = normal_db_functions.all_Recipes()
+    return render_template('recipes.html', recipes=recipes)
 
-@app.route('/new_Recipe') #Links from recipes look-up to create a new recipe.
+
+@app.route('/new_Recipe')  # Links from recipes look-up to create a new recipe.
 def new_Recipe():
-    if request.args.get('softwareName')!=None:
-        return redirect(url_for('submitNewRecipe',softwareName = request.args.get['softwareName'],version =request.args.get['version'],status=request.args.get['status'] ))
-    return render_template('newRecipe.html',dB = normal_db_functions)
+    if request.args.get('softwareName') is not None:
+        return redirect(url_for('submitNewRecipe', softwareName=request.args.get['softwareName'],
+                                version=request.args.get['version'], status=request.args.get['status']))
+    return render_template('newRecipe.html')
 
 
-@app.route('/retrieve', methods=['GET']) #Command Line retrieve API
+@app.route('/retrieve', methods=['GET'])  # Command Line retrieve API
 def retrieve():
     ver = request.args.get('ver')
     fileName = request.args.get('Fname')
 
-    connection = normal_db_functions.create_connection("instance/flaskr.sqlite")
-    if normal_db_functions.check_duplicate("instance/flaskr.sqlite",fileName,ver):
-        url = normal_db_functions.get_URL("instance/flaskr.sqlite",fileName,ver)
+    connection = normal_db_functions.create_connection()
+    if normal_db_functions.check_duplicate(fileName, ver):
+        url = normal_db_functions.get_URL(fileName, ver)
         key = url[0][0].split("/")[-1]
 
         my_bucket = get_bucket()
@@ -145,9 +170,10 @@ def retrieve():
             headers={"Content-Disposition": "attachment;filename={}".format(key)}
         )
     else:
-        return jsonify("DOESN'T EXIST"),404
+        return jsonify("DOESN'T EXIST"), 404
+
 
 if __name__ == '__main__':
-#    app.secret_key = '\xd3#d\xb0\xfck=\x14\xb9qi\xde\x04\xea\xb9\x89\x02+\xd8\x1e8g\x83t' #this is new, had errors about needing a secret key
-#    app.config['SESSION_TYPE'] = 'filesystem' #this is new
+    #    app.secret_key = '\xd3#d\xb0\xfck=\x14\xb9qi\xde\x04\xea\xb9\x89\x02+\xd8\x1e8g\x83t' #this is new, had errors about needing a secret key
+    #    app.config['SESSION_TYPE'] = 'filesystem' #this is new
     app.run()

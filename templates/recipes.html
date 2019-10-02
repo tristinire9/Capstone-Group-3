@@ -20,17 +20,27 @@
         <tr>
           <th>Recipe</th>
           <th></th>
+          <th></th>
         </tr>
-        {% for name in dB.all_Recipes("instance/flaskr.sqlite") %}
+        {% for recipe in recipes %}
         <tr>
-          <td>{{ name }}</td>
+          <td>{{ recipe['name'] }}</td>
           <td class="td-buttons">
             <form class="delete-form" action="{{ url_for('version') }}" method="POST">
-              <input type="hidden" name="component" value="{{ name }}">
+              <input type="hidden" name="component" value="{{ recipe['name'] }}">
               <button type="submit" class="btn btn-outline-primary">
                 Versions
               </button>
             </form>
+          </td>
+          <td class="td-buttons">
+            <form class="delete-form" action="{{ url_for('editRecipe') }}" method="POST">
+              <input type="hidden" name="recipeID" value="{{ recipe['id'] }}">
+              <button type="submit" class="btn btn-outline-primary">
+                Edit
+              </button>
+            </form>
+          </td>
         </tr>
         {% endfor %}
       </table>

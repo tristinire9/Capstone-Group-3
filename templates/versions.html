@@ -24,12 +24,12 @@
           <th>Version</th>
           <th></th>
         </tr>
-        {% for version in dB.lookup("instance/flaskr.sqlite",componentName) %}
+        {% for version in versions %}
         <tr>
           <td>{{ version }}</td>
           <td>
             <form class="download-form" action="{{ url_for('download') }}" method="POST">
-                <input type="hidden" name="key" value="{{ dB.get_URL('instance/flaskr.sqlite',componentName,version) }}">
+                <input type="hidden" name="key" value="{{ version['url'] }}">
                 <button type="submit" class="btn btn-default btn-sm">
                   <i class="fa fa-download"></i>
                 </button>

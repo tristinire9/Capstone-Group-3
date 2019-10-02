@@ -29,7 +29,7 @@
           <th>Component</th>
           <th></th>
         </tr>
-        {% for name in dB.all_components_names("instance/flaskr.sqlite") %}
+        {% for name in components %}
         <tr>
           <td>{{ name }}</td>
           <td class="td-buttons">
