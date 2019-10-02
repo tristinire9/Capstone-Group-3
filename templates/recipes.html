@@ -28,11 +28,11 @@
           <td class="td-buttons">
             {% for i in recipe[1] %}
                 <form class="download-form" action="{{ url_for('recipeDetails') }}" method="POST">
-                  <input type="hidden" name="recipePK" value="{{ loop.index }}">
+                  <input type="hidden" name="recipePK" value="{{ i[1] }}">
                   <input type="hidden" name="recipeName" value="{{ recipe[0] }}">
-                  <input type="hidden" name="ver" value="{{ i }}">
+                  <input type="hidden" name="ver" value="{{ i[0] }}">
                   <button type="submit" class="btn btn-outline-primary">
-                    {{ i }}
+                    {{ i[0] }}
                   </button>
                 </form>
             {% endfor %}

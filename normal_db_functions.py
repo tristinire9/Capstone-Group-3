@@ -227,12 +227,12 @@ def all_components_in_a_recipe(db_file, recipe_name, recipe_num):
 def recipeVersions(db_file, recipe_name):
     conn = sqlite3.connect(db_file, isolation_level=None)
     cursor = conn.cursor()
-    cursor.execute("SELECT id,version_num FROM recipes WHERE name = ? ", (recipe_name,))
+    cursor.execute("SELECT version_num FROM recipes WHERE name = ? ", (recipe_name,))
     components = cursor.fetchall()
 
     versionNumbers = []
     for component in components:
-        versionNumbers.insert(component[0],component[1])
+        versionNumbers.append([component[0],get_a_recipe_ID(db_file,recipe_name,component[0])])
 
     return versionNumbers
 

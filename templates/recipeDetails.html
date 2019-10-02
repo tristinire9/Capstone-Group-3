@@ -24,6 +24,7 @@
           Add Components to this Recipe
         </button>
       </form>
+      <br>
       <form class="delete-form" action="{{ url_for('editRecipe') }}" method="POST">
         <input type="hidden" name="recipeID" value="{{ recipePK }}">
         <button type="submit" class="btn btn-outline-primary">
