@@ -109,7 +109,11 @@ def lookupRecipe(recipeID):
 
 def delete_component(name, version_num):
     cursor = get_db().cursor()
-    cursor.execute("DELETE FROM components WHERE name = ? AND version_num = ?", (name, version_num))
+    pk = cursor.execute("SELECT id FROM components WHERE name = ? AND version_num = ?", (name,version_num))
+    components = cursor.fetchall()
+    pk = components[0][0]
+    cursor.execute("DELETE FROM components WHERE id = ? ", (pk,))
+    cursor.execute("DELETE FROM relationships WHERE componentID = ? ", (pk,))
     return 0
 
 def create_recipe(name, version_num, status):

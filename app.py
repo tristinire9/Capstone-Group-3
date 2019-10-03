@@ -165,7 +165,6 @@ def addComponentRecipe():
 def deleteComponentBucket():
     ver = request.form['ver']
     fileName = request.form['Fname']
-    print(ver,fileName)
     if normal_db_functions.check_duplicate(fileName, ver):
         url = normal_db_functions.get_URL(fileName, ver)
         key = url[0][0].split("/")[-1]
