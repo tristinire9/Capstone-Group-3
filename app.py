@@ -25,29 +25,10 @@ app.secret_key = 'secret'
 app.jinja_env.filters['datetimeformat'] = datetimeformat
 app.jinja_env.filters['file_type'] = file_type
 
+## Command Line APIs ###################################################################################################
 
-@app.route('/', methods=['GET', 'POST'])  # Index page, shows list of buckets
-def index():
-    if request.method == 'POST':
-        bucket = request.form['bucket']
-        session['bucket'] = bucket
-        return redirect(url_for('files'))
-    else:
-        buckets = get_buckets_list()
-        return render_template("index.html", buckets=buckets)
-
-
-@app.route('/files')  # Displays all components
-def files():
-    addToRecipe=request.args.get('addToRecipe')
-    my_bucket = get_bucket()
-    summaries = my_bucket.objects.all()
-    components = normal_db_functions.all_components_names()
-    return render_template('files.html', my_bucket=my_bucket, files=summaries, components = components,atR = addToRecipe)
-
-
-
-@app.route('/component', methods=['POST'])  # Upload from Command line client
+#Component Upload
+@app.route('/component', methods=['POST'])
 def component():
     file = request.files['file']
     filetype = file.filename.split(".")[1]
@@ -68,17 +49,62 @@ def component():
     # flash('File uploaded successfully')
     return redirect(url_for('files'))
 
+# Downloads
+@app.route('/retrieve', methods=['GET'])  # Command Line retrieve API
+def retrieve():
+    ver = request.args.get('ver')
+    fileName = request.args.get('Fname')
 
-@app.route('/upload', methods=['POST'])  # Upload from Web UI
-def upload():
-    file = request.files['file']
+    connection = normal_db_functions.create_connection()
+    if normal_db_functions.check_duplicate(fileName, ver):
+        url = normal_db_functions.get_URL(fileName, ver)
+        key = url[0][0].split("/")[-1]
 
+        my_bucket = get_bucket()
+        file_obj = my_bucket.Object(key).get()
+
+        return Response(
+            file_obj['Body'].read(),
+            mimetype='text/plain',
+            headers={"Content-Disposition": "attachment;filename={}".format(key)}
+        )
+    else:
+        return jsonify("DOESN'T EXIST"), 404
+
+##END of Command Line APIs #############################################################################################
+
+
+##Look-Up all Component APIS ###########################################################################################
+@app.route('/', methods=['GET', 'POST'])  # Index page, shows list of buckets
+def index():
+    if request.method == 'POST':
+        bucket = request.form['bucket']
+        session['bucket'] = bucket
+        return redirect(url_for('files'))
+    else:
+        buckets = get_buckets_list()
+        return render_template("index.html", buckets=buckets)
+
+@app.route('/files')  # Displays all components
+def files():
+    addToRecipe=request.args.get('addToRecipe')
     my_bucket = get_bucket()
-    my_bucket.Object(file.filename).put(Body=file)
+    summaries = my_bucket.objects.all()
+    components = normal_db_functions.all_components_names()
+    return render_template('files.html', my_bucket=my_bucket, files=summaries, components = components,atR = addToRecipe)
 
-    flash('File uploaded successfully')
-    return redirect(url_for('files'))
+@app.route('/version', methods=['POST'])  # See all versions of a particular component
+def version():
+    component = request.form['component']
+    addToRecipe = request.form['atR']
+    my_bucket = get_bucket()
+    versions=normal_db_functions.lookup(component)
+    return render_template('versions.html', my_bucket=my_bucket, componentName=component, versions=versions,atR=addToRecipe)
 
+##END###################################################################################################################
+
+
+##Recipe Management APIs ###############################################################################################
 
 @app.route('/submitNewRecipe', methods=['GET'])  # API for adding new recipe to database
 def submitNewRecipe():
@@ -88,7 +114,6 @@ def submitNewRecipe():
     normal_db_functions.create_recipe(name, ver, status)
     flash('Recipe uploaded successfully')
     return redirect(url_for('files'))
-
 
 @app.route('/updateRecipe', methods=['POST'])  # API for adding new recipe to database
 def updateRecipe():
@@ -100,52 +125,16 @@ def updateRecipe():
     flash('Recipe update successfully')
     return redirect(url_for('recipes'))
 
-
-@app.route('/delete', methods=['POST']) #Delete from bucket
-def delete():
-    key = request.form['key']
-
-    my_bucket = get_bucket()
-    my_bucket.Object(key).delete()
-
-    flash('File deleted successfully')
-    return redirect(url_for('files'))
-
-
-@app.route('/download', methods=['POST'])  # download from Web UI
-def download():
-    key = request.form['key'].split('/')[-1][:-4]
-    my_bucket = get_bucket()
-    file_obj = my_bucket.Object(key).get()
-
-    return Response(
-        file_obj['Body'].read(),
-        mimetype='text/plain',
-        headers={"Content-Disposition": "attachment;filename={}".format(key)}
-    )
-
-
-@app.route('/version', methods=['POST'])  # See all versions of a particular component
-def version():
-    component = request.form['component']
-    addToRecipe = request.form['atR']
-    my_bucket = get_bucket()
-    versions=normal_db_functions.lookup(component)
-    return render_template('versions.html', my_bucket=my_bucket, componentName=component, versions=versions,atR=addToRecipe)
-
-
 @app.route('/editRecipe', methods=['POST'])  # See all versions of a particular component
 def editRecipe():
     recipeID = request.form['recipeID']
     recipe = normal_db_functions.lookupRecipe(recipeID)
     return render_template('editRecipe.html', recipe=recipe)
 
-
 @app.route('/recipes')  # Look-up page for all recipes in Database
 def recipes():
     recipes = normal_db_functions.all_Recipes()
     return render_template('recipes.html', recipes=recipes)
-
 
 @app.route('/new_Recipe')  # Links from recipes look-up to create a new recipe.
 def new_Recipe():
@@ -169,27 +158,45 @@ def addComponentRecipe():
     flash('Component added to Recipe successfully! Select another Component to keep adding more.')
     return redirect(url_for('files',addToRecipe = recipePK))
 
+##END###################################################################################################################
 
-@app.route('/retrieve', methods=['GET'])  # Command Line retrieve API
-def retrieve():
-    ver = request.args.get('ver')
-    fileName = request.args.get('Fname')
 
-    connection = normal_db_functions.create_connection()
+@app.route('/deleteComponentBucket', methods=['POST']) #Delete Component from bucket
+def deleteComponentBucket():
+    ver = request.form['ver']
+    fileName = request.form['Fname']
+    print(ver,fileName)
     if normal_db_functions.check_duplicate(fileName, ver):
         url = normal_db_functions.get_URL(fileName, ver)
         key = url[0][0].split("/")[-1]
-
         my_bucket = get_bucket()
-        file_obj = my_bucket.Object(key).get()
+        my_bucket.Object(key).delete()
+        normal_db_functions.delete_component(fileName,ver)
 
-        return Response(
-            file_obj['Body'].read(),
-            mimetype='text/plain',
-            headers={"Content-Disposition": "attachment;filename={}".format(key)}
-        )
-    else:
-        return jsonify("DOESN'T EXIST"), 404
+        flash('File deleted successfully')
+    return redirect(url_for('files'))
+
+@app.route('/upload', methods=['POST'])  # Upload from Web UI
+def upload():
+    file = request.files['file']
+
+    my_bucket = get_bucket()
+    my_bucket.Object(file.filename).put(Body=file)
+
+    flash('File uploaded successfully')
+    return redirect(url_for('files'))
+
+@app.route('/download', methods=['POST'])  # download from Web UI
+def download():
+    key = request.form['key'].split('/')[-1][:-4]
+    my_bucket = get_bucket()
+    file_obj = my_bucket.Object(key).get()
+
+    return Response(
+        file_obj['Body'].read(),
+        mimetype='text/plain',
+        headers={"Content-Disposition": "attachment;filename={}".format(key)}
+    )
 
 
 if __name__ == '__main__':
