@@ -101,6 +101,20 @@ def version():
     versions=normal_db_functions.lookup(component)
     return render_template('versions.html', my_bucket=my_bucket, componentName=component, versions=versions,atR=addToRecipe)
 
+@app.route('/deleteComponentBucket', methods=['POST']) #Delete Component from bucket
+def deleteComponentBucket():
+    ver = request.form['ver']
+    fileName = request.form['Fname']
+    if normal_db_functions.check_duplicate(fileName, ver):
+        url = normal_db_functions.get_URL(fileName, ver)
+        key = url[0][0].split("/")[-1]
+        my_bucket = get_bucket()
+        my_bucket.Object(key).delete()
+        normal_db_functions.delete_component(fileName,ver)
+
+        flash('File deleted successfully')
+    return redirect(url_for('files'))
+
 ##END###################################################################################################################
 
 
@@ -158,22 +172,14 @@ def addComponentRecipe():
     flash('Component added to Recipe successfully! Select another Component to keep adding more.')
     return redirect(url_for('files',addToRecipe = recipePK))
 
+@app.route('/removeComponentRecipe',methods=['POST'])
+def removeComponentRecipe():
+    normal_db_functions.delete_a_relationship(request.form["recipeID"],request.form["compID"])
+    flash('Component removed from Recipe successfully!')
+    return redirect(url_for('files'))
+
 ##END###################################################################################################################
 
-
-@app.route('/deleteComponentBucket', methods=['POST']) #Delete Component from bucket
-def deleteComponentBucket():
-    ver = request.form['ver']
-    fileName = request.form['Fname']
-    if normal_db_functions.check_duplicate(fileName, ver):
-        url = normal_db_functions.get_URL(fileName, ver)
-        key = url[0][0].split("/")[-1]
-        my_bucket = get_bucket()
-        my_bucket.Object(key).delete()
-        normal_db_functions.delete_component(fileName,ver)
-
-        flash('File deleted successfully')
-    return redirect(url_for('files'))
 
 @app.route('/upload', methods=['POST'])  # Upload from Web UI
 def upload():

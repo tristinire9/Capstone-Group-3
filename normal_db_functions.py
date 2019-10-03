@@ -116,6 +116,7 @@ def delete_component(name, version_num):
     cursor.execute("DELETE FROM relationships WHERE componentID = ? ", (pk,))
     return 0
 
+
 def create_recipe(name, version_num, status):
     cursor = get_db().cursor()
     cursor.execute(''' INSERT INTO recipes ('name', 'version_num', 'status')
@@ -191,6 +192,11 @@ def create_a_relationship(db_file, recipe_ID, component_name, component_num):
     cursor.execute(''' INSERT INTO relationships ('componentID', 'recipeID', 'destination_path')
               VALUES(?,?,?) ''', (component_ID, recipe_ID, destination_path))
 
+    return 0
+
+def delete_a_relationship(recipe_ID, component_ID):
+    cursor = get_db().cursor()
+    cursor.execute("DELETE FROM relationships WHERE componentID = ? AND recipeID = ? ", (component_ID, recipe_ID))
     return 0
 
 # return a list
