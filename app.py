@@ -217,7 +217,5 @@ def download():
     )
 
 
-if __name__ == '__main__':
-    #    app.secret_key = '\xd3#d\xb0\xfck=\x14\xb9qi\xde\x04\xea\xb9\x89\x02+\xd8\x1e8g\x83t' #this is new, had errors about needing a secret key
-    #    app.config['SESSION_TYPE'] = 'filesystem' #this is new
+if __name__ == "__main__":
     app.run()
