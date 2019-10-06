@@ -6,7 +6,7 @@ import normal_db_functions
 import sqlite3
 import os
 from flask import Flask, render_template, request, redirect, url_for, jsonify, flash, \
-    Response, session, current_app
+    Response, session
 from flask_bootstrap import Bootstrap
 from datetime import datetime
 
@@ -32,7 +32,7 @@ app.jinja_env.filters['file_type'] = file_type
 #Component Upload
 @app.route('/component', methods=['POST'])
 def component():
-    database_address = current_app.config['DATABASE']
+    database_address = "/instance/flaskr.sqlite"
     file = request.files['file']
     filetype = file.filename.split(".")[1]
     ver = request.args.get('ver')
@@ -55,7 +55,7 @@ def component():
 # Downloads
 @app.route('/retrieve', methods=['GET'])  # Command Line retrieve API
 def retrieve():
-    database_address = current_app.config['DATABASE']
+    database_address = "/instance/flaskr.sqlite"
     ver = request.args.get('ver')
     fileName = request.args.get('Fname')
 
@@ -91,7 +91,7 @@ def index():
 
 @app.route('/files')  # Displays all components
 def files():
-    database_address = current_app.config['DATABASE']
+    database_address = "/instance/flaskr.sqlite"
     addToRecipe=request.args.get('addToRecipe')
     my_bucket = get_bucket()
     summaries = my_bucket.objects.all()
@@ -100,7 +100,7 @@ def files():
 
 @app.route('/version', methods=['POST'])  # See all versions of a particular component
 def version():
-    database_address = current_app.config['DATABASE']
+    database_address = "/instance/flaskr.sqlite"
     component = request.form['component']
     addToRecipe = request.form['atR']
     my_bucket = get_bucket()
@@ -109,7 +109,7 @@ def version():
 
 @app.route('/deleteComponentBucket', methods=['POST']) #Delete Component from bucket
 def deleteComponentBucket():
-    database_address = current_app.config['DATABASE']
+    database_address = "/instance/flaskr.sqlite"
     ver = request.form['ver']
     fileName = request.form['Fname']
     if normal_db_functions.check_duplicate(database_address, fileName, ver):
@@ -129,7 +129,7 @@ def deleteComponentBucket():
 
 @app.route('/submitNewRecipe', methods=['GET'])  # API for adding new recipe to database
 def submitNewRecipe():
-    database_address = current_app.config['DATABASE']
+    database_address = "/instance/flaskr.sqlite"
     name = request.args.get('softwareName')
     ver = request.args.get('version')
     status = request.args.get('status')
@@ -139,7 +139,7 @@ def submitNewRecipe():
 
 @app.route('/updateRecipe', methods=['POST'])  # API for adding new recipe to database
 def updateRecipe():
-    database_address = current_app.config['DATABASE']
+    database_address = "/instance/flaskr.sqlite"
     id = request.form.get('id')
     name = request.form.get('name')
     ver = request.form.get('version')
@@ -150,14 +150,14 @@ def updateRecipe():
 
 @app.route('/editRecipe', methods=['POST'])  # See all versions of a particular component
 def editRecipe():
-    database_address = current_app.config['DATABASE']
+    database_address = "/instance/flaskr.sqlite"
     recipeID = request.form['recipeID']
     recipe = normal_db_functions.lookupRecipe(database_address, recipeID)
     return render_template('editRecipe.html', recipe=recipe)
 
 @app.route('/recipes')  # Look-up page for all recipes in Database
 def recipes():
-    database_address = current_app.config['DATABASE']
+    database_address = "/instance/flaskr.sqlite"
     recipes = normal_db_functions.all_Recipes(database_address)
     return render_template('recipes.html', recipes=recipes)
 
@@ -170,13 +170,13 @@ def new_Recipe():
 
 @app.route('/recipeDetails',methods=['POST']) #Expands a recipe to view components and details
 def recipeDetails():
-    database_address = current_app.config['DATABASE']
+    database_address = "/instance/flaskr.sqlite"
     all_Components = normal_db_functions.all_components_in_a_recipe(database_address,request.form['recipeName'],request.form['ver'])
     return render_template('recipeDetails.html',all_Components = all_Components, recipeName = request.form['recipeName'], recipePK = request.form['recipePK'], recipeVER = request.form['ver'] )
 
 @app.route('/addComponentRecipe',methods=['POST']) #Adds a component to the currently selected Recipe
 def addComponentRecipe():
-    database_address = current_app.config['DATABASE']
+    database_address = "/instance/flaskr.sqlite"
     recipePK = request.form['recipe']
     componentName = request.form["componentName"]
     version = request.form["version"]
@@ -186,7 +186,7 @@ def addComponentRecipe():
 
 @app.route('/removeComponentRecipe',methods=['POST'])
 def removeComponentRecipe():
-    database_address = current_app.config['DATABASE']
+    database_address = "/instance/flaskr.sqlite"
     normal_db_functions.delete_a_relationship(database_address, request.form["recipeID"],request.form["compID"])
     flash('Component removed from Recipe successfully!')
     return redirect(url_for('files'))
