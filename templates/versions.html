@@ -2,60 +2,68 @@
 {% block title %}Versions{% endblock %}
 
 {% block content %}
-  <div class="container">
+<div class="container">
     <div class="col-12-xs">
-      <h3>Versions for: {{componentName}}</h3>
-      {% if atR != 'None' %}
+        <h4>Versions for: {{componentName}}</h4>
+        {% if atR != 'None' %}
         <p>Any Components you select will be added to Recipe ID: {{ atR }}</p>
-      {% endif %}
-      {% with messages = get_flashed_messages() %}
-        {% if messages %}
-          <p class="bg-info" style="padding: 15px;">
-          {% for message in messages %}
-            {{ message }}<br>
-          {% endfor %}
-          </p>
         {% endif %}
-      {% endwith %}
-      <hr>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <p class="bg-info" style="padding: 15px;">
+            {% for message in messages %}
+            {{ message }}<br>
+            {% endfor %}
+        </p>
+        {% endif %}
+        {% endwith %}
+        <hr>
 
-      <table class="table table-striped">
-        <tr>
-          <th>Version</th>
-        </tr>
-        {% for version in versions %}
-        <tr>
-          <td>{{ version }}</td>
-          <td>
-            <form class="download-form" action="{{ url_for('download') }}" method="POST">
-                <input type="hidden" name="key" value="{{ version['url'] }}">
-                <button type="submit" class="btn btn-default btn-sm">
-                  <i class="fa fa-download"></i>
-                </button>
-            </form>
-          </td>
-          <td>
-            {% if atR != 'None'%}
-              <form class="download-form" action="{{ url_for('addComponentRecipe') }}" method="post">
-                  <input type="hidden" name="componentName" value="{{ componentName }}">
-                  <input type="hidden" name="version" value="{{ version }}">
-                  <input type="hidden" name="recipe" value="{{ atR }}">
-                  <button type="submit" class="btn btn-default btn-sm">
-                    Add to Selected Recipe
-                  </button>
-              </form>
-            {% endif %}
-            <form class="delete-form" action="{{ url_for('deleteComponentBucket') }}" method="POST">
-                <input type="hidden" name="ver" value="{{ version }}"/>
-                <input type="hidden" name="Fname" value="{{ componentName }}"/>
-                <button type="submit" class="btn btn-outline-primary">
-                  Delete
-                </button>
-            </form>
-          </td>
-        </tr>
-        {% endfor %}
-      </table>
+        <table class="table table-bordered">
+            <tr>
+                <th class="info">Version</th>
+                <th class="success">Download</th>
+                <th class="danger">Remove</th>
+                {% if atR != 'None'%}
+                <th class="warning">Add to Selected Recipe</th>
+                {% endif %}
+            </tr>
+            {% for version in versions %}
+            <tr>
+                <td class="col-sm-4">{{ version }}</td>
+                <td class="col-sm-2">
+                    <form action="{{ url_for('download') }}" class="download-form" method="POST">
+                        <input name="key" type="hidden" value="{{ version['url'] }}">
+                        <button class="btn btn-default btn-sm" type="submit">
+                            <i class="fa fa-download"></i>
+                        </button>
+                    </form>
+                </td>
+                <td class="col-sm-2">
+                    <form action="{{ url_for('deleteComponentBucket') }}" class="delete-form" method="POST">
+                        <input name="ver" type="hidden" value="{{ version }}"/>
+                        <input name="Fname" type="hidden" value="{{ componentName }}"/>
+                        <button class="btn btn-danger" type="submit">
+                            Delete
+                        </button>
+                    </form>
+                </td>
+                {% if atR != 'None'%}
+                <td class="col-sm-2">
+                    <form action="{{ url_for('addComponentRecipe') }}" class="download-form" method="post">
+                        <input name="componentName" type="hidden" value="{{ componentName }}">
+                        <input name="version" type="hidden" value="{{ version }}">
+                        <input name="recipe" type="hidden" value="{{ atR }}">
+                        <button class="btn btn-warning" type="submit">
+                            Add
+                        </button>
+                    </form>
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </table>
+        <a href="{{ url_for('files') }}">Go back to component list<a>
     </div>
-  </div>
+</div>
 {% endblock %}

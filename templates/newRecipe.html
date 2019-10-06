@@ -4,7 +4,7 @@
 {% block content %}
 <div class="container" xmlns="http://www.w3.org/1999/html">
     <div class="col-12-xs">
-      <h3>Recipe Details</h3>
+      <h3 class="well">Recipe Details</h3>
       {% with messages = get_flashed_messages() %}
         {% if messages %}
           <p class="bg-info" style="padding: 15px;">
@@ -24,10 +24,10 @@
         Status: <br>
         <input type ="radio" name="status" value="In Development" checked>In Development<br>
         <input type ="radio" name="status" value="Released">Released<br><br>
-
-        <button type="submit" name="submit">Submit</button><br>
+        <button type="submit" name="submit" class="btn btn-primary">Submit</button><br>
       </form>
-
+      <br>
+      <a href="{{ url_for('recipes') }}">Go back to recipe list<a>
     </div>
   </div>
 {% endblock %}

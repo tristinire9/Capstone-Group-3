@@ -1,24 +1,29 @@
 {% extends "bootstrap/base.html" %}
 {% block html_attribs %} lang="en"{% endblock %}
 {% block head %}
-  {{super()}}
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/solid.css" integrity="sha384-v2Tw72dyUXeU3y4aM2Y0tBJQkGfplr39mxZqlTBDUZAb9BGoC40+rdFCG0m10lXk" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/fontawesome.css" integrity="sha384-q3jl8XQu1OpdLgGFvNRnPdj5VIlCvgsDQTQB6owSOHWlAurxul7f+JpUOVdAiJ5P" crossorigin="anonymous">
-  <link rel="stylesheet" href="/static/styles.css">
+{{super()}}
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/solid.css"
+      integrity="sha384-v2Tw72dyUXeU3y4aM2Y0tBJQkGfplr39mxZqlTBDUZAb9BGoC40+rdFCG0m10lXk" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/fontawesome.css"
+      integrity="sha384-q3jl8XQu1OpdLgGFvNRnPdj5VIlCvgsDQTQB6owSOHWlAurxul7f+JpUOVdAiJ5P" crossorigin="anonymous">
+<link rel="stylesheet" href="/static/styles.css">
 {% endblock %}
-{% block title %}ITL Software Component Store{% endblock %}
+{% block title %}ITL Component Store{% endblock %}
 
 {% block navbar %}
 <div class="container">
-  <img src="static/icon.png" alt="ITL logo" width="50px" height="50px">
-  <div class="navbar">
-    <ul class="nav navbar-nav">
-      <li><a href="{{ url_for('index') }}">Buckets</a></li>
-      <li><a href="{{ url_for('files') }}">Components</a></li>
-      <li><a href="{{ url_for('recipes') }}">Recipes</a></li>
-    </ul>
-  </div>
+    <img src="static/icon.png" alt="ITL logo" width="50px" height="50px">
+    <h4 class="well" style="font-weight:bold">ITL Software Component Store and Release Assembly Tool</h4>
+    <div class="navbar">
+        <ul class="nav navbar-nav">
+            <li><a href="{{ url_for('index') }}">Buckets</a></li>
+            <li><a href="{{ url_for('files') }}">Components</a></li>
+            <li><a href="{{ url_for('recipes') }}">Recipes</a></li>
+        </ul>
+    </div>
 </div>
 {% endblock %}
+<br>
+<br>
 
 <div class="container">{% block content %}{% endblock %}</div>

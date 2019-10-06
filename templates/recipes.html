@@ -4,7 +4,7 @@
 {% block content %}
   <div class="container">
     <div class="col-12-xs">
-      <h3>Store Recipes</h3>
+      <h3 class="well">Recipe Store</h3>
       {% with messages = get_flashed_messages() %}
         {% if messages %}
           <p class="bg-info" style="padding: 15px;">
@@ -15,23 +15,22 @@
         {% endif %}
       {% endwith %}
       <hr>
-      <a type="submit" href="{{ url_for('new_Recipe') }}">Create New Recipe</a><br><br>
-      <table class="table table-striped">
+      <h4>List of available recipes:</h4>
+      <table class="table table-bordered">
         <tr>
-          <th>Recipe</th>
-          <th>Version</th>
-
+          <th class ="success">Recipe Name</th>
+          <th class="info">Version Number</th>
         </tr>
         {% for recipe in recipes %}
         <tr>
-          <td>{{ recipe[0] }}</td>
-          <td class="td-buttons">
+          <td class="col-sm-4">{{ recipe[0] }}</td>
+          <td class="col-sm-2">
             {% for i in recipe[1] %}
                 <form class="download-form" action="{{ url_for('recipeDetails') }}" method="POST">
                   <input type="hidden" name="recipePK" value="{{ i[1] }}">
                   <input type="hidden" name="recipeName" value="{{ recipe[0] }}">
                   <input type="hidden" name="ver" value="{{ i[0] }}">
-                  <button type="submit" class="btn btn-outline-primary">
+                  <button type="submit" class="btn btn-link">
                     {{ i[0] }}
                   </button>
                 </form>
@@ -40,6 +39,12 @@
         </tr>
         {% endfor %}
       </table>
+      <hr>
+      <p>If you would like to create a new recipe, click the 'Create' button below:</p>
+      <form class="download-form" action="{{ url_for('new_Recipe') }}">
+        <button type="submit" class="btn btn-success">Create</button>
+      </form>
+      <hr>
     </div>
   </div>
 {% endblock %}
