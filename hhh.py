@@ -1,12 +1,5 @@
-destinations_list = ['/', "/data"]
-components_list = [[22,"hh"], [56,"po"]]
+import normal_db_functions
 
-result_list = []
-for i in range(0, len(destinations_list)):
-    component = components_list[i]
-    destination = destinations_list[i]
-    result = component + [destination]
-    print(result)
-    result_list.append(result)
+cur = normal_db_functions.get_db().cursor()
 
-print(result_list)
+print(cur)
