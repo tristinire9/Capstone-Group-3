@@ -306,5 +306,15 @@ def are_there_newer_versions_of_this_component(db_file, component_name, componen
     else:
         return False
 
+# False means that there is no duplicate
+def check_duplicate_recipes(db_file, recipe_name, recipe_version_number):
+    conn = sqlite3.connect(db_file, isolation_level=None)
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM recipes WHERE name = ? AND version_num = ?", (recipe_name, recipe_version_number))
+    data = cursor.fetchall()
+    if len(data) == 0:
+        return False
+    else:
+        return True
 # create_component(create_connection("../instance/myDB"), ("Thomas", "1.2.3.4", "19/9/2019", "www.google.com"))
 # print(lookup("../instance/myDB", "Thomas"))
