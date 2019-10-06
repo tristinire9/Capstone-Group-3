@@ -1,5 +1,6 @@
 import sqlite3
 from flask import current_app, g
+import os
 
 def get_db():
     if 'db' not in g:
@@ -235,6 +236,13 @@ def recipeVersions(db_file, recipe_name):
         versionNumbers.append([component[0],get_a_recipe_ID(db_file,recipe_name,component[0])])
 
     return versionNumbers
+
+# True is empty, and False is not empty
+def is_folder_empty(folder_address):
+    if len(os.listdir(folder_address)) == 0:
+        return True
+    else:
+        return False
 
 # create_component(create_connection("../instance/myDB"), ("Thomas", "1.2.3.4", "19/9/2019", "www.google.com"))
 # print(lookup("../instance/myDB", "Thomas"))
