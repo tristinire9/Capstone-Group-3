@@ -19,11 +19,9 @@
       {% endwith %}
       <hr>
 
-      <hr>
       <table class="table table-striped">
         <tr>
           <th>Version</th>
-          <th></th>
         </tr>
         {% for version in versions %}
         <tr>
@@ -47,6 +45,13 @@
                   </button>
               </form>
             {% endif %}
+            <form class="delete-form" action="{{ url_for('deleteComponentBucket') }}" method="POST">
+                <input type="hidden" name="ver" value="{{ version }}"/>
+                <input type="hidden" name="Fname" value="{{ componentName }}"/>
+                <button type="submit" class="btn btn-outline-primary">
+                  Delete
+                </button>
+            </form>
           </td>
         </tr>
         {% endfor %}

@@ -1,3 +1,18 @@
 .td-buttons form {
   display: inline-block;
 }
+img {
+  display: block;
+  max-width:50px;
+  max-height:50px;
+  width: auto;
+  height: auto;
+  float: left;
+  position: relative;
+  margin: 10px 15px 15px 10px;
+}
+
+.navbar {
+    overflow: hidden;
+    float: right;
+}

@@ -110,8 +110,13 @@ def lookupRecipe(recipeID):
 
 def delete_component(name, version_num):
     cursor = get_db().cursor()
-    cursor.execute("DELETE FROM components WHERE name = ? AND version_num = ?", (name, version_num))
+    pk = cursor.execute("SELECT id FROM components WHERE name = ? AND version_num = ?", (name,version_num))
+    components = cursor.fetchall()
+    pk = components[0][0]
+    cursor.execute("DELETE FROM components WHERE id = ? ", (pk,))
+    cursor.execute("DELETE FROM relationships WHERE componentID = ? ", (pk,))
     return 0
+
 
 def create_recipe(name, version_num, status):
     cursor = get_db().cursor()
@@ -188,6 +193,11 @@ def create_a_relationship(db_file, recipe_ID, component_name, component_num):
     cursor.execute(''' INSERT INTO relationships ('componentID', 'recipeID', 'destination_path')
               VALUES(?,?,?) ''', (component_ID, recipe_ID, destination_path))
 
+    return 0
+
+def delete_a_relationship(recipe_ID, component_ID):
+    cursor = get_db().cursor()
+    cursor.execute("DELETE FROM relationships WHERE componentID = ? AND recipeID = ? ", (component_ID, recipe_ID))
     return 0
 
 # return a list
