@@ -37,18 +37,19 @@
         <tr>
           <th class="warning">Component</th>
           <th class="info">Version</th>
-          <th class="danger">Remove</th>
+          <th class="danger">Remove Component from Recipe</th>
         </tr>
         {% for comp in all_Components %}
         <tr>
             {% if comp %}
-              <td>{{comp[1]}}</td><td>{{comp[2]}}</td>
-              <td>
+              <td class="col-sm-4">{{comp[1]}}</td>
+              <td class="col-sm-4">{{comp[2]}}</td>
+              <td class="col-sm-4">
                 <form class="delete-form" action="{{ url_for('removeComponentRecipe') }}" method="POST">
                   <input type="hidden" name="recipeID" value="{{ recipePK }}">
                   <input type="hidden" name="compID" value="{{ comp[0] }}">
                   <button type="submit" class="btn btn-danger">
-                    Remove
+                    Delete
                   </button>
                 </form>
               </td>
