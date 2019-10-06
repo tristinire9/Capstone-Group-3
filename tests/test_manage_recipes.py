@@ -103,5 +103,11 @@ class SimpleTest(unittest.TestCase):
 
     def test_is_folder_empty_2(self):
         self.assertEqual(normal_db_functions.is_folder_empty("../tests"), False)
+
+    def test_are_there_newer_versions_of_this_component_1(self):
+        self.assertEqual(normal_db_functions.are_there_newer_versions_of_this_component(db_file, "Thomas", "1.2.3.4"), True)
+
+    def test_are_there_newer_versions_of_this_component_2(self):
+        self.assertEqual(normal_db_functions.are_there_newer_versions_of_this_component(db_file, "Thomas", "1.4.3.4"), False)
 if __name__ == '__main__':
     unittest.main()
