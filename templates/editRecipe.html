@@ -16,14 +16,14 @@
       {% endwith %}
       <hr>
         <form action = "{{ url_for('updateRecipe') }}" method="post">
-        <input type="hidden" name="id" value="{{ recipe['id'] }}">
+        <input type="hidden" name="id" value="{{ recipe[0] }}">
         Software Name:<br>
-        <input type="text" name="name" value="{{ recipe['name'] }}"><br>
+        <input type="text" name="name" value="{{ recipe[1] }}"><br>
         Version Number: <br>
-        <input type ="text" name="version" value="{{ recipe['version_num'] }}"><br>
+        <input type ="text" name="version" value="{{ recipe[2] }}"><br>
         Status: <br>
-        <input type ="radio" name="status" value="In Development" {% if recipe['status'] == 'In Development' %} checked{% endif %}>In Development<br>
-        <input type ="radio" name="status" value="Released" {% if recipe['status'] == 'Released' %} checked{% endif %}>Released<br><br>
+        <input type ="radio" name="status" value="In Development" {% if recipe[3] == 'In Development' %} checked{% endif %}>In Development<br>
+        <input type ="radio" name="status" value="Released" {% if recipe[3] == 'Released' %} checked{% endif %}>Released<br><br>
         <button type="submit" name="submit" class="btn btn-primary">Submit</button><br>
       </form>
       <br>
