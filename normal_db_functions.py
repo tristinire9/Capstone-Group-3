@@ -295,25 +295,12 @@ def are_there_newer_versions_of_this_component(db_file, component_name, componen
         all_version_numbers[i] = version.parse(all_version_numbers[i])
 
     present_version_number = version.parse(component_version_num)
-    compare_results = []
 
     for version_number in all_version_numbers:
         if version_number > present_version_number:
-            compare_results.append(True)
-        else:
-            compare_results.append(False)
+            return True
 
-    if True in compare_results:
-        return True
-    else:
-        return False
-# returns a list of components which have newer versions
-def newVersionsExist(db_file, components):
-    newVersions=[]
-    for comp in components:
-        if are_there_newer_versions_of_this_component(db_file,comp[1],comp[2]):
-            newVersions.append(comp)
-    return newVersions
+    return False
 
 
 # False means that there is no duplicate

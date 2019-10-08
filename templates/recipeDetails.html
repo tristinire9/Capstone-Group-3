@@ -43,7 +43,7 @@
         <tr>
             {% if comp %}
               <td class="col-sm-4">{{comp[1]}}</td>
-              <td class="col-sm-4">{{comp[2]}}{% if comp[6] == 'True' %} *New Version Available*{% endif %}</td>
+              <td class="col-sm-4">{{comp[2]}}{% if comp[6] == True %} *New Version Available*{% endif %}</td>
 
               <td class="col-sm-4">
                 <form class="delete-form" action="{{ url_for('removeComponentRecipe') }}" method="POST">
