@@ -32,11 +32,19 @@ def ensureZipped(file,fileName):
             zipf.write(file)
         zipf.close()
 
+def fileExists(fileName):
+    if fileName.is_dir() or fileName.is_file():
+        return True
+
 #'https://intense-stream-78237.herokuapp.com/'
 url="https://intense-stream-78237.herokuapp.com/"
 
 def send_Function(file,fileName,versionNumber):
     try:
+        if not fileExists(fileName):
+            print("File does not exist")
+            sys.exit(1)
+
         ensureZipped(file,fileName)
         response = requests.post(url+'component', files={'file':open(fileName+".zip",'rb')}, params={'ver':versionNumber, 'Fname':fileName})
     # If the response was successful, no Exception will be raised
