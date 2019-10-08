@@ -68,7 +68,7 @@ def get_filename_from_cd(cd):
         return None
     return fname[0]
 
-def download_Function(fileName, versionNumber):
+def download_Function(fileName, versionNumber,location):
     try:
         response = requests.get(url+'retrieve',params={'ver':versionNumber, 'Fname':fileName})
     except HTTPError as http_err:
@@ -76,8 +76,9 @@ def download_Function(fileName, versionNumber):
     except Exception as err:
         print(f'Other error occurred: {err}')  # Python 3.6
     else:
+
         filename = get_filename_from_cd(response.headers.get('content-disposition'))
-        open(filename, 'wb').write(response.content)
+        open(location+'\\'+filename, 'wb').write(response.content)
         if response.status_code==200:
             sys.exit(0)
         else:
@@ -88,7 +89,8 @@ def help():
     print("""\n\n***Welcome to ITL's Software Component Command Line tool!*** \nThis tool is used to store, retrieve, and look up components in the Store\n (Server)\n
 To use this tool correctly, follow the examples below:\n""")
     print("""\nPUSH \"filename.xxx\" \"NAME\" \"1.1.1.1\" - Sends file (relative path) to Store.
-PULL \"filename.xxx\" \"1.1.1.1\"- Sends retrieve request to Store.\n
+PULL \"filename.xxx\" \"1.1.1.1\" \"C:\\Users...\"- Sends retrieve request to Store.\n
+If you don't specify a download location, default download is relative to this script.
 \n
 You must specify a command (Push/Pull), the File (relative path), name the Component, and the version number.\n
 You cannot have duplicates in the store, \ne.g: matching component name and version number.
@@ -99,4 +101,4 @@ if not len(sys.argv) > 3 or sys.argv[1].lower() not in ["push", "pull"]:
 elif sys.argv[1].lower()=="push":
     send_Function(sys.argv[2],sys.argv[3],sys.argv[4])
 elif sys.argv[1].lower()=="pull":
-    download_Function(sys.argv[2],sys.argv[3])
+    download_Function(sys.argv[2],sys.argv[3],sys.argv[4])

@@ -254,8 +254,10 @@ def all_components_in_a_recipe(db_file, recipe_name, recipe_num):
     for i in range(0, len(destinations_list)):
         component = components_list[i]
         destination = destinations_list[i]
-        result = component + [destination]
-        result_list.append(result)
+        newer= are_there_newer_versions_of_this_component(db_file,component[1],component[2])
+        component.append(destination)
+        component.append(newer)
+        result_list.append(component)
 
     return result_list
 
@@ -305,6 +307,14 @@ def are_there_newer_versions_of_this_component(db_file, component_name, componen
         return True
     else:
         return False
+# returns a list of components which have newer versions
+def newVersionsExist(db_file, components):
+    newVersions=[]
+    for comp in components:
+        if are_there_newer_versions_of_this_component(db_file,comp[1],comp[2]):
+            newVersions.append(comp)
+    return newVersions
+
 
 # False means that there is no duplicate
 def check_duplicate_recipes(db_file, recipe_name, recipe_version_number):

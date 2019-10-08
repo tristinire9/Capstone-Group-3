@@ -184,11 +184,9 @@ def new_Recipe():
 def recipeDetails():
     all_Components = normal_db_functions.all_components_in_a_recipe("instance/flaskr.sqlite",
     request.form['recipeName'], request.form['ver'])
+    print(all_Components[0][6])
     return render_template('recipeDetails.html', all_Components=all_Components, recipeName=request.form['recipeName'],
     recipePK=request.form['recipePK'], recipeVER=request.form['ver'])
-    all_Components = normal_db_functions.all_components_in_a_recipe(database_address,request.form['recipeName'],request.form['ver'])
-
-    return render_template('recipeDetails.html',all_Components = all_Components, recipeName = request.form['recipeName'], recipePK = request.form['recipePK'], recipeVER = request.form['ver'] )
 
 
 @app.route('/addComponentRecipe', methods=['POST'])  # Adds a component to the currently selected Recipe
