@@ -31,6 +31,14 @@
           Edit
         </button>
       </form>
+      <br>
+        <p>To clone this recipe, click 'Clone' below:</p>
+      <form action="{{ url_for('cloneRecipe') }}" method="POST">
+        <input type="hidden" name="recipeID" value="{{ recipePK }}">
+        <button type="submit" class="btn btn-warning">
+          Clone
+        </button>
+      </form>
       <br><br>
 
       <table class="table table-bordered">

@@ -143,6 +143,12 @@ def submitNewRecipe():
     flash('Recipe uploaded successfully')
     return redirect(url_for('recipes'))
 
+@app.route('/searchRecipes', methods=['POST'])  # API for adding new recipe to database
+def searchRecipes():
+    database_address = "instance/flaskr.sqlite"
+    searchString = request.form.get('recipeSearchName')
+    recipes = normal_db_functions.lookupRecipesByName(database_address, searchString)
+    return render_template('recipes.html', recipes=recipes, recipeSearchName=searchString)
 
 @app.route('/updateRecipe', methods=['POST'])  # API for adding new recipe to database
 def updateRecipe():
@@ -154,6 +160,22 @@ def updateRecipe():
 
     normal_db_functions.update_recipe(database_address, id, name, ver, status)
     flash('Recipe update successfully')
+    return redirect(url_for('recipes'))
+
+@app.route('/cloneRecipe', methods=['POST'])  # API for adding new recipe to database
+def cloneRecipe():
+    database_address = "instance/flaskr.sqlite"
+    recipeId = request.form.get('recipeID')
+    recipe = normal_db_functions.lookupRecipe(database_address, recipeId)
+    version_num = recipe['version_num'][:-1] + chr(ord(recipe['version_num'][-1]) + 1)
+    newRecipeId = normal_db_functions.create_recipe(database_address, recipe['name'], version_num, recipe['status'])
+
+    relationships = normal_db_functions.select_recipe_components(database_address, recipeId)
+
+    for relationship in relationships:
+        normal_db_functions.create_relationship(database_address, newRecipeId, relationship['componentID'])
+
+    flash('Recipe Clone successfully')
     return redirect(url_for('recipes'))
 
 

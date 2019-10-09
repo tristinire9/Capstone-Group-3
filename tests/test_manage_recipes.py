@@ -29,10 +29,8 @@ class SimpleTest(unittest.TestCase):
         cur.execute("SELECT * FROM recipes WHERE name = 'Hi'")
 
         data = cur.fetchall()
-        if len(data) == 0:
-            self.assertTrue(False)
-        else:
-            self.assertTrue(True)
+
+        self.assertEqual(1, len(data))
 
     def test_change_recipe_version_num(self):
         normal_db_functions.create_recipe(db_file, "2", "4.3.2.1", "In Dev")
