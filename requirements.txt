@@ -18,3 +18,4 @@ Werkzeug==0.14.1
 gunicorn==19.9.0
 awscli==1.16.234
 packaging
+requests==2.22.0
