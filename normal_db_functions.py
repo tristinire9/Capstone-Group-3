@@ -1,8 +1,15 @@
 import sqlite3
-from flask import current_app, g
 import os
 from packaging import version
 
+import shutil
+import sys
+import requests
+from requests.exceptions import HTTPError
+import re
+
+
+url="https://intense-stream-78237.herokuapp.com/"
 # def get_db():
 #     if 'db' not in g:
 #         g.db = sqlite3.connect(
@@ -313,5 +320,66 @@ def check_duplicate_recipes(db_file, recipe_name, recipe_version_number):
         return False
     else:
         return True
+
+
+# From here
+
+def get_filename_from_cd(cd):
+    if not cd:
+        return None
+    fname = re.findall('filename=(.+)', cd)
+    if len(fname) == 0:
+        return None
+    return fname[0]
+
+def download_a_component_to_root_path(component_name, component_version_number, recipe_destination):
+    try:
+        response = requests.get(url+'retrieve',params={'ver':component_version_number, 'Fname':component_name})
+    except HTTPError as http_err:
+        print(f'HTTP error occurred: {http_err}')  # Python 3.6
+    except Exception as err:
+        print(f'Other error occurred: {err}')  # Python 3.6
+    else:
+        filename = get_filename_from_cd(response.headers.get('content-disposition'))
+        open(recipe_destination+'\\'+filename, 'wb').write(response.content)
+        if response.status_code == 200:
+            return 0
+        else:
+            return 1
+
+def download_all_actual_components_in_a_recipe_to_root(db_file, recipe_name, recipe_version_number, recipe_destination):
+    all_components_with_destination_paths = all_components_in_a_recipe(db_file, recipe_name, recipe_version_number)
+    components_destinations_dictionary = dict()
+
+    for component in all_components_with_destination_paths:
+        download_a_component_to_root_path(component[1], component[2], recipe_destination)
+        components_destinations_dictionary[component[1]] = component[5]
+
+    return components_destinations_dictionary
+
+def put_components_to_right_places(recipe_destination, components_destinations_dictionary):
+    all_components = os.listdir(recipe_destination)
+
+    all_components_names_without_extensions = []
+    for component in all_components:
+        all_components_names_without_extensions.append(component.partition('.')[0])
+
+    for i in range(0, len(all_components)):
+        source = recipe_destination + "/" + all_components[i]
+        destination = recipe_destination + components_destinations_dictionary[all_components_names_without_extensions[i]]
+        if os.path.exists(destination):
+            pass
+        else:
+            os.mkdir(destination)
+        shutil.move(source, destination)
+    return 0
+
+def assemble_a_release(db_file, recipe_name, recipe_version_number, recipe_destination):
+    components_destinations_dictionary = download_all_actual_components_in_a_recipe_to_root(db_file, recipe_name, recipe_version_number, recipe_destination)
+    put_components_to_right_places(recipe_destination, components_destinations_dictionary)
+    return 0
+
+
+
 # create_component(create_connection("../instance/myDB"), ("Thomas", "1.2.3.4", "19/9/2019", "www.google.com"))
 # print(lookup("../instance/myDB", "Thomas"))

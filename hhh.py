@@ -1,5 +1,5 @@
-import normal_db_functions
+def hhh():
+    print("hhh")
+    return 1
 
-cur = normal_db_functions.get_db().cursor()
-
-print(cur)
+a = hhh()
