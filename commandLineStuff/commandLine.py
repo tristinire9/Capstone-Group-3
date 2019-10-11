@@ -23,8 +23,13 @@ def retrieve_file_paths(dirName):
 #Zips single files/directories, otherwise renames the file if it's already zipped
 def ensureZipped(file,fileName):
     if os.path.isfile(file):
+        print("IS FILE")
         if file.split(".")[1]=="zip":
             os.rename(file,fileName+".zip")
+        else:
+            zipf = zipfile.ZipFile(fileName+".zip",'w',zipfile.ZIP_DEFLATED)
+            zipf.write(file)
+            zipf.close()
     else:
         filePaths = retrieve_file_paths(file)
         zipf = zipfile.ZipFile(fileName+'.zip', 'w', zipfile.ZIP_DEFLATED)
@@ -79,7 +84,7 @@ def download_Function(fileName, versionNumber,location=""):
 
         filename = get_filename_from_cd(response.headers.get('content-disposition'))
         if location!="":
-            open(str(location+'\\'+filename), 'wb').write(response.content)
+            open(str(location+'/'+filename), 'wb').write(response.content)
         else:
             open(filename, 'wb').write(response.content)
 
@@ -94,6 +99,7 @@ def get_Components(recipeName, recipeVersion):
         os.makedirs(recipeName+recipeVersion)
     data_json = response.json()
     for i in data_json:
+        print(i)
         download_Function(i[1],i[2],str(recipeName+recipeVersion))
 
 def help():

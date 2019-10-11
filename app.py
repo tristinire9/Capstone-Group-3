@@ -195,7 +195,7 @@ def removeComponentRecipe():
 def fetchRecipeComponents():
     name = request.args.get('softwareName')
     ver = request.args.get('ver')
-    return jsonify(normal_db_functions.all_components_in_a_recipe(database_address,name,ver)),200
+    return jsonify(components = normal_db_functions.all_components_in_a_recipe(database_address,name,ver))
 
 ##END###################################################################################################################
 
