@@ -32,19 +32,11 @@ def ensureZipped(file,fileName):
             zipf.write(file)
         zipf.close()
 
-def fileExists(fileName):
-    if fileName.is_dir() or fileName.is_file():
-        return True
-
 #'https://intense-stream-78237.herokuapp.com/'
 url="https://intense-stream-78237.herokuapp.com/"
 
 def send_Function(file,fileName,versionNumber):
     try:
-        if not fileExists(fileName):
-            print("File does not exist")
-            sys.exit(1)
-
         ensureZipped(file,fileName)
         response = requests.post(url+'component', files={'file':open(fileName+".zip",'rb')}, params={'ver':versionNumber, 'Fname':fileName})
     # If the response was successful, no Exception will be raised
@@ -76,7 +68,7 @@ def get_filename_from_cd(cd):
         return None
     return fname[0]
 
-def download_Function(fileName, versionNumber,location):
+def download_Function(fileName, versionNumber,location=""):
     try:
         response = requests.get(url+'retrieve',params={'ver':versionNumber, 'Fname':fileName})
     except HTTPError as http_err:
@@ -86,12 +78,23 @@ def download_Function(fileName, versionNumber,location):
     else:
 
         filename = get_filename_from_cd(response.headers.get('content-disposition'))
-        open(location+'\\'+filename, 'wb').write(response.content)
+        if location!="":
+            open(str(location+'\\'+filename), 'wb').write(response.content)
+        else:
+            open(filename, 'wb').write(response.content)
+
         if response.status_code==200:
             sys.exit(0)
         else:
             sys.exit(1)
 
+def get_Components(recipeName, recipeVersion):
+    response = requests.get(url+'fetchRecipeComponents',params={'softwareName':recipeName, 'ver':recipeVersion})
+    if not os.path.exists(recipeName+recipeVersion):
+        os.makedirs(recipeName+recipeVersion)
+    data_json = response.json()
+    for i in data_json:
+        download_Function(i[1],i[2],str(recipeName+recipeVersion))
 
 def help():
     print("""\n\n***Welcome to ITL's Software Component Command Line tool!*** \nThis tool is used to store, retrieve, and look up components in the Store\n (Server)\n
@@ -104,9 +107,14 @@ You must specify a command (Push/Pull), the File (relative path), name the Compo
 You cannot have duplicates in the store, \ne.g: matching component name and version number.
 """)
 
-if not len(sys.argv) > 3 or sys.argv[1].lower() not in ["push", "pull"]:
+if not len(sys.argv) > 3 or sys.argv[1].lower() not in ["push", "pull","assemble"]:
     help()
 elif sys.argv[1].lower()=="push":
     send_Function(sys.argv[2],sys.argv[3],sys.argv[4])
 elif sys.argv[1].lower()=="pull":
-    download_Function(sys.argv[2],sys.argv[3],sys.argv[4])
+    if len(sys.argv)>4:
+        download_Function(sys.argv[2],sys.argv[3],sys.argv[4])
+    else:
+        download_Function(sys.argv[2],sys.argv[3])
+elif sys.argv[1].lower()=="assemble":
+    get_Components(sys.argv[2],sys.argv[3])
