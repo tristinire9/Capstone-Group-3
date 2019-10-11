@@ -195,8 +195,8 @@ def fetchRecipeComponents():
     name = request.args.get('softwareName')
     ver = request.args.get('ver')
     all_components = normal_db_functions.all_components_in_a_recipe(database_address,name,ver)
-    print(all_components)
-    return jsonify(components = all_components)
+
+    return jsonify(all_components)
 
 ##END###################################################################################################################
 

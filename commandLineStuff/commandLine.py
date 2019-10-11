@@ -23,7 +23,6 @@ def retrieve_file_paths(dirName):
 #Zips single files/directories, otherwise renames the file if it's already zipped
 def ensureZipped(file,fileName):
     if os.path.isfile(file):
-        print("IS FILE")
         if file.split(".")[1]=="zip":
             os.rename(file,fileName+".zip")
         else:
@@ -38,7 +37,7 @@ def ensureZipped(file,fileName):
         zipf.close()
 
 #'https://intense-stream-78237.herokuapp.com/'
-url="http://127.0.0.1:5000/"
+url="https://intense-stream-78237.herokuapp.com/"
 
 def send_Function(file,fileName,versionNumber):
     try:
@@ -73,7 +72,7 @@ def get_filename_from_cd(cd):
         return None
     return fname[0]
 
-def download_Function(fileName, versionNumber,location=""):
+def download_Function(fileName, versionNumber,location="",recipeDownload=False):
     try:
         response = requests.get(url+'retrieve',params={'ver':versionNumber, 'Fname':fileName})
     except HTTPError as http_err:
@@ -87,20 +86,19 @@ def download_Function(fileName, versionNumber,location=""):
             open(str(location+'/'+filename), 'wb').write(response.content)
         else:
             open(filename, 'wb').write(response.content)
-
-        if response.status_code==200:
-            sys.exit(0)
-        else:
-            sys.exit(1)
+        if recipeDownload==False:
+            if response.status_code==200:
+                sys.exit(0)
+            else:
+                sys.exit(1)
 
 def get_Components(recipeName, recipeVersion):
     response = requests.get(url+'fetchRecipeComponents',params={'softwareName':recipeName, 'ver':recipeVersion})
     if not os.path.exists(recipeName+recipeVersion):
         os.makedirs(recipeName+recipeVersion)
     data_json = response.json()
-    for i in data_json["components"]:
-        print(i)
-        download_Function(i[1],i[2],str(recipeName+recipeVersion))
+    for i in data_json:
+        download_Function(i[1],i[2],str(recipeName+recipeVersion),True)
 
 def help():
     print("""\n\n***Welcome to ITL's Software Component Command Line tool!*** \nThis tool is used to store, retrieve, and look up components in the Store\n (Server)\n
