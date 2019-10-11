@@ -2,49 +2,55 @@
 {% block title %}ITL Component Store{% endblock %}
 
 {% block content %}
-  <div class="container">
+<div class="container">
     <div class="col-12-xs">
-      <h3 class="well">Recipe Store</h3>
-      {% with messages = get_flashed_messages() %}
+        <h3 class="well">Recipe Store</h3>
+        {% with messages = get_flashed_messages() %}
         {% if messages %}
-          <p class="bg-info" style="padding: 15px;">
-          {% for message in messages %}
+        <p class="bg-info" style="padding: 15px;">
+            {% for message in messages %}
             {{ message }}<br>
-          {% endfor %}
-          </p>
-        {% endif %}
-      {% endwith %}
-      <hr>
-      <h4>List of available recipes:</h4>
-      <table class="table table-bordered">
-        <tr>
-          <th class ="success">Recipe Name</th>
-          <th class="info">Version Number</th>
-        </tr>
-        {% for recipe in recipes %}
-        <tr>
-          <td class="col-sm-4">{{ recipe[0] }}</td>
-          <td class="col-sm-2">
-            {% for i in recipe[1] %}
-                <form class="download-form" action="{{ url_for('recipeDetails') }}" method="POST">
-                  <input type="hidden" name="recipePK" value="{{ i[1] }}">
-                  <input type="hidden" name="recipeName" value="{{ recipe[0] }}">
-                  <input type="hidden" name="ver" value="{{ i[0] }}">
-                  <button type="submit" class="btn btn-link">
-                    {{ i[0] }}
-                  </button>
-                </form>
             {% endfor %}
-          </td>
-        </tr>
-        {% endfor %}
-      </table>
-      <hr>
-      <p>If you would like to create a new recipe, click the 'Create' button below:</p>
-      <form class="download-form" action="{{ url_for('new_Recipe') }}">
-        <button type="submit" class="btn btn-success">Create</button>
-      </form>
-      <hr>
+        </p>
+        {% endif %}
+        {% endwith %}
+        <form class="search-form" action="{{ url_for('searchRecipes') }}" method="POST">
+            <input type="text" name="recipeSearchName" value="{{ recipeSearchName }}">
+            <button type="submit" class="btn btn-link">
+                Search Recipes
+            </button>
+        </form>
+        <hr>
+        <h4>List of available recipes:</h4>
+        <table class="table table-bordered">
+            <tr>
+                <th class="success">Recipe Name</th>
+                <th class="info">Version Number</th>
+            </tr>
+            {% for recipe in recipes %}
+            <tr>
+                <td class="col-sm-4">{{ recipe[0] }}</td>
+                <td class="col-sm-2">
+                    {% for i in recipe[1] %}
+                    <form class="download-form" action="{{ url_for('recipeDetails') }}" method="POST">
+                        <input type="hidden" name="recipePK" value="{{ i[1] }}">
+                        <input type="hidden" name="recipeName" value="{{ recipe[0] }}">
+                        <input type="hidden" name="ver" value="{{ i[0] }}">
+                        <button type="submit" class="btn btn-link">
+                            {{ i[0] }}
+                        </button>
+                    </form>
+                    {% endfor %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        <hr>
+        <p>If you would like to create a new recipe, click the 'Create' button below:</p>
+        <form class="download-form" action="{{ url_for('new_Recipe') }}">
+            <button type="submit" class="btn btn-success">Create</button>
+        </form>
+        <hr>
     </div>
-  </div>
+</div>
 {% endblock %}
