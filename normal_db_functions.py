@@ -133,6 +133,16 @@ def lookupRecipe(db_file, recipeID):
     recipes = cursor.fetchall()
     return recipes[0] if recipes else None
 
+def lookupRecipesByName(db_file, recipeName):
+    conn = create_connection(db_file)
+    cursor = conn.cursor()
+    cursor.execute("SELECT DISTINCT name FROM recipes WHERE name LIKE ?", ('%' + recipeName + '%',))
+    recipe_Names = cursor.fetchall()
+    recipes = []
+    for i in recipe_Names:
+        recipes.append([i[0], recipeVersions(db_file, i[0])])
+    return recipes
+
 def delete_component(db_file, name, version_num):
     conn = sqlite3.connect(db_file, isolation_level=None)
     cursor = conn.cursor()
@@ -149,7 +159,7 @@ def create_recipe(db_file, name, version_num, status):
     cursor = conn.cursor()
     cursor.execute(''' INSERT INTO recipes ('name', 'version_num', 'status')
               VALUES(?,?,?) ''', (name, version_num, status))
-    return 0
+    return cursor.lastrowid
 
 def update_recipe(db_file, id, name, version_num, status):
     conn = sqlite3.connect(db_file, isolation_level=None)
@@ -177,7 +187,7 @@ def create_relationship(db_file, componentID, recipeID):
     cursor = conn.cursor()
     cursor.execute(''' INSERT INTO relationships ('componentID', 'recipeID')
                   VALUES(?,?) ''', (componentID, recipeID))
-
+    return cursor.lastrowid
 
 def change_recipe_name(db_file, oldName, version_num, newName):
     conn = sqlite3.connect(db_file, isolation_level=None)
@@ -206,6 +216,14 @@ def get_a_recipe_ID(db_file, name, version_num):
     cursor.execute("""SELECT * FROM recipes WHERE name=? AND version_num=?""", (name, version_num))
     recipe = cursor.fetchall()
     return recipe[0][0]
+
+def select_recipe_components(db_file, recipeId):
+    conn = create_connection(db_file)
+    cursor = conn.cursor()
+    cursor.execute(''' SELECT * FROM relationships WHERE recipeID = ?''', (recipeId,))
+    relationships = cursor.fetchall()
+
+    return relationships
 
 def get_a_component_ID(db_file, name, version_num):
     conn = sqlite3.connect(db_file, isolation_level=None)
