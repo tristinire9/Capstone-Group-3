@@ -38,7 +38,7 @@ def ensureZipped(file,fileName):
         zipf.close()
 
 #'https://intense-stream-78237.herokuapp.com/'
-url="https://intense-stream-78237.herokuapp.com/"
+url="http://127.0.0.1:5000/"
 
 def send_Function(file,fileName,versionNumber):
     try:
@@ -98,7 +98,7 @@ def get_Components(recipeName, recipeVersion):
     if not os.path.exists(recipeName+recipeVersion):
         os.makedirs(recipeName+recipeVersion)
     data_json = response.json()
-    for i in data_json:
+    for i in data_json["components"]:
         print(i)
         download_Function(i[1],i[2],str(recipeName+recipeVersion))
 
