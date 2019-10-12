@@ -3,6 +3,7 @@ from auth import bp
 import db
 
 import normal_db_functions
+import sqlite3
 import os
 from flask import Flask, render_template, request, redirect, url_for, jsonify, flash, \
     Response, session
@@ -25,6 +26,9 @@ app.secret_key = 'secret'
 app.jinja_env.filters['datetimeformat'] = datetimeformat
 app.jinja_env.filters['file_type'] = file_type
 database_address = "instance/flaskr.sqlite"
+
+
+# database_address = "instance/flaskr.sqlite" > Add as global variable
 
 ## Command Line APIs ###################################################################################################
 
@@ -61,6 +65,7 @@ def retrieve():
     if normal_db_functions.check_duplicate(database_address, fileName, ver):
         url = normal_db_functions.get_URL(database_address, fileName, ver)
         key = url[0][0].split("/")[-1]
+
         my_bucket = get_bucket()
         file_obj = my_bucket.Object(key).get()
 
@@ -90,11 +95,12 @@ def index():
 
 @app.route('/files')  # Displays all components
 def files():
-    addToRecipe=request.args.get('addToRecipe')
+    addToRecipe = request.args.get('addToRecipe')
     my_bucket = get_bucket()
     summaries = my_bucket.objects.all()
     components = normal_db_functions.all_components_names(database_address)
-    return render_template('files.html', my_bucket=my_bucket, files=summaries, components = components,atR = addToRecipe)
+    return render_template('files.html', my_bucket=my_bucket, files=summaries, components=components, atR=addToRecipe)
+
 
 @app.route('/version', methods=['POST'])  # See all versions of a particular component
 def version():
@@ -102,8 +108,9 @@ def version():
     addToRecipe = request.form['atR']
     my_bucket = get_bucket()
 
-    versions=normal_db_functions.lookup(database_address, component)
-    return render_template('versions.html', my_bucket=my_bucket, componentName=component, versions=versions,atR=addToRecipe)
+    versions = normal_db_functions.lookup(database_address, component)
+    return render_template('versions.html', my_bucket=my_bucket, componentName=component, versions=versions,
+                           atR=addToRecipe)
 
 
 @app.route('/deleteComponentBucket', methods=['POST'])  # Delete Component from bucket
@@ -115,9 +122,10 @@ def deleteComponentBucket():
         key = url[0][0].split("/")[-1]
         my_bucket = get_bucket()
         my_bucket.Object(key).delete()
-        normal_db_functions.delete_component(database_address, fileName,ver)
+        normal_db_functions.delete_component(database_address, fileName, ver)
         flash('File deleted successfully')
     return redirect(url_for('files'))
+
 
 ##END###################################################################################################################
 
@@ -132,6 +140,7 @@ def submitNewRecipe():
     normal_db_functions.create_recipe(database_address, name, ver, status)
     flash('Recipe uploaded successfully')
     return redirect(url_for('recipes'))
+
 
 @app.route('/searchRecipes', methods=['POST'])  # API for adding new recipe to database
 def searchRecipes():
@@ -151,21 +160,21 @@ def updateRecipe():
     flash('Recipe update successfully')
     return redirect(url_for('recipes'))
 
+
 @app.route('/cloneRecipe', methods=['POST'])  # API for adding new recipe to database
 def cloneRecipe():
     recipeId = request.form.get('recipeID')
     recipe = normal_db_functions.lookupRecipe(database_address, recipeId)
-    version_num = recipe[2][:-1] + chr(ord(recipe[2][-1]) + 1)
-    newRecipeId = normal_db_functions.create_recipe(database_address, recipe[1], version_num, recipe[1])
+    version_num = recipe['version_num'][:-1] + chr(ord(recipe['version_num'][-1]) + 1)
+    newRecipeId = normal_db_functions.create_recipe(database_address, recipe['name'], version_num, recipe['status'])
 
     relationships = normal_db_functions.select_recipe_components(database_address, recipeId)
 
     for relationship in relationships:
-        normal_db_functions.create_relationship(database_address, newRecipeId, relationship[0])
+        normal_db_functions.create_relationship(database_address, newRecipeId, relationship['componentID'])
 
     flash('Recipe Clone successfully')
     return redirect(url_for('recipes'))
-
 
 
 @app.route('/editRecipe', methods=['POST'])  # See all versions of a particular component
@@ -191,10 +200,10 @@ def new_Recipe():
 
 @app.route('/recipeDetails', methods=['POST'])  # Expands a recipe to view components and details
 def recipeDetails():
-    all_Components = normal_db_functions.all_components_in_a_recipe("instance/flaskr.sqlite",
-    request.form['recipeName'], request.form['ver'])
+    all_Components = normal_db_functions.all_components_in_a_recipe(database_address,
+                                                                    request.form['recipeName'], request.form['ver'])
     return render_template('recipeDetails.html', all_Components=all_Components, recipeName=request.form['recipeName'],
-    recipePK=request.form['recipePK'], recipeVER=request.form['ver'])
+                           recipePK=request.form['recipePK'], recipeVER=request.form['ver'])
 
 
 @app.route('/addComponentRecipe', methods=['POST'])  # Adds a component to the currently selected Recipe
@@ -206,19 +215,22 @@ def addComponentRecipe():
     flash('Component added to Recipe successfully! Select another Component to keep adding more.')
     return redirect(url_for('files', addToRecipe=recipePK))
 
+
 @app.route('/removeComponentRecipe', methods=['POST'])
 def removeComponentRecipe():
-    normal_db_functions.delete_a_relationship(database_address, request.form["recipeID"],request.form["compID"])
+    normal_db_functions.delete_a_relationship(database_address, request.form["recipeID"], request.form["compID"])
     flash('Component removed from Recipe successfully!')
     return redirect(url_for('files'))
+
 
 @app.route('/fetchRecipeComponents', methods=['GET'])
 def fetchRecipeComponents():
     name = request.args.get('softwareName')
     ver = request.args.get('ver')
-    all_components = normal_db_functions.all_components_in_a_recipe(database_address,name,ver)
+    all_components = normal_db_functions.all_components_in_a_recipe(database_address, name, ver)
 
     return jsonify(all_components)
+
 
 ##END###################################################################################################################
 
@@ -233,6 +245,7 @@ def upload():
     flash('File uploaded successfully')
     return redirect(url_for('files'))
 
+
 @app.route('/download', methods=['POST'])  # download from Web UI
 def download():
     key = request.form['key'].split('/')[-1][:-4]
@@ -244,6 +257,7 @@ def download():
         mimetype='text/plain',
         headers={"Content-Disposition": "attachment;filename={}".format(key)}
     )
+
 
 if __name__ == "__main__":
     app.run()

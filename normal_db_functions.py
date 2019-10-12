@@ -1,15 +1,9 @@
 import sqlite3
+from flask import current_app, g
 import os
 from packaging import version
 
-import shutil
-import sys
-import requests
-from requests.exceptions import HTTPError
-import re
 
-
-url="https://intense-stream-78237.herokuapp.com/"
 # def get_db():
 #     if 'db' not in g:
 #         g.db = sqlite3.connect(
@@ -50,9 +44,13 @@ def create_connection(db_file):
     conn = None
     try:
         conn = sqlite3.connect(db_file, isolation_level=None)
+
+        conn.row_factory = sqlite3.Row
     except sqlite3.Error as e:
         print(e)
     return conn
+
+
 # connection = create_connection("../instance/flaskr.sqlite")
 # id = create_component(connection, ('Thomas','1.4.3','2019-09-16','www.google.com'))
 # print(id)
@@ -67,7 +65,7 @@ def check_duplicate(db_file, fileName, versionNumber):
     :param versionNumber: version number of a component
     :return: True or False
     """
-    conn = sqlite3.connect(db_file, isolation_level=None)
+    conn = create_connection(db_file)
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM components WHERE name = ? AND version_num = ?", (fileName, versionNumber))
     data = cursor.fetchall()
@@ -76,8 +74,9 @@ def check_duplicate(db_file, fileName, versionNumber):
     else:
         return True
 
+
 def get_URL(db_file, fileName, versionNumber):
-    conn = sqlite3.connect(db_file, isolation_level=None)
+    conn = create_connection(db_file)
     cursor = conn.cursor()
     cursor.execute("SELECT url FROM components WHERE name = ? AND version_num = ?", (fileName, versionNumber))
     data = cursor.fetchall()
@@ -86,20 +85,21 @@ def get_URL(db_file, fileName, versionNumber):
     else:
         return data
 
+
 # return a list containing all components' names
 def all_components_names(db_file):
     """ return a list containing all components' names in db_file
     :param db_file: database file
     :return: a list
     """
-    conn = sqlite3.connect(db_file, isolation_level=None)
+    conn = create_connection(db_file)
     cursor = conn.cursor()
     cursor.execute("SELECT DISTINCT name FROM components")
     all_components = cursor.fetchall()
 
     component_names_list = []
     for component in all_components:
-        component_names_list.append(component[0]) #adds into index at which it's ID(PK) is represented
+        component_names_list.append(component[0])  # adds into index at which it's ID(PK) is represented
     return component_names_list
 
 
@@ -110,7 +110,7 @@ def lookup(db_file, componentName):
     :param componentName: name of a component
     :return: a list
     """
-    conn = sqlite3.connect(db_file, isolation_level=None)
+    conn = create_connection(db_file)
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM components WHERE name = ? ", (componentName,))
     components = cursor.fetchall()
@@ -121,17 +121,19 @@ def lookup(db_file, componentName):
 
     return versionNumbers
 
+
 def lookupRecipe(db_file, recipeID):
     """ return a list containing all the version numbers of a specific component in db_file
     :param db_file: database file
     :param componentName: name of a component
     :return: a list
     """
-    conn = sqlite3.connect(db_file, isolation_level=None)
+    conn = create_connection(db_file)
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM recipes WHERE id = ? ", (recipeID,))
     recipes = cursor.fetchall()
     return recipes[0] if recipes else None
+
 
 def lookupRecipesByName(db_file, recipeName):
     conn = create_connection(db_file)
@@ -143,10 +145,11 @@ def lookupRecipesByName(db_file, recipeName):
         recipes.append([i[0], recipeVersions(db_file, i[0])])
     return recipes
 
+
 def delete_component(db_file, name, version_num):
-    conn = sqlite3.connect(db_file, isolation_level=None)
+    conn = create_connection(db_file)
     cursor = conn.cursor()
-    pk = cursor.execute("SELECT id FROM components WHERE name = ? AND version_num = ?", (name,version_num))
+    pk = cursor.execute("SELECT id FROM components WHERE name = ? AND version_num = ?", (name, version_num))
     components = cursor.fetchall()
     pk = components[0][0]
     cursor.execute("DELETE FROM components WHERE id = ? ", (pk,))
@@ -155,14 +158,15 @@ def delete_component(db_file, name, version_num):
 
 
 def create_recipe(db_file, name, version_num, status):
-    conn = sqlite3.connect(db_file, isolation_level=None)
+    conn = create_connection(db_file)
     cursor = conn.cursor()
     cursor.execute(''' INSERT INTO recipes ('name', 'version_num', 'status')
               VALUES(?,?,?) ''', (name, version_num, status))
     return cursor.lastrowid
 
+
 def update_recipe(db_file, id, name, version_num, status):
-    conn = sqlite3.connect(db_file, isolation_level=None)
+    conn = create_connection(db_file)
     cursor = conn.cursor()
     cursor.execute(''' UPDATE recipes
               SET name = ? ,
@@ -171,47 +175,55 @@ def update_recipe(db_file, id, name, version_num, status):
               WHERE id = ? ''', (name, version_num, status, id))
     return 0
 
+
 def all_Recipes(db_file):
     """Returns a list of all recipe names"""
-    conn = sqlite3.connect(db_file, isolation_level=None)
+    conn = create_connection(db_file)
     cursor = conn.cursor()
     cursor.execute("SELECT DISTINCT name FROM recipes")
     recipe_Names = cursor.fetchall()
     all_recipes = []
     for i in recipe_Names:
-        all_recipes.append([i[0],recipeVersions("instance/flaskr.sqlite",i[0])])
+        all_recipes.append([i[0], recipeVersions("instance/flaskr.sqlite", i[0])])
     return all_recipes
 
+
 def create_relationship(db_file, componentID, recipeID):
-    conn = sqlite3.connect(db_file, isolation_level=None)
+    conn = create_connection(db_file)
     cursor = conn.cursor()
     cursor.execute(''' INSERT INTO relationships ('componentID', 'recipeID')
                   VALUES(?,?) ''', (componentID, recipeID))
-    return cursor.lastrowid
+
 
 def change_recipe_name(db_file, oldName, version_num, newName):
-    conn = sqlite3.connect(db_file, isolation_level=None)
+    conn = create_connection(db_file)
     cursor = conn.cursor()
-    cursor.execute(''' UPDATE recipes SET name = ? WHERE name = ? AND version_num = ?''', (newName, oldName, version_num))
+    cursor.execute(''' UPDATE recipes SET name = ? WHERE name = ? AND version_num = ?''',
+                   (newName, oldName, version_num))
 
     return 0
+
 
 def change_recipe_version_num(db_file, name, old_version_num, new_version_num):
-    conn = sqlite3.connect(db_file, isolation_level=None)
+    conn = create_connection(db_file)
     cursor = conn.cursor()
-    cursor.execute(''' UPDATE recipes SET version_num = ? WHERE name = ? AND version_num = ?''', (new_version_num, name, old_version_num))
+    cursor.execute(''' UPDATE recipes SET version_num = ? WHERE name = ? AND version_num = ?''',
+                   (new_version_num, name, old_version_num))
 
     return 0
+
 
 def change_recipe_status(db_file, name, version_num, new_status):
-    conn = sqlite3.connect(db_file, isolation_level=None)
+    conn = create_connection(db_file)
     cursor = conn.cursor()
-    cursor.execute(''' UPDATE recipes SET status = ? WHERE name = ? AND version_num = ?''', (new_status, name, version_num))
+    cursor.execute(''' UPDATE recipes SET status = ? WHERE name = ? AND version_num = ?''',
+                   (new_status, name, version_num))
 
     return 0
 
+
 def get_a_recipe_ID(db_file, name, version_num):
-    conn = sqlite3.connect(db_file, isolation_level=None)
+    conn = create_connection(db_file)
     cursor = conn.cursor()
     cursor.execute("""SELECT * FROM recipes WHERE name=? AND version_num=?""", (name, version_num))
     recipe = cursor.fetchall()
@@ -226,41 +238,63 @@ def select_recipe_components(db_file, recipeId):
     return relationships
 
 def get_a_component_ID(db_file, name, version_num):
-    conn = sqlite3.connect(db_file, isolation_level=None)
+    conn = create_connection(db_file)
     cursor = conn.cursor()
     cursor.execute("""SELECT * FROM components WHERE name=? AND version_num=?""", (name, version_num))
     component = cursor.fetchall()
     return component[0][0]
 
+
 def create_a_relationship(db_file, recipe_ID, component_name, component_num):
     destination_path = ""
     component_ID = get_a_component_ID(db_file, component_name, component_num)
 
-    conn = sqlite3.connect(db_file, isolation_level=None)
+    conn = create_connection(db_file)
     cursor = conn.cursor()
     cursor.execute(''' INSERT INTO relationships ('componentID', 'recipeID', 'destination_path')
               VALUES(?,?,?) ''', (component_ID, recipe_ID, destination_path))
 
     return 0
 
+
+def create_relationship(db_file, recipeId, componentId):
+    conn = create_connection(db_file)
+    cursor = conn.cursor()
+    cursor.execute(''' INSERT INTO relationships ('recipeID', 'componentID')
+              VALUES(?,?) ''', (recipeId, componentId))
+
+    return cursor.lastrowid
+
+
 def delete_a_relationship(db_file, recipe_ID, component_ID):
-    conn = sqlite3.connect(db_file, isolation_level=None)
+    conn = create_connection(db_file)
     cursor = conn.cursor()
     cursor.execute("DELETE FROM relationships WHERE componentID = ? AND recipeID = ? ", (component_ID, recipe_ID))
     return 0
 
+
 # return a list
 def get_a_component_by_ID(db_file, component_ID):
-    conn = sqlite3.connect(db_file, isolation_level=None)
+    conn = create_connection(db_file)
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM components WHERE id = ?", (component_ID,))
     component = cursor.fetchall()
     return list(component[0])
 
+
+def select_recipe_components(db_file, recipeId):
+    conn = create_connection(db_file)
+    cursor = conn.cursor()
+    cursor.execute(''' SELECT * FROM relationships WHERE recipeID = ?''', (recipeId,))
+    relationships = cursor.fetchall()
+
+    return relationships
+
+
 def all_components_in_a_recipe(db_file, recipe_name, recipe_num):
     recipe_ID = get_a_recipe_ID(db_file, recipe_name, recipe_num)
 
-    conn = sqlite3.connect(db_file, isolation_level=None)
+    conn = create_connection(db_file)
     cursor = conn.cursor()
     cursor.execute(''' SELECT * FROM relationships WHERE recipeID = ?''', (recipe_ID,))
     relationships = cursor.fetchall()
@@ -279,24 +313,26 @@ def all_components_in_a_recipe(db_file, recipe_name, recipe_num):
     for i in range(0, len(destinations_list)):
         component = components_list[i]
         destination = destinations_list[i]
-        newer= are_there_newer_versions_of_this_component(db_file,component[1],component[2])
+        newer = are_there_newer_versions_of_this_component(db_file, component[1], component[2])
         component.append(destination)
         component.append(newer)
         result_list.append(component)
 
     return result_list
 
+
 def recipeVersions(db_file, recipe_name):
-    conn = sqlite3.connect(db_file, isolation_level=None)
+    conn = create_connection(db_file)
     cursor = conn.cursor()
     cursor.execute("SELECT version_num FROM recipes WHERE name = ? ", (recipe_name,))
     components = cursor.fetchall()
 
     versionNumbers = []
     for component in components:
-        versionNumbers.append([component[0],get_a_recipe_ID(db_file,recipe_name,component[0])])
+        versionNumbers.append([component[0], get_a_recipe_ID(db_file, recipe_name, component[0])])
 
     return versionNumbers
+
 
 # True is empty, and False is not empty
 def is_folder_empty(folder_address):
@@ -305,9 +341,10 @@ def is_folder_empty(folder_address):
     else:
         return False
 
+
 # True means that there are new versions or a new version of this component, False otherwise
 def are_there_newer_versions_of_this_component(db_file, component_name, component_version_num):
-    conn = sqlite3.connect(db_file, isolation_level=None)
+    conn = create_connection(db_file)
     cursor = conn.cursor()
     cursor.execute("SELECT version_num FROM components WHERE name = ? ", (component_name,))
     components = cursor.fetchall()
@@ -320,17 +357,23 @@ def are_there_newer_versions_of_this_component(db_file, component_name, componen
         all_version_numbers[i] = version.parse(all_version_numbers[i])
 
     present_version_number = version.parse(component_version_num)
+    compare_results = []
 
     for version_number in all_version_numbers:
         if version_number > present_version_number:
-            return True
+            compare_results.append(True)
+        else:
+            compare_results.append(False)
 
-    return False
+    if True in compare_results:
+        return True
+    else:
+        return False
 
 
 # False means that there is no duplicate
 def check_duplicate_recipes(db_file, recipe_name, recipe_version_number):
-    conn = sqlite3.connect(db_file, isolation_level=None)
+    conn = create_connection(db_file)
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM recipes WHERE name = ? AND version_num = ?", (recipe_name, recipe_version_number))
     data = cursor.fetchall()
@@ -338,9 +381,5 @@ def check_duplicate_recipes(db_file, recipe_name, recipe_version_number):
         return False
     else:
         return True
-
-
-
-
 # create_component(create_connection("../instance/myDB"), ("Thomas", "1.2.3.4", "19/9/2019", "www.google.com"))
 # print(lookup("../instance/myDB", "Thomas"))
