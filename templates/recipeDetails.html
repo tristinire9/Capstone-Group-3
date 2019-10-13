@@ -45,6 +45,7 @@
             <tr>
                 <th class="warning">Component</th>
                 <th class="info">Version</th>
+                <th class="info">Assembly Location</th>
                 <th class="danger">Remove Component from Recipe</th>
             </tr>
             {% for comp in all_Components %}
@@ -54,7 +55,7 @@
                 <td class="col-sm-4">{{comp[2]}}{% if comp[6] == True %} *New Version Available*{% endif %}</td>
                 <td class="col-sm-4">
                     <form action = "{{ url_for('updateComponentDestination') }}" method="POST">
-                        <input type="text" name="location" value="{{comp[4]}}">
+                        <input type="text" name="location" value="{{comp[5]}}">
                         <input type="hidden" name="recipeID" value="{{ recipePK }}">
                         <input type="hidden" name="compID" value="{{ comp[0] }}">
                         <button type="submit">
