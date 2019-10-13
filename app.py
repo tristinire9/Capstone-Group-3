@@ -65,7 +65,7 @@ def retrieve():
     if normal_db_functions.check_duplicate(database_address, fileName, ver):
         url = normal_db_functions.get_URL(database_address, fileName, ver)
         key = url[0][0].split("/")[-1]
-
+        print(key)
         my_bucket = get_bucket()
         file_obj = my_bucket.Object(key).get()
 
@@ -211,7 +211,8 @@ def updateComponentDestination():
     recipe_id = request.form['recipeID']
     component_id = request.form['compID']
     normal_db_functions.update_Component_Download_Destination(database_address, recipe_id, component_id, location)
-    return 0
+    flash('Updated successfully')
+    return redirect(url_for('recipes'))
 
 @app.route('/addComponentRecipe', methods=['POST'])  # Adds a component to the currently selected Recipe
 def addComponentRecipe():
@@ -251,19 +252,6 @@ def upload():
 
     flash('File uploaded successfully')
     return redirect(url_for('files'))
-
-
-@app.route('/download', methods=['POST'])  # download from Web UI
-def download():
-    key = request.form['key'].split('/')[-1][:-4]
-    my_bucket = get_bucket()
-    file_obj = my_bucket.Object(key).get()
-
-    return Response(
-        file_obj['Body'].read(),
-        mimetype='text/plain',
-        headers={"Content-Disposition": "attachment;filename={}".format(key)}
-    )
 
 
 if __name__ == "__main__":

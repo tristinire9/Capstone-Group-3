@@ -37,7 +37,7 @@ def ensureZipped(file,fileName):
         zipf.close()
 
 #'https://intense-stream-78237.herokuapp.com/'
-url="https://intense-stream-78237.herokuapp.com/"
+url="http://127.0.0.1:5000/"
 
 def send_Function(file,fileName,versionNumber):
     try:

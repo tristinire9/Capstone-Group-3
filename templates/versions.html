@@ -32,8 +32,9 @@
             <tr>
                 <td class="col-sm-3">{{ version }}</td>
                 <td class="col-sm-3">
-                    <form action="{{ url_for('download') }}" class="download-form" method="POST">
-                        <input name="key" type="hidden" value="{{ version['url'] }}">
+                    <form action="{{ url_for('retrieve') }}" class="download-form" method="GET">
+                        <input name="ver" type="hidden" value="{{ version }}">
+                        <input name="Fname" type="hidden" value="{{ componentName }}">
                         <button class="btn btn-default btn-sm" type="submit">
                             <i class="fa fa-download"></i>
                         </button>
