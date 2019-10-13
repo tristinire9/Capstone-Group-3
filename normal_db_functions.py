@@ -178,6 +178,14 @@ def create_relationship(db_file, recipeId, componentId):
 
     return cursor.lastrowid
 
+#Updates a components' download destination within a software release (Recipe)
+def update_Component_Download_Destination(db_file, recipe_id, component_id, location):
+    conn = create_connection(db_file)
+    cursor = conn.cursor()
+    cursor.execute(''' UPDATE relationships
+              SET destination_path = ?
+              WHERE componentID = ? AND recipeID = ?''', (location, component_id, recipe_id))
+    return 0
 
 def change_recipe_name(db_file, oldName, version_num, newName):
     conn = create_connection(db_file)
