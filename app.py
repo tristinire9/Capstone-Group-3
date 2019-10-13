@@ -205,6 +205,13 @@ def recipeDetails():
     return render_template('recipeDetails.html', all_Components=all_Components, recipeName=request.form['recipeName'],
                            recipePK=request.form['recipePK'], recipeVER=request.form['ver'])
 
+@app.route('/updateComponentDestination',methods=['POST'])
+def updateComponentDestination():
+    location = request.form['location']
+    recipe_id = request.form['recipeID']
+    component_id = request.form['compID']
+    normal_db_functions.update_Component_Download_Destination(database_address, recipe_id, component_id, location)
+    return 0
 
 @app.route('/addComponentRecipe', methods=['POST'])  # Adds a component to the currently selected Recipe
 def addComponentRecipe():

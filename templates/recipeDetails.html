@@ -52,7 +52,16 @@
                 {% if comp %}
                 <td class="col-sm-4">{{comp[1]}}</td>
                 <td class="col-sm-4">{{comp[2]}}{% if comp[6] == True %} *New Version Available*{% endif %}</td>
-
+                <td class="col-sm-4">
+                    <form action = "{{ url_for('updateComponentDestination') }}" method="POST">
+                        <input type="text" name="location" value="{{comp[4]}}">
+                        <input type="hidden" name="recipeID" value="{{ recipePK }}">
+                        <input type="hidden" name="compID" value="{{ comp[0] }}">
+                        <button type="submit">
+                            Change
+                        </button>
+                    </form>
+                </td>
                 <td class="col-sm-4">
                     <form class="delete-form" action="{{ url_for('removeComponentRecipe') }}" method="POST">
                         <input type="hidden" name="recipeID" value="{{ recipePK }}">
