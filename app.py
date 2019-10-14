@@ -181,7 +181,7 @@ def deleteRecipe():
     recipeID = request.form['recipeID']
     recipe = normal_db_functions.delete_recipe(database_address, recipeID)
     flash('Recipe Deleted successfully')
-    return render_template('recipeDetails.html', recipe=recipe)
+    return redirect(url_for('recipes'))
 
 
 @app.route('/editRecipe', methods=['POST'])  # See all versions of a particular component
