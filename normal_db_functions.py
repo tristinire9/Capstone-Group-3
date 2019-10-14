@@ -1,25 +1,7 @@
 import sqlite3
-from flask import current_app, g
 import os
 from packaging import version
 
-
-# def get_db():
-#     if 'db' not in g:
-#         g.db = sqlite3.connect(
-#             current_app.config['DATABASE'],
-#             isolation_level=None,
-#             detect_types=0
-#         )
-#         g.db.row_factory = sqlite3.Row
-#
-#     return g.db
-
-# def close_db(e=None):
-#     db = g.pop('db', None)
-#
-#     if db is not None:
-#         db.close()
 
 def create_component(conn, component):
     """
@@ -44,7 +26,6 @@ def create_connection(db_file):
     conn = None
     try:
         conn = sqlite3.connect(db_file, isolation_level=None)
-
         conn.row_factory = sqlite3.Row
     except sqlite3.Error as e:
         print(e)
@@ -149,7 +130,7 @@ def lookupRecipesByName(db_file, recipeName):
 def delete_component(db_file, name, version_num):
     conn = create_connection(db_file)
     cursor = conn.cursor()
-    pk = cursor.execute("SELECT id FROM components WHERE name = ? AND version_num = ?", (name, version_num))
+    cursor.execute("SELECT id FROM components WHERE name = ? AND version_num = ?", (name, version_num))
     components = cursor.fetchall()
     pk = components[0][0]
     cursor.execute("DELETE FROM components WHERE id = ? ", (pk,))
@@ -188,11 +169,13 @@ def all_Recipes(db_file):
     return all_recipes
 
 
-def create_relationship(db_file, componentID, recipeID):
+def create_relationship(db_file, recipeId, componentId):
     conn = create_connection(db_file)
     cursor = conn.cursor()
-    cursor.execute(''' INSERT INTO relationships ('componentID', 'recipeID')
-                  VALUES(?,?) ''', (componentID, recipeID))
+    cursor.execute(''' INSERT INTO relationships ('recipeID', 'componentID')
+              VALUES(?,?) ''', (recipeId, componentId))
+
+    return cursor.lastrowid
 
 #Updates a components' download destination within a software release (Recipe)
 def update_Component_Download_Destination(db_file, recipe_id, component_id, location):
@@ -244,6 +227,7 @@ def select_recipe_components(db_file, recipeId):
     relationships = cursor.fetchall()
 
     return relationships
+
 
 def get_a_component_ID(db_file, name, version_num):
     conn = create_connection(db_file)

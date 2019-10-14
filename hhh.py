@@ -1,5 +1,3 @@
-def hhh():
-    print("hhh")
-    return 1
+import zipfile,fnmatch,os
 
-a = hhh()
+print(list(os.walk("D:/here")))
