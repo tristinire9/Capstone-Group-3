@@ -4,6 +4,8 @@ from requests.exceptions import HTTPError
 import re
 import zipfile
 import os
+import shutil
+import fnmatch
 
 def retrieve_file_paths(dirName):
 
@@ -37,7 +39,7 @@ def ensureZipped(file,fileName):
         zipf.close()
 
 #'https://intense-stream-78237.herokuapp.com/'
-url="http://127.0.0.1:5000/"
+url="https://intense-stream-78237.herokuapp.com/"
 
 def send_Function(file,fileName,versionNumber):
     try:
@@ -80,7 +82,6 @@ def download_Function(fileName, versionNumber,location="",recipeDownload=False):
     except Exception as err:
         print(f'Other error occurred: {err}')  # Python 3.6
     else:
-
         filename = get_filename_from_cd(response.headers.get('content-disposition'))
         if location!="":
             open(str(location+'/'+filename), 'wb').write(response.content)
@@ -92,13 +93,48 @@ def download_Function(fileName, versionNumber,location="",recipeDownload=False):
             else:
                 sys.exit(1)
 
-def get_Components(recipeName, recipeVersion):
+def put_components_to_right_places(recipe_destination, components_destinations_dictionary):
+    all_components = os.listdir(recipe_destination)
+
+    all_components_names_without_extensions = []
+    for component in all_components:
+        if "." in component:
+            all_components_names_without_extensions.append(component.partition('.')[0])
+        else:
+            all_components_names_without_extensions.append(component)
+
+    for i in range(0, len(all_components)):
+        source = recipe_destination + "/" + all_components[i]
+        destination = recipe_destination + components_destinations_dictionary[all_components_names_without_extensions[i]]
+        if os.path.exists(destination):
+            pass
+        else:
+            os.mkdir(destination)
+        shutil.move(source, destination)
+    return 0
+
+
+def get_Components(recipeName, recipeVersion, recipe_destination):
     response = requests.get(url+'fetchRecipeComponents',params={'softwareName':recipeName, 'ver':recipeVersion})
-    if not os.path.exists(recipeName+recipeVersion):
-        os.makedirs(recipeName+recipeVersion)
+    if not os.path.exists(recipe_destination):
+        os.makedirs(recipe_destination)
     data_json = response.json()
+
+    components_destinations_dictionary = dict()
     for i in data_json:
-        download_Function(i[1],i[2],str(recipeName+recipeVersion),True)
+        download_Function(i[1],i[2],str(recipe_destination),True)
+        version_number = i[2].replace(".", "")
+        components_destinations_dictionary[i[1]+version_number] = i[-2]
+
+    put_components_to_right_places(recipe_destination, components_destinations_dictionary)
+
+    pattern = '*.zip'
+    for root, dirs, files in os.walk(recipe_destination):
+        for filename in fnmatch.filter(files, pattern):
+            zipfile.ZipFile(os.path.join(root, filename)).extractall(os.path.join(root, os.path.splitext(filename)[0]))
+            os.remove(os.path.join(root, filename))
+
+    return 0
 
 def help():
     print("""\n\n***Welcome to ITL's Software Component Command Line tool!*** \nThis tool is used to store, retrieve, and look up components in the Store\n (Server)\n
@@ -121,4 +157,4 @@ elif sys.argv[1].lower()=="pull":
     else:
         download_Function(sys.argv[2],sys.argv[3])
 elif sys.argv[1].lower()=="assemble":
-    get_Components(sys.argv[2],sys.argv[3])
+    get_Components(sys.argv[2],sys.argv[3], sys.argv[4])
