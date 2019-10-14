@@ -16,45 +16,65 @@
         {% endif %}
         {% endwith %}
         <hr>
-        <p>To add components to this recipe, click 'Add Components' below:</p>
-        <form class="download-form" action="{{ url_for('files') }}" method="get">
-            <input type="hidden" name="addToRecipe" value="{{ recipePK }}">
-            <button type="submit" class="btn btn-info">
-                Add Components
-            </button>
-        </form>
+        <table class="table table-bordered">
+            <tr>
+                <th class="info">Add components to this recipe, click 'Add Components' below:</th>
+                <th class="success">To modify this recipe, click 'Edit' below:</th>
+                <th class="warning">To clone this recipe, click 'Clone' below:</th>
+                <th class="danger">To delete the recipe, click 'Delete' below:</th>
+            </tr>
+            <tr>
+                <td class="col-sm-3">
+                    <form class="download-form" action="{{ url_for('files') }}" method="get">
+                        <input type="hidden" name="addToRecipe" value="{{ recipePK }}">
+                        <button type="submit" class="btn btn-info">
+                            Add Components
+                        </button>
+                    </form>
+                </td>
+                <td class="col-sm-3">
+                    <form class="delete-form" action="{{ url_for('editRecipe') }}" method="POST">
+                        <input type="hidden" name="recipeID" value="{{ recipePK }}">
+                        <button type="submit" class="btn btn-success">
+                            Edit
+                        </button>
+                    </form>
+                </td>
+                <td class="col-sm-3">
+                    <form action="{{ url_for('cloneRecipe') }}" method="POST">
+                        <input type="hidden" name="recipeID" value="{{ recipePK }}">
+                        <button type="submit" class="btn btn-warning">
+                            Clone
+                        </button>
+                    </form>
+                </td>
+                <td class="col-sm-3">
+                    <form action="{{ url_for('deleteRecipe') }}" method="POST">
+                        <input type="hidden" name="recipeID" value="{{ recipePK }}">
+                        <button type="submit" class="btn btn-danger">
+                            Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        </table>
         <br>
-        <p>To modify this recipe, click 'Edit' below:</p>
-        <form class="delete-form" action="{{ url_for('editRecipe') }}" method="POST">
-            <input type="hidden" name="recipeID" value="{{ recipePK }}">
-            <button type="submit" class="btn btn-success">
-                Edit
-            </button>
-        </form>
+        <hr>
         <br>
-        <p>To clone this recipe, click 'Clone' below:</p>
-        <form action="{{ url_for('cloneRecipe') }}" method="POST">
-            <input type="hidden" name="recipeID" value="{{ recipePK }}">
-            <button type="submit" class="btn btn-warning">
-                Clone
-            </button>
-        </form>
-        <br><br>
-
         <table class="table table-bordered">
             <tr>
                 <th class="warning">Component</th>
                 <th class="info">Version</th>
                 <th class="info">Assembly Location</th>
-                <th class="danger">Remove Component from Recipe</th>
+                <th class="danger">Remove Component</th>
             </tr>
             {% for comp in all_Components %}
             <tr>
                 {% if comp %}
-                <td class="col-sm-4">{{comp[1]}}</td>
-                <td class="col-sm-4">{{comp[2]}}{% if comp[6] == True %} *New Version Available*{% endif %}</td>
-                <td class="col-sm-4">
-                    <form action = "{{ url_for('updateComponentDestination') }}" method="POST">
+                <td class="col-sm-3">{{comp[1]}}</td>
+                <td class="col-sm-3">{{comp[2]}}{% if comp[6] == True %} *New Version Available*{% endif %}</td>
+                <td class="col-sm-3">
+                    <form action="{{ url_for('updateComponentDestination') }}" method="POST">
                         <input type="text" name="location" value="{{comp[5]}}">
                         <input type="hidden" name="recipeID" value="{{ recipePK }}">
                         <input type="hidden" name="compID" value="{{ comp[0] }}">
@@ -63,7 +83,7 @@
                         </button>
                     </form>
                 </td>
-                <td class="col-sm-4">
+                <td class="col-sm-3">
                     <form class="delete-form" action="{{ url_for('removeComponentRecipe') }}" method="POST">
                         <input type="hidden" name="recipeID" value="{{ recipePK }}">
                         <input type="hidden" name="compID" value="{{ comp[0] }}">
