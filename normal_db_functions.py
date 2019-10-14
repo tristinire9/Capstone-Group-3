@@ -138,6 +138,17 @@ def delete_component(db_file, name, version_num):
     return 0
 
 
+def delete_recipe(db_file, recipeID):
+    conn = create_connection(db_file)
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM recipes WHERE id = ?", (recipeID,))
+    recipe = cursor.fetchall()
+    recipesID = recipe[0][0]
+    cursor.execute("DELETE FROM recipes WHERE id = ? ", (recipesID,))
+    cursor.execute("DELETE FROM relationships WHERE recipeID = ? ", (recipesID,))
+    return 0
+
+
 def create_recipe(db_file, name, version_num, status):
     conn = create_connection(db_file)
     cursor = conn.cursor()
@@ -177,7 +188,8 @@ def create_relationship(db_file, recipeId, componentId):
 
     return cursor.lastrowid
 
-#Updates a components' download destination within a software release (Recipe)
+
+# Updates a components' download destination within a software release (Recipe)
 def update_Component_Download_Destination(db_file, recipe_id, component_id, location):
     conn = create_connection(db_file)
     cursor = conn.cursor()
@@ -185,6 +197,7 @@ def update_Component_Download_Destination(db_file, recipe_id, component_id, loca
               SET destination_path = ?
               WHERE componentID = ? AND recipeID = ?''', (location, component_id, recipe_id))
     return 0
+
 
 def change_recipe_name(db_file, oldName, version_num, newName):
     conn = create_connection(db_file)
@@ -219,6 +232,7 @@ def get_a_recipe_ID(db_file, name, version_num):
     cursor.execute("""SELECT * FROM recipes WHERE name=? AND version_num=?""", (name, version_num))
     recipe = cursor.fetchall()
     return recipe[0][0]
+
 
 def select_recipe_components(db_file, recipeId):
     conn = create_connection(db_file)

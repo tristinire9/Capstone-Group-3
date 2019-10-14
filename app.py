@@ -176,6 +176,14 @@ def cloneRecipe():
     return redirect(url_for('recipes'))
 
 
+@app.route('/deleteRecipe', methods=['POST'])  # See all versions of a particular component
+def deleteRecipe():
+    recipeID = request.form['recipeID']
+    recipe = normal_db_functions.delete_recipe(database_address, recipeID)
+    flash('Recipe Deleted successfully')
+    return render_template('recipeDetails.html', recipe=recipe)
+
+
 @app.route('/editRecipe', methods=['POST'])  # See all versions of a particular component
 def editRecipe():
     recipeID = request.form['recipeID']
@@ -204,7 +212,8 @@ def recipeDetails():
     return render_template('recipeDetails.html', all_Components=all_Components, recipeName=request.form['recipeName'],
                            recipePK=request.form['recipePK'], recipeVER=request.form['ver'])
 
-@app.route('/updateComponentDestination',methods=['POST'])
+
+@app.route('/updateComponentDestination', methods=['POST'])
 def updateComponentDestination():
     location = request.form['location']
     recipe_id = request.form['recipeID']
@@ -212,6 +221,7 @@ def updateComponentDestination():
     normal_db_functions.update_Component_Download_Destination(database_address, recipe_id, component_id, location)
     flash('Updated successfully')
     return redirect(url_for('recipes'))
+
 
 @app.route('/addComponentRecipe', methods=['POST'])  # Adds a component to the currently selected Recipe
 def addComponentRecipe():
