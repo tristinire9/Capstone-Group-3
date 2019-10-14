@@ -37,7 +37,7 @@ def ensureZipped(file,fileName):
         zipf.close()
 
 #'https://intense-stream-78237.herokuapp.com/'
-url="http://127.0.0.1:5000/"
+url="https://intense-stream-78237.herokuapp.com/"
 
 def send_Function(file,fileName,versionNumber):
     try:
@@ -98,7 +98,8 @@ def get_Components(recipeName, recipeVersion):
         os.makedirs(recipeName+recipeVersion)
     data_json = response.json()
     for i in data_json:
-        download_Function(i[1],i[2],str(recipeName+recipeVersion),True)
+        print(i)
+        download_Function(i[1],i[2],str(recipeName+recipeVersion+i[5]),True)
 
 def help():
     print("""\n\n***Welcome to ITL's Software Component Command Line tool!*** \nThis tool is used to store, retrieve, and look up components in the Store\n (Server)\n
