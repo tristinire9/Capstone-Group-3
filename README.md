@@ -1,4 +1,6 @@
-run locally 
-$ python -m flask run
+Tristin Ireland
+Mike Mitchell
+Tianchi Zhang
 
-https://medium.com/@gitaumoses4/deploying-a-flask-application-on-heroku-e509e5c76524
+GPL 3.0 License
+
