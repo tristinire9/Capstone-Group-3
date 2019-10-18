@@ -82,19 +82,6 @@ class SimpleTest(unittest.TestCase):
         else:
             self.assertTrue(True)
 
-    # def test_create_relationship(self):
-    #     normal_db_functions.create_relationship(db_file, "1", "1", "/")
-    #
-    #     conn = sqlite3.connect(db_file)
-    #     cur = conn.cursor()
-    #     cur.execute(
-    #         "SELECT * FROM relationships")
-    #     data = cur.fetchall()
-    #     if len(data) == 0:
-    #         self.assertTrue(False)
-    #     else:
-    #         self.assertTrue(True)
-
 
 
 if __name__ == '__main__':

@@ -93,6 +93,7 @@ def download_Function(fileName, versionNumber,location="",recipeDownload=False):
             else:
                 sys.exit(1)
 
+# Put all components inside a directory to the right places defined in the attribute "destination_path"
 def put_components_to_right_places(recipe_destination, components_destinations_dictionary):
     all_components = os.listdir(recipe_destination)
 
@@ -114,6 +115,7 @@ def put_components_to_right_places(recipe_destination, components_destinations_d
     return 0
 
 
+# Get all components in a recipe, and put them to the right places
 def get_Components(recipeName, recipeVersion, recipe_destination):
     response = requests.get(url+'fetchRecipeComponents',params={'softwareName':recipeName, 'ver':recipeVersion})
     if not os.path.exists(recipe_destination):

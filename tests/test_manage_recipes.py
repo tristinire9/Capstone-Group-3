@@ -76,27 +76,13 @@ class SimpleTest(unittest.TestCase):
         ID = int(ID)
         self.assertEqual(ID, 22)
 
-    # def test_create_a_relationship(self):
-    #     # normal_db_functions.create_recipe(db_file, "100", "4.3.2.1", "HHH")
-    #
-    #     conn = sqlite3.connect(db_file, isolation_level=None)
-    #     # normal_db_functions.create_component(conn, ("hey", "1.2.3.7", "2019.10.2", "www.baidu.com"))
-    #     normal_db_functions.create_a_relationship(db_file, "100", "4.3.2.1", "hey", "1.2.3.7", "/data")
-    #
-    #     cur = conn.cursor()
-    #     cur.execute("SELECT * FROM relationships WHERE destination_path = '/data'")
-    #     relationship = cur.fetchall()
-    #     componentID = int(relationship[0][1])
-    #     recipeID = int(relationship[0][2])
-    #     self.assertEqual([componentID, recipeID], [23, 52])
-
     def test_get_a_component_by_ID(self):
         component = normal_db_functions.get_a_component_by_ID(db_file, '22')
         self.assertEqual(component, [22, 'nihao', '1.2.3.5', '2019.10.1', 'www.google.com'])
 
     def test_all_components_in_a_recipe(self):
         result_list = normal_db_functions.all_components_in_a_recipe(db_file, "Hiii", "1.2.3.4")
-        self.assertEqual(result_list, [[22, 'nihao', '1.2.3.5', '2019.10.1', 'www.google.com', '/tttt'], [24, '1heyhey', '1.4.8.9', '2019.10.3', 'www.hhhh.com', '/tttt']])
+        self.assertEqual(result_list, [[22, 'nihao', '1.2.3.5', '2019.10.1', 'www.google.com', '/tttt', False], [24, '1heyhey', '1.4.8.9', '2019.10.3', 'www.hhhh.com', '/tttt', False]])
 
     def test_is_folder_empty_1(self):
         self.assertEqual(normal_db_functions.is_folder_empty("D:\hhhh"), True)

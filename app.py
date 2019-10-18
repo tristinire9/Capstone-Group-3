@@ -1,6 +1,4 @@
 import datetime
-from auth import bp
-import db
 
 import normal_db_functions
 import os
@@ -13,8 +11,6 @@ from filters import datetimeformat, file_type
 from resources import get_bucket, get_buckets_list
 
 app = Flask(__name__)
-db.init_app(app)
-app.register_blueprint(bp, url_prefix="/hi")
 app.config.from_mapping(
     SECRET_KEY='dev',
     DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
@@ -29,7 +25,7 @@ database_address = "instance/flaskr.sqlite"
 
 # database_address = "instance/flaskr.sqlite" > Add as global variable
 
-## Command Line APIs ###################################################################################################
+# Command Line APIs ###################################################################################################
 
 # Component Upload
 @app.route('/component', methods=['POST'])
