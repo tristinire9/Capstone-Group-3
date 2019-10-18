@@ -39,7 +39,7 @@ def ensureZipped(file,fileName):
         zipf.close()
 
 #'https://intense-stream-78237.herokuapp.com/'
-url="https://intense-stream-78237.herokuapp.com/"
+url = os.environ.get("ITL_UPLOAD_LOCATION")
 
 def send_Function(file,fileName,versionNumber):
     try:
