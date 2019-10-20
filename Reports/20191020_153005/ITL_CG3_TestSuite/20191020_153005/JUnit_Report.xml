@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<testsuites name="ITL_CG3_TestSuite" time="114" tests="11" failures="0" errors="0">
+    <testsuite name="ITL_CG3_TestSuite" tests="11" failures="0" errors="0" time="114" timestamp="2019-10-20 15:30:08" hostname="mikey - DESKTOP-LL60K1C" id="Test Suites/ITL_CG3_TestSuite">
+        <properties>
+            <property name="deviceName" value=""/>
+            <property name="devicePlatform" value=""/>
+            <property name="logFolder" value="C:\\Project-Icarus\\Capstone-Group-3\\Reports\\20191020_153005\\ITL_CG3_TestSuite\\20191020_153005"/>
+            <property name="logFiles" value="C:\\Project-Icarus\\Capstone-Group-3\\Reports\\20191020_153005\\ITL_CG3_TestSuite\\20191020_153005\\execution0.log"/>
+            <property name="attachments" value=""/>
+            <property name="hostName" value="mikey - DESKTOP-LL60K1C"/>
+            <property name="os" value="Windows 10 64bit"/>
+            <property name="katalonVersion" value="6.3.3.11"/>
+            <property name="browser" value="Firefox 69.0"/>
+            <property name="hostAddress" value="192.168.1.127"/>
+            <property name="sessionId" value="82d7f40a-ac68-480a-b29f-feb145b9f798"/>
+            <property name="seleniumVersion" value="3.141.59"/>
+            <property name="proxyInformation" value="ProxyInformation{proxyOption=NO_PROXY, proxyServerType=HTTP, password=, proxyServerAddress=, proxyServerPort=0}"/>
+            <property name="platform" value="Windows 10"/>
+        </properties>
+        <testcase name="Test Cases/selectComponentStorageTest" classname="Test Cases/selectComponentStorageTest" status="PASSED">
+            <system-out>2019-10-20 15:30:08 - [TEST_CASE][PASSED] - Test Cases/selectComponentStorageTest: Test Cases/selectComponentStorageTest&#xD;
+&#xD;
+2019-10-20 15:30:08 - [TEST_STEP][PASSED] - openBrowser("https://intense-stream-78237.herokuapp.com/"): Browser is opened with url: 'https://intense-stream-78237.herokuapp.com/'&#xD;
+&#xD;
+2019-10-20 15:30:09 - [MESSAGE][INFO] - Starting 'Firefox' driver&#xD;
+&#xD;
+2019-10-20 15:30:09 - [MESSAGE][INFO] - Action delay is set to 0 seconds&#xD;
+&#xD;
+2019-10-20 15:30:17 - [MESSAGE][PASSED] - Browser is opened with url: 'https://intense-stream-78237.herokuapp.com/'&#xD;
+&#xD;
+2019-10-20 15:30:17 - [TEST_STEP][PASSED] - click(findTestObject("ITL Component Store/i_capprojteam3_fa fa-archive")): Object: 'Object Repository/ITL Component Store/i_capprojteam3_fa fa-archive' is clicked on&#xD;
+&#xD;
+2019-10-20 15:30:18 - [MESSAGE][PASSED] - Object: 'Object Repository/ITL Component Store/i_capprojteam3_fa fa-archive' is clicked on&#xD;
+&#xD;
+2019-10-20 15:30:18 - [TEST_STEP][PASSED] - closeBrowser(): Browser is closed&#xD;
+&#xD;
+2019-10-20 15:30:20 - [MESSAGE][PASSED] - Browser is closed</system-out>
+            <system-err></system-err>
+        </testcase>
+        <testcase name="Test Cases/addComponentToRecipeTest" classname="Test Cases/addComponentToRecipeTest" status="PASSED">
+            <system-out>2019-10-20 15:30:20 - [TEST_CASE][PASSED] - Test Cases/addComponentToRecipeTest: Test Cases/addComponentToRecipeTest&#xD;
+&#xD;
+2019-10-20 15:30:20 - [TEST_STEP][PASSED] - openBrowser("https://intense-stream-78237.herokuapp.com/"): Browser is opened with url: 'https://intense-stream-78237.herokuapp.com/'&#xD;
+&#xD;
+2019-10-20 15:30:20 - [MESSAGE][INFO] - Starting 'Firefox' driver&#xD;
+&#xD;
+2019-10-20 15:30:25 - [MESSAGE][PASSED] - Browser is opened with url: 'https://intense-stream-78237.herokuapp.com/'&#xD;
+&#xD;
+2019-10-20 15:30:25 - [TEST_STEP][PASSED] - click(findTestObject("Page_ITL Component Store/a_Recipes (1)")): Object: 'Object Repository/Page_ITL Component Store/a_Recipes (1)' is clicked on&#xD;
+&#xD;
+2019-10-20 15:30:26 - [MESSAGE][PASSED] - Object: 'Object Repository/Page_ITL Component Store/a_Recipes (1)' is clicked on&#xD;
+&#xD;
+2019-10-20 15:30:26 - [TEST_STEP][PASSED] - click(findTestObject("Page_ITL Component Store/button_1112 (1)")): Object: 'Object Repository/Page_ITL Component Store/button_1112 (1)' is clicked on&#xD;
+&#xD;
+2019-10-20 15:30:27 - [MESSAGE][PASSED] - Object: 'Object Repository/Page_ITL Component Store/button_1112 (1)' is clicked on&#xD;
+&#xD;
+2019-10-20 15:30:27 - [TEST_STEP][PASSED] - click(findTestObject("Page_Versions/button_Add Components (1)")): Object: 'Object Repository/Page_Versions/button_Add Components (1)' is clicked on&#xD;
+&#xD;
+2019-10-20 15:30:28 - [MESSAGE][PASSED] - Object: 'Object Repository/Page_Versions/button_Add Components (1)' is clicked on&#xD;
+&#xD;
+2019-10-20 15:30:28 - [TEST_STEP][PASSED] - click(findTestObject("Page_ITL Component Store/button_Select (1)")): Object: 'Object Repository/Page_ITL Component Store/button_Select (1)' is clicked on&#xD;
+&#xD;
+2019-10-20 15:30:28 - [MESSAGE][PASSED] - Object: 'Object Repository/Page_ITL Component Store/button_Select (1)' is clicked on&#xD;
+&#xD;
+2019-10-20 15:30:28 - [TEST_STEP][PASSED] - click(findTestObject("Page_Versions/button_Add (1)")): Object: 'Object Repository/Page_Versions/button_Add (1)' is clicked on&#xD;
+&#xD;
+2019-10-20 15:30:30 - [MESSAGE][PASSED] - Object: 'Object Repository/Page_Versions/button_Add (1)' is clicked on&#xD;
+&#xD;
+2019-10-20 15:30:30 - [TEST_STEP][PASSED] - closeBrowser(): Browser is closed&#xD;
+&#xD;
+2019-10-20 15:30:31 - [MESSAGE][PASSED] - Browser is closed</system-out>
+            <system-err></system-err>
+        </testcase>
+        <testcase name="Test Cases/cloneRecipeTest" classname="Test Cases/cloneRecipeTest" status="PASSED">
+            <system-out>2019-10-20 15:30:31 - [TEST_CASE][PASSED] - Test Cases/cloneRecipeTest: Test Cases/cloneRecipeTest&#xD;
+&#xD;
+2019-10-20 15:30:31 - [TEST_STEP][PASSED] - openBrowser("https://intense-stream-78237.herokuapp.com/"): Browser is opened with url: 'https://intense-stream-78237.herokuapp.com/'&#xD;
+&#xD;
+2019-10-20 15:30:31 - [MESSAGE][INFO] - Starting 'Firefox' driver&#xD;
+&#xD;
+2019-10-20 15:30:37 - [MESSAGE][PASSED] - Browser is opened with url: 'https://intense-stream-78237.herokuapp.com/'&#xD;
+&#xD;
+2019-10-20 15:30:37 - [TEST_STEP][PASSED] - click(findTestObject("Page_ITL Component Store/a_Recipes (2)")): Object: 'Object Repository/Page_ITL Component Store/a_Recipes (2)' is clicked on&#xD;
+&#xD;
+2019-10-20 15:30:37 - [MESSAGE][PASSED] - Object: 'Object Repository/Page_ITL Component Store/a_Recipes (2)' is clicked on&#xD;
+&#xD;
+2019-10-20 15:30:37 - [TEST_STEP][PASSED] - click(findTestObject("Object Repository/Page_ITL Component Store/button_9898")): Object: 'Object Repository/Page_ITL Component Store/button_9898' is clicked on&#xD;
+&#xD;
+2019-10-20 15:30:38 - [MESSAGE][PASSED] - Object: 'Object Repository/Page_ITL Component Store/button_9898' is clicked on&#xD;
+&#xD;
+2019-10-20 15:30:38 - [TEST_STEP][PASSED] - click(findTestObject("Object Repository/Page_Versions/button_Clone")): Object: 'Object Repository/Page_Versions/button_Clone' is clicked on&#xD;
+&#xD;
+2019-10-20 15:30:39 - [MESSAGE][PASSED] - Object: 'Object Repository/Page_Versions/button_Clone' is clicked on&#xD;
+&#xD;
+2019-10-20 15:30:39 - [TEST_STEP][PASSED] - closeBrowser(): Browser is closed&#xD;
+&#xD;
+2019-10-20 15:30:41 - [MESSAGE][PASSED] - Browser is closed</system-out>
+            <system-err></system-err>
+        </testcase>
+        <testcase name="Test Cases/viewRecipeTest" classname="Test Cases/viewRecipeTest" status="PASSED">
+            <system-out>2019-10-20 15:30:41 - [TEST_CASE][PASSED] - Test Cases/viewRecipeTest: Test Cases/viewRecipeTest&#xD;
+&#xD;
+2019-10-20 15:30:41 - [TEST_STEP][PASSED] - openBrowser("https://intense-stream-78237.herokuapp.com/"): Browser is opened with url: 'https://intense-stream-78237.herokuapp.com/'&#xD;
+&#xD;
+2019-10-20 15:30:41 - [MESSAGE][INFO] - Starting 'Firefox' driver&#xD;
+&#xD;
+2019-10-20 15:30:47 - [MESSAGE][PASSED] - Browser is opened with url: 'https://intense-stream-78237.herokuapp.com/'&#xD;
+&#xD;
+2019-10-20 15:30:47 - [TEST_STEP][PASSED] - click(findTestObject("Page_ITL Component Store/a_Recipes")): Object: 'Object Repository/Page_ITL Component Store/a_Recipes' is clicked on&#xD;
+&#xD;
+2019-10-20 15:30:47 - [MESSAGE][PASSED] - Object: 'Object Repository/Page_ITL Component Store/a_Recipes' is clicked on&#xD;
+&#xD;
+2019-10-20 15:30:47 - [TEST_STEP][PASSED] - click(findTestObject("Object Repository/Page_ITL Component Store/button_1112")): Object: 'Object Repository/Page_ITL Component Store/button_1112' is clicked on&#xD;
+&#xD;
+2019-10-20 15:30:48 - [MESSAGE][PASSED] - Object: 'Object Repository/Page_ITL Component Store/button_1112' is clicked on&#xD;
+&#xD;
+2019-10-20 15:30:48 - [TEST_STEP][PASSED] - closeBrowser(): Browser is closed&#xD;
+&#xD;
+2019-10-20 15:30:49 - [MESSAGE][PASSED] - Browser is closed</system-out>
+            <system-err></system-err>
+        </testcase>
+        <testcase name="Test Cases/deleteRecipeTest" classname="Test Cases/deleteRecipeTest" status="PASSED">
+            <system-out>2019-10-20 15:30:49 - [TEST_CASE][PASSED] - Test Cases/deleteRecipeTest: Test Cases/deleteRecipeTest&#xD;
+&#xD;
+2019-10-20 15:30:50 - [TEST_STEP][PASSED] - openBrowser("https://intense-stream-78237.herokuapp.com/"): Browser is opened with url: 'https://intense-stream-78237.herokuapp.com/'&#xD;
+&#xD;
+2019-10-20 15:30:50 - [MESSAGE][INFO] - Starting 'Firefox' driver&#xD;
+&#xD;
+2019-10-20 15:30:57 - [MESSAGE][PASSED] - Browser is opened with url: 'https://intense-stream-78237.herokuapp.com/'&#xD;
+&#xD;
+2019-10-20 15:30:57 - [TEST_STEP][PASSED] - click(findTestObject("Page_ITL Component Store/a_Recipes (3)")): Object: 'Object Repository/Page_ITL Component Store/a_Recipes (3)' is clicked on&#xD;
+&#xD;
+2019-10-20 15:30:58 - [MESSAGE][PASSED] - Object: 'Object Repository/Page_ITL Component Store/a_Recipes (3)' is clicked on&#xD;
+&#xD;
+2019-10-20 15:30:58 - [TEST_STEP][PASSED] - click(findTestObject("Object Repository/Page_ITL Component Store/button_9899")): Object: 'Object Repository/Page_ITL Component Store/button_9899' is clicked on&#xD;
+&#xD;
+2019-10-20 15:30:58 - [MESSAGE][PASSED] - Object: 'Object Repository/Page_ITL Component Store/button_9899' is clicked on&#xD;
+&#xD;
+2019-10-20 15:30:58 - [TEST_STEP][PASSED] - click(findTestObject("Object Repository/Page_Versions/button_Delete")): Object: 'Object Repository/Page_Versions/button_Delete' is clicked on&#xD;
+&#xD;
+2019-10-20 15:30:59 - [MESSAGE][PASSED] - Object: 'Object Repository/Page_Versions/button_Delete' is clicked on&#xD;
+&#xD;
+2019-10-20 15:30:59 - [TEST_STEP][PASSED] - closeBrowser(): Browser is closed&#xD;
+&#xD;
+2019-10-20 15:31:01 - [MESSAGE][PASSED] - Browser is closed</system-out>
+            <system-err></system-err>
+        </testcase>
+        <testcase name="Test Cases/downloadComponentTest" classname="Test Cases/downloadComponentTest" status="PASSED">
+            <system-out>2019-10-20 15:31:01 - [TEST_CASE][PASSED] - Test Cases/downloadComponentTest: Test Cases/downloadComponentTest&#xD;
+&#xD;
+2019-10-20 15:31:01 - [TEST_STEP][PASSED] - openBrowser("https://intense-stream-78237.herokuapp.com/"): Browser is opened with url: 'https://intense-stream-78237.herokuapp.com/'&#xD;
+&#xD;
+2019-10-20 15:31:01 - [MESSAGE][INFO] - Starting 'Firefox' driver&#xD;
+&#xD;
+2019-10-20 15:31:06 - [MESSAGE][PASSED] - Browser is opened with url: 'https://intense-stream-78237.herokuapp.com/'&#xD;
+&#xD;
+2019-10-20 15:31:06 - [TEST_STEP][PASSED] - click(findTestObject("Page_ITL Component Store/a_Components (2)")): Object: 'Object Repository/Page_ITL Component Store/a_Components (2)' is clicked on&#xD;
+&#xD;
+2019-10-20 15:31:07 - [MESSAGE][PASSED] - Object: 'Object Repository/Page_ITL Component Store/a_Components (2)' is clicked on&#xD;
+&#xD;
+2019-10-20 15:31:07 - [TEST_STEP][PASSED] - click(findTestObject("Page_ITL Component Store/button_Select (3)")): Object: 'Object Repository/Page_ITL Component Store/button_Select (3)' is clicked on&#xD;
+&#xD;
+2019-10-20 15:31:08 - [MESSAGE][PASSED] - Object: 'Object Repository/Page_ITL Component Store/button_Select (3)' is clicked on&#xD;
+&#xD;
+2019-10-20 15:31:08 - [TEST_STEP][PASSED] - click(findTestObject("Object Repository/Page_Versions/button_concat(1234  )_btn btn-default btn-sm")): Object: 'Object Repository/Page_Versions/button_concat(1234  )_btn btn-default btn-sm' is clicked on&#xD;
+&#xD;
+2019-10-20 15:31:13 - [MESSAGE][PASSED] - Object: 'Object Repository/Page_Versions/button_concat(1234  )_btn btn-default btn-sm' is clicked on&#xD;
+&#xD;
+2019-10-20 15:31:13 - [TEST_STEP][PASSED] - closeBrowser(): Browser is closed&#xD;
+&#xD;
+2019-10-20 15:31:14 - [MESSAGE][PASSED] - Browser is closed</system-out>
+            <system-err></system-err>
+        </testcase>
+        <testcase name="Test Cases/searchRecipeTest" classname="Test Cases/searchRecipeTest" status="PASSED">
+            <system-out>2019-10-20 15:31:14 - [TEST_CASE][PASSED] - Test Cases/searchRecipeTest: Test Cases/searchRecipeTest&#xD;
+&#xD;
+2019-10-20 15:31:15 - [TEST_STEP][PASSED] - openBrowser("https://intense-stream-78237.herokuapp.com/"): Browser is opened with url: 'https://intense-stream-78237.herokuapp.com/'&#xD;
+&#xD;
+2019-10-20 15:31:15 - [MESSAGE][INFO] - Starting 'Firefox' driver&#xD;
+&#xD;
+2019-10-20 15:31:21 - [MESSAGE][PASSED] - Browser is opened with url: 'https://intense-stream-78237.herokuapp.com/'&#xD;
+&#xD;
+2019-10-20 15:31:21 - [TEST_STEP][PASSED] - click(findTestObject("Page_ITL Component Store/a_Recipes (4)")): Object: 'Object Repository/Page_ITL Component Store/a_Recipes (4)' is clicked on&#xD;
+&#xD;
+2019-10-20 15:31:21 - [MESSAGE][PASSED] - Object: 'Object Repository/Page_ITL Component Store/a_Recipes (4)' is clicked on&#xD;
+&#xD;
+2019-10-20 15:31:21 - [TEST_STEP][PASSED] - setText(findTestObject("Object Repository/Page_ITL Component Store/input_Recipe Store_recipeSearchName"), "test"): Text 'test' is set on object 'Object Repository/Page_ITL Component Store/input_Recipe Store_recipeSearchName'&#xD;
+&#xD;
+2019-10-20 15:31:21 - [MESSAGE][PASSED] - Text 'test' is set on object 'Object Repository/Page_ITL Component Store/input_Recipe Store_recipeSearchName'&#xD;
+&#xD;
+2019-10-20 15:31:21 - [TEST_STEP][PASSED] - sendKeys(findTestObject("Object Repository/Page_ITL Component Store/input_Recipe Store_recipeSearchName"), Keys.chord(ENTER)): Keys 'ENTER + ' sent to object: 'Object Repository/Page_ITL Component Store/input_Recipe Store_recipeSearchName'&#xD;
+&#xD;
+2019-10-20 15:31:22 - [MESSAGE][PASSED] - Keys 'ENTER + ' sent to object: 'Object Repository/Page_ITL Component Store/input_Recipe Store_recipeSearchName'&#xD;
+&#xD;
+2019-10-20 15:31:22 - [TEST_STEP][PASSED] - closeBrowser(): Browser is closed&#xD;
+&#xD;
+2019-10-20 15:31:23 - [MESSAGE][PASSED] - Browser is closed</system-out>
+            <system-err></system-err>
+        </testcase>
+        <testcase name="Test Cases/updateRecipeTest" classname="Test Cases/updateRecipeTest" status="PASSED">
+            <system-out>2019-10-20 15:31:23 - [TEST_CASE][PASSED] - Test Cases/updateRecipeTest: Test Cases/updateRecipeTest&#xD;
+&#xD;
+2019-10-20 15:31:23 - [TEST_STEP][PASSED] - openBrowser("https://intense-stream-78237.herokuapp.com/"): Browser is opened with url: 'https://intense-stream-78237.herokuapp.com/'&#xD;
+&#xD;
+2019-10-20 15:31:23 - [MESSAGE][INFO] - Starting 'Firefox' driver&#xD;
+&#xD;
+2019-10-20 15:31:29 - [MESSAGE][PASSED] - Browser is opened with url: 'https://intense-stream-78237.herokuapp.com/'&#xD;
+&#xD;
+2019-10-20 15:31:29 - [TEST_STEP][PASSED] - click(findTestObject("Page_ITL Component Store/a_Recipes (7)")): Object: 'Object Repository/Page_ITL Component Store/a_Recipes (7)' is clicked on&#xD;
+&#xD;
+2019-10-20 15:31:29 - [MESSAGE][PASSED] - Object: 'Object Repository/Page_ITL Component Store/a_Recipes (7)' is clicked on&#xD;
+&#xD;
+2019-10-20 15:31:29 - [TEST_STEP][PASSED] - click(findTestObject("Page_ITL Component Store/button_1112 (4)")): Object: 'Object Repository/Page_ITL Component Store/button_1112 (4)' is clicked on&#xD;
+&#xD;
+2019-10-20 15:31:30 - [MESSAGE][PASSED] - Object: 'Object Repository/Page_ITL Component Store/button_1112 (4)' is clicked on&#xD;
+&#xD;
+2019-10-20 15:31:30 - [TEST_STEP][PASSED] - click(findTestObject("Object Repository/Page_Versions/button_Edit")): Object: 'Object Repository/Page_Versions/button_Edit' is clicked on&#xD;
+&#xD;
+2019-10-20 15:31:30 - [MESSAGE][PASSED] - Object: 'Object Repository/Page_Versions/button_Edit' is clicked on&#xD;
+&#xD;
+2019-10-20 15:31:30 - [TEST_STEP][PASSED] - setText(findTestObject("Page_ITL Component Store/input_Software NameVersion NumberStatusIn DevelopmentReleased_name"), "softwareRelease16"): Text 'softwareRelease16' is set on object 'Object Repository/Page_ITL Component Store/input_Software NameVersion NumberStatusIn DevelopmentReleased_name'&#xD;
+&#xD;
+2019-10-20 15:31:30 - [MESSAGE][PASSED] - Text 'softwareRelease16' is set on object 'Object Repository/Page_ITL Component Store/input_Software NameVersion NumberStatusIn DevelopmentReleased_name'&#xD;
+&#xD;
+2019-10-20 15:31:30 - [TEST_STEP][PASSED] - setText(findTestObject("Page_ITL Component Store/input_Software NameVersion NumberStatusIn DevelopmentReleased_version"), "1.1.19"): Text '1.1.19' is set on object 'Object Repository/Page_ITL Component Store/input_Software NameVersion NumberStatusIn DevelopmentReleased_version'&#xD;
+&#xD;
+2019-10-20 15:31:31 - [MESSAGE][PASSED] - Text '1.1.19' is set on object 'Object Repository/Page_ITL Component Store/input_Software NameVersion NumberStatusIn DevelopmentReleased_version'&#xD;
+&#xD;
+2019-10-20 15:31:31 - [TEST_STEP][PASSED] - click(findTestObject("Page_ITL Component Store/input_Software NameVersion NumberStatusIn DevelopmentReleased_status")): Object: 'Object Repository/Page_ITL Component Store/input_Software NameVersion NumberStatusIn DevelopmentReleased_status' is clicked on&#xD;
+&#xD;
+2019-10-20 15:31:31 - [MESSAGE][PASSED] - Object: 'Object Repository/Page_ITL Component Store/input_Software NameVersion NumberStatusIn DevelopmentReleased_status' is clicked on&#xD;
+&#xD;
+2019-10-20 15:31:31 - [TEST_STEP][PASSED] - click(findTestObject("Page_ITL Component Store/button_Submit (3)")): Object: 'Object Repository/Page_ITL Component Store/button_Submit (3)' is clicked on&#xD;
+&#xD;
+2019-10-20 15:31:32 - [MESSAGE][PASSED] - Object: 'Object Repository/Page_ITL Component Store/button_Submit (3)' is clicked on&#xD;
+&#xD;
+2019-10-20 15:31:32 - [TEST_STEP][PASSED] - closeBrowser(): Browser is closed&#xD;
+&#xD;
+2019-10-20 15:31:33 - [MESSAGE][PASSED] - Browser is closed</system-out>
+            <system-err></system-err>
+        </testcase>
+        <testcase name="Test Cases/uploadComponentToStoreTest" classname="Test Cases/uploadComponentToStoreTest" status="PASSED">
+            <system-out>2019-10-20 15:31:33 - [TEST_CASE][PASSED] - Test Cases/uploadComponentToStoreTest: Test Cases/uploadComponentToStoreTest&#xD;
+&#xD;
+2019-10-20 15:31:33 - [TEST_STEP][PASSED] - openBrowser("https://intense-stream-78237.herokuapp.com/"): Browser is opened with url: 'https://intense-stream-78237.herokuapp.com/'&#xD;
+&#xD;
+2019-10-20 15:31:33 - [MESSAGE][INFO] - Starting 'Firefox' driver&#xD;
+&#xD;
+2019-10-20 15:31:39 - [MESSAGE][PASSED] - Browser is opened with url: 'https://intense-stream-78237.herokuapp.com/'&#xD;
+&#xD;
+2019-10-20 15:31:39 - [TEST_STEP][PASSED] - click(findTestObject("Object Repository/Page_ITL Component Store/a_Components")): Object: 'Object Repository/Page_ITL Component Store/a_Components' is clicked on&#xD;
+&#xD;
+2019-10-20 15:31:40 - [MESSAGE][PASSED] - Object: 'Object Repository/Page_ITL Component Store/a_Components' is clicked on&#xD;
+&#xD;
+2019-10-20 15:31:40 - [TEST_STEP][PASSED] - click(findTestObject("Object Repository/Page_ITL Component Store/button_Upload")): Object: 'Object Repository/Page_ITL Component Store/button_Upload' is clicked on&#xD;
+&#xD;
+2019-10-20 15:31:41 - [MESSAGE][PASSED] - Object: 'Object Repository/Page_ITL Component Store/button_Upload' is clicked on&#xD;
+&#xD;
+2019-10-20 15:31:41 - [TEST_STEP][PASSED] - closeBrowser(): Browser is closed&#xD;
+&#xD;
+2019-10-20 15:31:42 - [MESSAGE][PASSED] - Browser is closed</system-out>
+            <system-err></system-err>
+        </testcase>
+        <testcase name="Test Cases/deleteComponentTest" classname="Test Cases/deleteComponentTest" status="PASSED">
+            <system-out>2019-10-20 15:31:42 - [TEST_CASE][PASSED] - Test Cases/deleteComponentTest: Test Cases/deleteComponentTest&#xD;
+&#xD;
+2019-10-20 15:31:42 - [TEST_STEP][PASSED] - openBrowser("https://intense-stream-78237.herokuapp.com/"): Browser is opened with url: 'https://intense-stream-78237.herokuapp.com/'&#xD;
+&#xD;
+2019-10-20 15:31:42 - [MESSAGE][INFO] - Starting 'Firefox' driver&#xD;
+&#xD;
+2019-10-20 15:31:49 - [MESSAGE][PASSED] - Browser is opened with url: 'https://intense-stream-78237.herokuapp.com/'&#xD;
+&#xD;
+2019-10-20 15:31:49 - [TEST_STEP][PASSED] - click(findTestObject("Page_ITL Component Store/a_Components (1)")): Object: 'Object Repository/Page_ITL Component Store/a_Components (1)' is clicked on&#xD;
+&#xD;
+2019-10-20 15:31:49 - [MESSAGE][PASSED] - Object: 'Object Repository/Page_ITL Component Store/a_Components (1)' is clicked on&#xD;
+&#xD;
+2019-10-20 15:31:49 - [TEST_STEP][PASSED] - click(findTestObject("Page_ITL Component Store/button_Select (2)")): Object: 'Object Repository/Page_ITL Component Store/button_Select (2)' is clicked on&#xD;
+&#xD;
+2019-10-20 15:31:50 - [MESSAGE][PASSED] - Object: 'Object Repository/Page_ITL Component Store/button_Select (2)' is clicked on&#xD;
+&#xD;
+2019-10-20 15:31:50 - [TEST_STEP][PASSED] - click(findTestObject("Page_Versions/button_Delete (1)")): Object: 'Object Repository/Page_Versions/button_Delete (1)' is clicked on&#xD;
+&#xD;
+2019-10-20 15:31:51 - [MESSAGE][PASSED] - Object: 'Object Repository/Page_Versions/button_Delete (1)' is clicked on&#xD;
+&#xD;
+2019-10-20 15:31:51 - [TEST_STEP][PASSED] - closeBrowser(): Browser is closed&#xD;
+&#xD;
+2019-10-20 15:31:53 - [MESSAGE][PASSED] - Browser is closed</system-out>
+            <system-err></system-err>
+        </testcase>
+        <testcase name="Test Cases/createRecipeTest" classname="Test Cases/createRecipeTest" status="PASSED">
+            <system-out>2019-10-20 15:31:53 - [TEST_CASE][PASSED] - Test Cases/createRecipeTest: Test Cases/createRecipeTest&#xD;
+&#xD;
+2019-10-20 15:31:53 - [TEST_STEP][PASSED] - openBrowser("https://intense-stream-78237.herokuapp.com/"): Browser is opened with url: 'https://intense-stream-78237.herokuapp.com/'&#xD;
+&#xD;
+2019-10-20 15:31:53 - [MESSAGE][INFO] - Starting 'Firefox' driver&#xD;
+&#xD;
+2019-10-20 15:31:59 - [MESSAGE][PASSED] - Browser is opened with url: 'https://intense-stream-78237.herokuapp.com/'&#xD;
+&#xD;
+2019-10-20 15:31:59 - [TEST_STEP][PASSED] - click(findTestObject("Page_ITL Component Store/a_Recipes (10)")): Object: 'Object Repository/Page_ITL Component Store/a_Recipes (10)' is clicked on&#xD;
+&#xD;
+2019-10-20 15:31:59 - [MESSAGE][PASSED] - Object: 'Object Repository/Page_ITL Component Store/a_Recipes (10)' is clicked on&#xD;
+&#xD;
+2019-10-20 15:31:59 - [TEST_STEP][PASSED] - click(findTestObject("Page_ITL Component Store/button_Create (3)")): Object: 'Object Repository/Page_ITL Component Store/button_Create (3)' is clicked on&#xD;
+&#xD;
+2019-10-20 15:32:00 - [MESSAGE][PASSED] - Object: 'Object Repository/Page_ITL Component Store/button_Create (3)' is clicked on&#xD;
+&#xD;
+2019-10-20 15:32:00 - [TEST_STEP][PASSED] - setText(findTestObject("Page_ITL Component Store/input_Software Name Version NumberStatusIn DevelopmentReleased_softwareName (1)"), "Whatsup"): Text 'Whatsup' is set on object 'Object Repository/Page_ITL Component Store/input_Software Name Version NumberStatusIn DevelopmentReleased_softwareName (1)'&#xD;
+&#xD;
+2019-10-20 15:32:00 - [MESSAGE][PASSED] - Text 'Whatsup' is set on object 'Object Repository/Page_ITL Component Store/input_Software Name Version NumberStatusIn DevelopmentReleased_softwareName (1)'&#xD;
+&#xD;
+2019-10-20 15:32:00 - [TEST_STEP][PASSED] - setText(findTestObject("Page_ITL Component Store/input_Software Name Version NumberStatusIn DevelopmentReleased_version (1)"), "1.1.1.1"): Text '1.1.1.1' is set on object 'Object Repository/Page_ITL Component Store/input_Software Name Version NumberStatusIn DevelopmentReleased_version (1)'&#xD;
+&#xD;
+2019-10-20 15:32:00 - [MESSAGE][PASSED] - Text '1.1.1.1' is set on object 'Object Repository/Page_ITL Component Store/input_Software Name Version NumberStatusIn DevelopmentReleased_version (1)'&#xD;
+&#xD;
+2019-10-20 15:32:00 - [TEST_STEP][PASSED] - click(findTestObject("Page_ITL Component Store/input_Software Name Version NumberStatusIn DevelopmentReleased_status (1)")): Object: 'Object Repository/Page_ITL Component Store/input_Software Name Version NumberStatusIn DevelopmentReleased_status (1)' is clicked on&#xD;
+&#xD;
+2019-10-20 15:32:00 - [MESSAGE][PASSED] - Object: 'Object Repository/Page_ITL Component Store/input_Software Name Version NumberStatusIn DevelopmentReleased_status (1)' is clicked on&#xD;
+&#xD;
+2019-10-20 15:32:00 - [TEST_STEP][PASSED] - click(findTestObject("Page_ITL Component Store/button_Submit (6)")): Object: 'Object Repository/Page_ITL Component Store/button_Submit (6)' is clicked on&#xD;
+&#xD;
+2019-10-20 15:32:01 - [MESSAGE][PASSED] - Object: 'Object Repository/Page_ITL Component Store/button_Submit (6)' is clicked on&#xD;
+&#xD;
+2019-10-20 15:32:01 - [TEST_STEP][PASSED] - closeBrowser(): Browser is closed&#xD;
+&#xD;
+2019-10-20 15:32:02 - [MESSAGE][PASSED] - Browser is closed</system-out>
+            <system-err></system-err>
+        </testcase>
+        <system-out>2019-10-20 15:30:08 - [TEST_SUITE][INCOMPLETE] - ITL_CG3_TestSuite: null</system-out>
+        <system-err>2019-10-20 15:30:08 - [TEST_SUITE][INCOMPLETE] - ITL_CG3_TestSuite: null</system-err>
+    </testsuite>
+</testsuites>

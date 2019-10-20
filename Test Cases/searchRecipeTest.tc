@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TestCaseEntity>
+   <description>Searchs for a recipe based on keyword provided in textbox by user</description>
+   <name>searchRecipeTest</name>
+   <tag>searchRecipe</tag>
+   <comment></comment>
+   <testCaseGuid>5a2af6ee-e9e9-4ec7-91d6-35b960834888</testCaseGuid>
+</TestCaseEntity>

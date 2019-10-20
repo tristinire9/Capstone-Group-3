@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TestCaseEntity>
+   <description>Deletes recipe from recipe list</description>
+   <name>deleteRecipeTest</name>
+   <tag>deleteRecipe</tag>
+   <comment></comment>
+   <testCaseGuid>b9568c7a-50f8-400f-89ea-27cc381e7b41</testCaseGuid>
+</TestCaseEntity>

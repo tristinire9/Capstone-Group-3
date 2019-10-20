@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TestCaseEntity>
+   <description>Update the field data in the recipe</description>
+   <name>updateRecipeTest</name>
+   <tag>updateRecipe</tag>
+   <comment></comment>
+   <testCaseGuid>e32f7cfa-92e7-48c8-a9fc-90d59b010248</testCaseGuid>
+</TestCaseEntity>

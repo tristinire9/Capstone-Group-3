@@ -1,0 +1,11 @@
+{"testCaseName":"Test Cases/selectComponentStorageTest","testCaseId":"Test Cases/selectComponentStorageTest"}
+{"testCaseName":"Test Cases/addComponentToRecipeTest","testCaseId":"Test Cases/addComponentToRecipeTest"}
+{"testCaseName":"Test Cases/cloneRecipeTest","testCaseId":"Test Cases/cloneRecipeTest"}
+{"testCaseName":"Test Cases/viewRecipeTest","testCaseId":"Test Cases/viewRecipeTest"}
+{"testCaseName":"Test Cases/deleteRecipeTest","testCaseId":"Test Cases/deleteRecipeTest"}
+{"testCaseName":"Test Cases/downloadComponentTest","testCaseId":"Test Cases/downloadComponentTest"}
+{"testCaseName":"Test Cases/searchRecipeTest","testCaseId":"Test Cases/searchRecipeTest"}
+{"testCaseName":"Test Cases/updateRecipeTest","testCaseId":"Test Cases/updateRecipeTest"}
+{"testCaseName":"Test Cases/uploadComponentToStoreTest","testCaseId":"Test Cases/uploadComponentToStoreTest"}
+{"testCaseName":"Test Cases/deleteComponentTest","testCaseId":"Test Cases/deleteComponentTest"}
+{"testCaseName":"Test Cases/createRecipeTest","testCaseId":"Test Cases/createRecipeTest"}

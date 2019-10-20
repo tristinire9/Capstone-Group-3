@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TestCaseEntity>
+   <description>Views details of the Component</description>
+   <name>viewComponentTest</name>
+   <tag>viewComponent</tag>
+   <comment></comment>
+   <testCaseGuid>58f8389e-c100-413e-8bf5-c7d4c401b834</testCaseGuid>
+</TestCaseEntity>

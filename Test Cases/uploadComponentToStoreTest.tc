@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TestCaseEntity>
+   <description>Uploads Component to selected AWS Bucket</description>
+   <name>uploadComponentToStoreTest</name>
+   <tag>uploadComp</tag>
+   <comment></comment>
+   <testCaseGuid>ad649945-7556-48ce-a416-f7c46925dcdc</testCaseGuid>
+</TestCaseEntity>
